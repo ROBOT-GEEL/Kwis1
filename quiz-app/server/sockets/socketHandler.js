@@ -33,6 +33,7 @@ export function registerSocketHandlers(io) {
       socket.broadcast.emit("projector-clear-answers");
     });
 
+
     //
     // Pi / people counting events
     //

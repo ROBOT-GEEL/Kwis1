@@ -9,27 +9,8 @@ const timerProgressElement = document.querySelector('#timer progress');
 // io() connects to the host that served the page (works with http/https and ports).
 const socket = io();
 
-async function sendProjectorCommand(action) {
-  try {
-    const response = await fetch("/cms/toggleProjector", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ projectorState: action })
-    });
 
-    if (!response.ok) {
-      const error = await response.text();
-      throw new Error(error);
-    }
 
-    const text = await response.text();
-    console.log(text);
-  } catch (error) {
-    console.error("Error sending projector command:", error);
-  }
-}
-
-sendProjectorCommand("sleep")
 
 
 // Global timer variable
@@ -86,9 +67,6 @@ socket.on('disconnect', () => {
     clearInterval(countdownInterval);
 });
 
-socket.on('projector-wake', () => {
-    sendProjectorCommand('wake')
-});
 
 
 socket.on('projector-update-question', (data) => {
@@ -147,7 +125,6 @@ socket.on('projector-clear-answers', () => {
 });
 
 socket.on('projector-reset', () => {
-    sendProjectorCommand('sleep');
     mainElement.classList.add('hidden');
     clearAnswerClasses();
 

@@ -7,6 +7,25 @@
  * - error.js (logError)
  * - textFit.js (external library)
  */
+async function sendProjectorCommand(action) {
+  try {
+    const response = await fetch("/cms/toggleProjector", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ projectorState: action })
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error);
+    }
+
+    const text = await response.text();
+    console.log(text);
+  } catch (error) {
+    console.error("Error sending projector command:", error);
+  }
+}
 class Quiz {
     static #answerTime = 10;
     static #maxQuestions = 3;
@@ -57,7 +76,6 @@ class Quiz {
             }
         });
     }
-
     /**
      * Initialize a new quiz.
      *
@@ -207,8 +225,6 @@ class Quiz {
         while (!this.#isInitialized) {
             await wait(100);
         }
-
-        socket.emit('projector-wake');
         // Reset the cancelled flag
         this.#cancelled = false;
 
@@ -217,6 +233,7 @@ class Quiz {
 
         // Change the screen to the quiz screen after the instructions
         changeScreen('quiz-screen');
+        sendProjectorCommand("wake")
         document.querySelector('#instructions-header').classList.add('instruction-header-big');
         document.querySelector('#instruction-container').classList.add('instruction-container-invisible');
         document.querySelector('#instruction-text').textContent = '';
@@ -247,6 +264,7 @@ class Quiz {
 
         // Finish the quiz if it was not cancelled
         if (!this.#cancelled) {
+            sendProjectorCommand("sleep")
             socket.emit('projector-reset');
             changeScreen('quiz-finished-screen');
             await wait(this.#finishedScreenTime * 1000);
