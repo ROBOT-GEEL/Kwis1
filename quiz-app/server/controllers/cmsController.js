@@ -207,8 +207,15 @@ export const saveSettings = async (req, res, next) => {
 export const getSettings = async (req, res, next) => {
   try {
     const collection = global.db.collection("params");
-    const settings = await collection.findOne({});
-    res.json(settings);
+    /**
+     * Always return the CMS-managed settings document.
+     * The CMS stores settings with { name: "settings", ... } via an upsert.
+     * Using findOne({}) can accidentally return an old/legacy params document,
+     * which makes the defaults shown in the Settings UI differ from the
+     * values actually used by the quiz.
+     */
+    const settings = await collection.findOne({ name: "settings" });
+    res.json(settings || {});
   } catch (error) {
     console.error("Error fetching settings:", error);
     res.status(500).send("Internal Server Error");

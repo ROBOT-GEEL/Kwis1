@@ -1,5 +1,5 @@
 // Store references to elements once.
-const mainElement = document.querySelector('main');
+const mainElement = document.querySelector('#projector-quiz');
 const questionElement = document.querySelector('#question');
 const answerTextElements = document.querySelectorAll('.answer-text');
 const answerElements = document.querySelectorAll('.answer');
@@ -82,6 +82,7 @@ socket.on('disconnect', () => {
 
 
 socket.on('projector-update-question', (data) => {
+    // When the first question arrives, show the quiz view (from a black screen).
     mainElement.classList.remove('hidden');
     questionElement.innerHTML = data.question;
 
@@ -118,6 +119,7 @@ socket.on('projector-clear-answers', () => {
 });
 
 socket.on('projector-reset', () => {
+    // After a reset, hide the quiz so the projector is fully black.
     mainElement.classList.add('hidden');
     clearAnswerClasses();
 
@@ -130,3 +132,4 @@ socket.on('projector-reset', () => {
     // Stop the timer on reset
     clearInterval(countdownInterval);
 });
+
