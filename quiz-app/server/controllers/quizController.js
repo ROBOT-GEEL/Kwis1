@@ -40,7 +40,13 @@ export const getParameters = async (req, res) => {
     try {
         const db = getDB();
         const collection = db.collection("params");
-        const parameters = await collection.findOne({});
+        /**
+         * Always read the parameters document that is managed by the CMS.
+         * The CMS saves settings with { name: "settings", ... } via an upsert.
+         * Using findOne({}) can accidentally return an older/legacy document,
+         * which makes the quiz ignore the values you see in the Settings UI.
+         */
+        const parameters = await collection.findOne({ name: "settings" });
         res.status(200).json(parameters);
     } catch (e) {
         console.error(e);
@@ -63,7 +69,8 @@ export const getTimeToStart = async (req, res) => {
     try {
         const db = getDB();
         const collection = db.collection("params");
-        const parameters = await collection.findOne({});
+        // Same reasoning as in getParameters: explicitly use the "settings" doc.
+        const parameters = await collection.findOne({ name: "settings" });
         res.status(200).json({ time: parameters.timeToStartQuiz });
     } catch (e) {
         console.error(e);

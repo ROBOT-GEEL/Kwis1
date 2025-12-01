@@ -34,25 +34,37 @@ const clearAnswerClasses = () => {
 };
 
 /**
- * Creates and returns the function that updates the timer UI.
- * This avoids repetitive code in the countdown handler.
+ * Starts a simple local countdown on the projector.
+ *
+ * This avoids relying on the system clocks of different devices
+ * (quiz screen vs. projector). If those clocks are out of sync,
+ * a timestamp‑based countdown can immediately jump to 0.
  */
-const createTimerUpdater = (startTimestamp, answerTime) => {
-    return () => {
-        const elapsed = (Date.now() - startTimestamp) / 1000;
-        let remainingTime = answerTime - elapsed;
+const startLocalCountdown = (answerTime) => {
+    // Stop any previous countdown
+    clearInterval(countdownInterval);
+
+    let remainingTime = answerTime;
+
+    // Initial render
+    timerSpanElement.textContent = `${remainingTime}s`;
+    timerProgressElement.value = 100;
+
+    countdownInterval = setInterval(() => {
+        remainingTime -= 1;
 
         if (remainingTime <= 0) {
             remainingTime = 0;
-            clearInterval(countdownInterval); // Stop the timer
+            clearInterval(countdownInterval);
         }
 
-        timerSpanElement.textContent = `${Math.ceil(remainingTime)}s`;
+        timerSpanElement.textContent = `${remainingTime}s`;
 
-        // Calculate percentage and clamp it between 0 and 100
-        const percentage = Math.max(0, Math.min(100, (remainingTime / answerTime) * 100));
-        timerProgressElement.value = percentage; // .value is more efficient than setAttribute
-    };
+        const percentage = answerTime > 0
+            ? Math.max(0, Math.min(100, (remainingTime / answerTime) * 100))
+            : 0;
+        timerProgressElement.value = percentage;
+    }, 1000);
 };
 
 // --- Socket.io Event Listeners ---
@@ -83,28 +95,9 @@ socket.on('projector-update-question', (data) => {
 });
 
 socket.on('projector-start-countdown', (data) => {
-    // Always clear any existing timer
-    clearInterval(countdownInterval);
-
-    const { startTimestamp, answerTime } = data; // ES6 destructuring
-
-    // Create the specific update function for this countdown
-    const updateTimerDisplay = createTimerUpdater(startTimestamp, answerTime);
-
-    // Run once immediately to show the initial time
-    updateTimerDisplay();
-
-    // Calculate the delay until the *next* full second
-    const offset = Date.now() - startTimestamp;
-    const firstTickDelay = 1000 - (offset % 1000);
-
-    // Use setTimeout to *start* the setInterval on the next full second.
-    // This maintains the smart synchronization logic from your original code.
-    setTimeout(() => {
-        updateTimerDisplay(); // First "clean" tick
-        // Store the ID in the *global* variable
-        countdownInterval = setInterval(updateTimerDisplay, 1000);
-    }, firstTickDelay);
+    const { answerTime } = data;
+    // Use a purely local countdown to avoid cross‑device clock issues.
+    startLocalCountdown(answerTime);
 });
 
 socket.on('projector-display-answers', (data) => {
