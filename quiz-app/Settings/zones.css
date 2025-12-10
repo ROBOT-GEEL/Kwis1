@@ -3,12 +3,14 @@
     --darkGreen-hover: #026151;
 }
 
-body {
+html, body {
     margin: 0;
     padding: 0;
+    height: 100%;
     background-color: #f1f1f1;
 }
 
+/* ------------------- Sidebar Styles ------------------- */
 .rectangleSideBalk {
     background-color: #80c8cc;
     border-top-right-radius: 1rem;
@@ -19,6 +21,7 @@ body {
     top: 0;
     width: 12rem;
     overflow: hidden;
+    z-index: 1000; /* Zorg dat sidebar altijd bovenop ligt */
 }
 
 .dashBoardFrame {
@@ -79,7 +82,7 @@ body {
     width: 2.1rem;
 }
 
-.beamerPowerToggle{
+.beamerPowerToggle {
     font-family: "CO Headline";
     color: var(--darkGreen);
     display: flex;
@@ -111,7 +114,7 @@ body {
     width: 5.2rem;
     left: 0.6rem;
 }
-.beamerPowerToggleOn{
+.beamerPowerToggleOn {
     height: 100%;
     font-family: "CO Headline";
     font-size: 0.9rem;
@@ -133,7 +136,7 @@ body {
     width: 5.2rem;
     right: 0.6rem;
 }
-.beamerPowerToggleOff{
+.beamerPowerToggleOff {
     height: 100%;
     font-family: "CO Headline";
     font-size: 0.9rem;
@@ -146,12 +149,7 @@ body {
     line-height: 0;
     width: 100%;
 }
-.beamerPowerToggleOn:hover {
-    font-size: 1rem;
-    cursor: pointer;
-    background-color: var(--darkGreen-hover);
-}
-.beamerPowerToggleOff:hover {
+.beamerPowerToggleOn:hover, .beamerPowerToggleOff:hover {
     font-size: 1rem;
     cursor: pointer;
     background-color: var(--darkGreen-hover);
@@ -176,97 +174,6 @@ body {
     padding-bottom: 0.4rem
 }
 
-.settingsLine {
-    background-color: var(--darkGreen);
-    height: 0.1rem;
-    left: 0;
-    position: absolute;
-    top: 12rem;
-    width: 100%;
-}
-
-.body {
-    flex-shrink: 0;
-    margin-top: 1.25rem;
-    width: 100%;
-    width: calc(100% - 12.5rem);
-    max-width: 45rem;
-    margin-left: 13rem;
-}
-
-.vragen {
-    color: #000000;
-    display: flex;
-    font-family: Inter, 'CO Headline';
-    font-size: 2rem;
-    font-weight: 700;
-    line-height: 1.2125;
-    margin-bottom: 1rem;
-    white-space: nowrap;
-}
-
-.questionsBody {
-    background-color: #ffffff;
-    border-radius: 0.5rem;
-    box-sizing: border-box;
-    padding: 1rem 1rem 1.2rem 1rem;
-    width: 100%;
-    margin-top: 1rem;
-}
-
-.questionsFrame {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    box-sizing: content-box;
-}
-
-.settingsBodyFrame {
-    gap: 10px;
-    display: flex;
-    margin-bottom: 0.4rem;
-    width: 100%;
-    flex-wrap: wrap;
-}
-.setting {
-    flex: 1 1 calc(50% - 5px);
-    margin-bottom: 10px;
-}
-.setting label {
-    display: block;
-    margin-bottom: 5px;
-    font-family: Inter, 'Open Sans';
-    font-size: 1.2rem;
-    font-weight: 400;
-}
-.setting-input {
-    display: flex;
-    flex-direction: column;
-}
-.buttonSaveSettings {
-    background-color: var(--darkGreen);
-    color: #ffffff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    width: 100%;
-    margin-top: 0.2rem;
-}
-
-.buttonSaveSettings:hover {
-    background-color: #026958;
-}
-
-
-
-
-
-
-
-
 .BackButtonDiv {
     position: absolute;
     bottom: 0;
@@ -278,11 +185,9 @@ body {
 
 #backButton {
     height: 100%;
-
     font-family: "CO Headline";
     font-size: 0.9rem;
     font-weight: 500;
-
     background-color: var(--darkGreen);
     color: #ffffff;
     padding: 10px 20px;
@@ -292,78 +197,121 @@ body {
     margin-top: 0.2rem;
 }
 
-.settingsgreen {
-    color: var(--darkGreen);
-    font-family: Inter, 'Open Sans';
-    font-size: 1rem;
-    font-weight: 800;
-}
-
-.settingsblack {
-    color: black;
-    font-family: Inter, 'Open Sans';
-    font-size: 1rem;
-    font-weight: 400;
-}
-
 #backButton:hover {
     background-color: var(--darkGreen-hover);
 }
 
+/* ------------------- Body & Layout ------------------- */
 
-    /******************************************* Switch ***************************************** */
-    .cancelInactiveQuizSwitch {
-        position: absolute;
-        display: inline-block;
-        width: 3rem;
-        height: 1.2rem;
-    }
+.body {
+    flex-shrink: 0;
+    margin-top: 1.25rem;
+    /* AANGEPAST: margin-left iets ruimer om plakken tegen sidebar te voorkomen */
+    margin-left: 14rem;
+    /* AANGEPAST: Breedte berekend op basis van nieuwe margin */
+    width: calc(100% - 16rem);
+    /* AANGEPAST: Max-width verwijderd zodat foto heel het scherm kan vullen */
+    /* max-width: 45rem;  <-- Deze regel zorgde dat het smal bleef */
+    padding-right: 2rem;
+    box-sizing: border-box;
+}
 
-    .cancelInactiveQuizSwitch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
+.vragen {
+    color: #000000;
+    display: flex;
+    font-family: Inter, 'CO Headline';
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.2125;
+    margin-bottom: 1rem;
+    white-space: nowrap;
+    justify-content: left;
+}
 
-    .slider {
-        display: flex;
-        align-items: center;
-        width: 3rem;
-        height: 1.2rem;
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #ccc;
-        -webkit-transition: .4s;
-        transition: .4s;
-        border-radius: 34px;
-    }
+.questionsBody {
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+    padding: 1rem;
+    width: 100%;
+    margin-top: 1rem;
+}
 
-    .slider:before {
-        height: 80%;
-        aspect-ratio: 1 / 1;
-        position: absolute;
-        content: "";
-        left: 4px;
-        background-color: white;
-        -webkit-transition: .4s;
-        transition: .4s;
-        border-radius: 50%;
-    }
+.buttonSaveSettings {
+    background-color: var(--darkGreen);
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 0.2rem;
+}
 
-    input:checked+.slider {
-        background-color: #2196F3;
-    }
+.buttonSaveSettings:hover {
+    background-color: #026958;
+}
 
-    input:focus+.slider {
-        box-shadow: 0 0 1px #2196F3;
-    }
+/* ------------------- ZONE CONTROLS (Nieuw) ------------------- */
+.zone-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
 
-    input:checked+.slider:before {
-        -webkit-transform: translateX(26px);
-        -ms-transform: translateX(26px);
-        transform: translateX(26px);
-    }
+.zone-btn {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: 2px solid #ccc;
+    background: white;
+    font-family: "CO Headline", sans-serif;
+    font-weight: 500;
+    border-radius: 5px;
+    transition: all 0.2s;
+}
+
+/* Actieve knop stijlen */
+.zone-btn.active {
+    background-color: var(--darkGreen);
+    color: white;
+    border-color: var(--darkGreen);
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+/* Specifieke hover effecten per zone knop (optioneel, voor duidelijkheid) */
+#btn-zone-1.active { background-color: #d32f2f; border-color: #d32f2f; } /* Rood */
+#btn-zone-2.active { background-color: #1976d2; border-color: #1976d2; } /* Blauw */
+#btn-zone-3.active { background-color: #388e3c; border-color: #388e3c; } /* Groen */
+
+
+/* ------------------- IMAGE & CANVAS WRAPPER (Nieuw) ------------------- */
+
+.zone-wrapper {
+    position: relative; /* Cruciaal voor de canvas positie */
+    width: 100%;        /* Gebruik volledige breedte van de .body */
+    /* AANGEPAST: Geen max-width meer */
+    margin: 0 auto;
+    border: 2px solid #333;
+    background-color: #000;
+    line-height: 0;     /* Verwijdert witruimte onder img */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.zone-wrapper img {
+    width: 100%;       /* Foto vult de wrapper */
+    height: auto;      /* Hoogte schaalt mee */
+    display: block;
+    user-select: none;
+}
+
+#drawingCanvas {
+    position: absolute; /* Canvas ligt bovenop de img */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;  /* Vizier cursor */
+    z-index: 10;
+}

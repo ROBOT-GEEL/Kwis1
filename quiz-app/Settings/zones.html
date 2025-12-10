@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robotoo admin panel</title>
+    <link rel="icon" type="image/x-icon" href="https://tabloo.com/themes/contrib/rocketship_theme_flex/favicon.ico">
+    <link rel="stylesheet" href="zones.css">
+    <link href="https://fonts.cdnfonts.com/css/co-headline" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+</head>
+
+
+<body>
+     <div class="rectangleSideBalk">
+        <div class="dashBoardFrame">
+            <div class="rectangleDashBoard"></div>
+            <img class="gaugeIcon" src="icons\gauge.svg" />
+            <div class="dashBoard">Admin panel</div>
+        </div>
+        <div class="settingsFrame" onclick="location.href='../cms'" id="settingsFrame">
+            <img class="gear" src="icons\settings.svg" />
+            <div class="settings">Cms</div>
+        </div>
+        <div class="beamerPowerToggle">Beamer</div>
+        <div class="beamerPowerToggleDivOff">
+            <button id="beamerPowerToggleOff" class="beamerPowerToggleOff" type="button"
+                onclick="toggleProjector('0')">Off</button>
+        </div>
+        <div class="beamerPowerToggleDivOn">
+            <button id="beamerPowerToggleOn" class="beamerPowerToggleOn" type="button"
+                onclick="toggleProjector('1')">On</button>
+        </div>
+
+        <div class="BackButtonDiv">
+            <button id="backButton" type="button" onclick="location.href='../grafieken'">Ga naar dashboard</button>
+        </div>
+    </div>
+
+
+    <div class="body">
+        <div class="vragen" id="title">Antwoordzones herconfigureren</div>
+
+        <div class="questionsBody">
+            <div class="zone-controls">
+                <button class="zone-btn active" onclick="selectZone(1)" id="btn-zone-1">Zone A (Rood)</button>
+                <button class="zone-btn" onclick="selectZone(2)" id="btn-zone-2">Zone B (Blauw)</button>
+                <button class="zone-btn" onclick="selectZone(3)" id="btn-zone-3">Zone C (Groen)</button>
+
+                <button class="buttonSaveSettings" onclick="clearCurrentZone()">Wis Zone</button>
+                <button class="buttonSaveSettings" onclick="saveZones()">Opslaan</button>
+
+                <button class="buttonSaveSettings" onclick="location.reload(true)">Nieuwe foto</button>
+                <button class="buttonSaveSettings" onclick="location.href='index.html'">Terug</button>
+            </div>
+
+            <div id="zone-wrapper" class="zone-wrapper">
+                <img id="cameraImage" src="" alt="Camerabeeld" onload="resizeCanvas()" style="max-width: 100%; height: auto; display: block;" />
+
+                <canvas id="drawingCanvas"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="zones.js"></script>
+</body>
+
+</html>

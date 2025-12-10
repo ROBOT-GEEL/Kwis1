@@ -1,6 +1,6 @@
 import express from "express";
 import { toggleProjector, delQuestion, editQuestion, getQuestions, saveEnabledCheckBoxes, saveVisitedCheckBoxes,
-    saveSettings, getSettings } from "../controllers/cmsController.js";
+    saveSettings, getSettings, saveZones, getJetsonIp } from "../controllers/cmsController.js";
 const router = express.Router();
 
 router.post("/toggleProjector", toggleProjector);
@@ -11,5 +11,7 @@ router.post("/saveEnabledCheckBoxes", saveEnabledCheckBoxes);
 router.post("/saveVisitedCheckBoxes", saveVisitedCheckBoxes);
 router.post("/saveSettings", saveSettings);
 router.get("/getSettings", getSettings);
+router.post("/saveZones", saveZones);
+router.get("/getJetsonIp", getJetsonIp);
 
 export default router;
