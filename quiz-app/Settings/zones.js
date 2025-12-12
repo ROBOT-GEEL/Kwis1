@@ -1,24 +1,23 @@
-// Opslag voor de punten van de 3 zones
 let zones = {
-    1: [], // Array van {x, y} objecten
+    1: [], // Array with (xy) points
     2: [],
     3: []
 };
 
-let currentActiveZone = 1; // We beginnen bij zone 1
-const maxPoints = 4; // Maximaal 4 punten per zone
+let currentActiveZone = 1;
+const maxPoints = 4;
 
 // Kleuren voor de zones
 const zoneColors = {
-    1: 'rgba(255, 0, 0, 0.6)',   // Rood
-    2: 'rgba(0, 0, 255, 0.6)',   // Blauw
-    3: 'rgba(0, 255, 0, 0.6)'    // Groen
+    1: 'rgba(255, 0, 0, 0.6)',
+    2: 'rgba(0, 0, 255, 0.6)',
+    3: 'rgba(0, 255, 0, 0.6)'
 };
 
 const canvas = document.getElementById('drawingCanvas');
 const ctx = canvas.getContext('2d');
 const img = document.getElementById('cameraImage');
-const CAMERA_ENDPOINT = "/foto";
+const CAMERA_ENDPOINT = "/take_picture";
 const CAMERA_PORT = ":5000";
 
 // Run the showImage function when the whole page is loaded in
