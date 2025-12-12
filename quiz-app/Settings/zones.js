@@ -169,8 +169,12 @@ async function saveZones() {
 
     const exportData = {};
 
+    const zoneKeys = ["", "A", "B", "C"]; // Index 0 is empty, convert 'zone 1' to 'A'
+
     for (let i = 1; i <= 3; i++) {
-        exportData[`zone${i}`] = zones[i].map(p => ({
+        const key = zoneKeys[i];
+
+        exportData[key] = zones[i].map(p => ({
             x: Math.max(0, Math.round(p.x * scaleX)),
             y: Math.max(0, Math.round(p.y * scaleY))
         }));
