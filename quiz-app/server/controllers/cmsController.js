@@ -3,15 +3,16 @@ import crypto from "crypto";
 import { ObjectId } from "mongodb";
 
 export const getJetsonIp = async (req, res, next) => {
-  res.json(process.env.PROJECTOR_RECEIVER_IP || "192.168.50.77");
+  res.json(process.env.PROJECTOR_RECEIVER_IP || "192.168.137.101");
 }
 
 export const saveZones = async (req, res, next) => {
     let { coordinates } = req.body;
-    const jetsonIp = process.env.PROJECTOR_RECEIVER_IP || "192.168.50.77";
+    const REVEIVER_IP = process.env.PROJECTOR_RECEIVER_IP || "192.168.137.101";
+    const REVEIVER_PORT = process.env.ZONE_CONFIG_PORT || "5051";
 
     try {
-        const response = await fetch(`http://${jetsonIp}:5000/save_zones`, {
+        const response = await fetch(`http://${REVEIVER_IP}:${REVEIVER_PORT}/save_zones`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -54,8 +55,8 @@ export const toggleProjector = async (req, res, next) => {
   }
 
   const client = new net.Socket();
-  const RECEIVER_IP = process.env.PROJECTOR_RECEIVER_IP || "192.168.50.77";         // IP of the Jetson Orin Nano running the Python listener
-  const RECEIVER_PORT = process.env.PROJECTOR_RECEIVER_PORT || 5050;        // Must match LISTEN_PORT in Python
+  const RECEIVER_IP = process.env.PROJECTOR_RECEIVER_IP || "192.168.137.101";         // IP of the Jetson Orin Nano running the Python listener
+  const RECEIVER_PORT = process.env.PROJECTOR_PORT || 5050;        // Must match LISTEN_PORT in Python
 
   client.connect(RECEIVER_PORT, RECEIVER_IP, () => {
     console.log("Connected to projector receiver");

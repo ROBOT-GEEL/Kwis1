@@ -18,7 +18,7 @@ const canvas = document.getElementById('drawingCanvas');
 const ctx = canvas.getContext('2d');
 const img = document.getElementById('cameraImage');
 const CAMERA_ENDPOINT = "/take_picture";
-const CAMERA_PORT = ":5000";
+const CAMERA_PORT = ":5051";
 
 // Run the showImage function when the whole page is loaded in
 document.addEventListener('DOMContentLoaded', (event) => {
