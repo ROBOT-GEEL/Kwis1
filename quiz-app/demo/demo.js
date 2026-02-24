@@ -1,5 +1,9 @@
 const socket = io(`ws://${window.location.hostname}`);
 
+function startup() {
+    socket.emit("robot-startup");
+}
+
 function exploring() {
     socket.emit("robot-explore");
 }

@@ -1,113 +1,145 @@
 :root {
-  --language-selection-height: 50px;
-  --screen-height: calc(100vh - var(--language-selection-height));
-  /*background-color: #80c8cc;*/
-  background-color: #80c8cc;;
-  --green-bg-color-dark: #005144;
-  --start-button-bg-color: #1d6b62;
+  --bg: #80c8cc;
+  --accent: #005144;
+  --muted: rgba(255,255,255,0.9);
+  --btn-bg: #1d6b62;
+  --gap: 1rem;
+  --bottombar-height: 207px;
   font-size: 16px;
 }
 
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: var(--bg);
+  font-family: 'Open Sans', system-ui, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
+.page { display: flex; flex-direction: column; min-height: 100vh; }
 
-.container {
+.topbar {
+  --topbar-height: 64px;
+  display: flex; justify-content: flex-start; align-items: center;
+  padding: 12px 18px; height: var(--topbar-height); background: transparent;
+}
+
+.topbar .actions-left { display: flex; align-items: center; gap: 8px; }
+
+.topbar .btn.back {
+  padding: 12px 18px;
+  min-width: 128px;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  background: var(--btn-bg);
+  color: white;
+}
+
+.actions { display: flex; gap: 12px; }
+.btn {
+  background: var(--btn-bg);
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.btn:active { transform: translateY(1px); box-shadow: 0 4px 10px rgba(0,0,0,0.12); }
+
+/* Merged .main declarations */
+.main { 
+  flex: 1; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  padding: 2rem; 
+  padding-bottom: calc(var(--bottombar-height) + 1rem); 
+}
+
+.arrows-grid {
+  width: min(70vmin, 1000px);
+  aspect-ratio: 1 / 1;
   display: grid;
-  grid-template-areas:
-    "header header"
-    "menu content"
-    "footer footer";
-  grid-template-columns: 2fr 3fr;
-  gap: 5px;
-  background-color: #2196F3;
-  padding: 5px;
-}
-.container > div {
-  background-color:rgba(255, 255, 255, 0.8);
-  padding: 10px;
-}
-.container > div.header {
-  grid-area: header;
-  text-align: center;
-}
-.container > div.menu {
-  grid-area: menu;
-}
-.container > div.content {
-  grid-area: content;
-}
-.container > div.footer {
-  grid-area: footer;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 1rem;
+  align-items: center; justify-items: center;
+  background: transparent;
+  border-radius: 18px;
+  padding: 1rem;
 }
 
+.arrow { 
+  background: var(--btn-bg); 
+  border: none; 
+  padding: .6rem; 
+  border-radius: 14px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  width: 100%; 
+  height: 100%; 
+  transition: transform .08s ease, filter .08s ease;
+}
 
-img {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 5px;
-    width: 100px;
-  }
+/* Fixed Image Scaling */
+.arrow img { 
+  max-width: 80%; /* Keeps the image inside the button nicely */
+  max-height: 80%;
+  object-fit: contain;
+  display: block; 
+  filter: invert(1) brightness(2); 
+  pointer-events: none; /* Prevents dragging the image instead of clicking */
+}
 
+.arrow:active,
+.arrow.pressed {
+  filter: brightness(0.85);
+  transform: translateY(1px);
+}
 
+.arrow.up { grid-column: 2; grid-row: 1; }
+.arrow.left { grid-column: 1; grid-row: 2; }
+.arrow.right { grid-column: 3; grid-row: 2; }
+.arrow.down { grid-column: 2; grid-row: 3; }
 
-button {
+@media (max-width: 600px) {
+  .arrows-grid { width: min(80vmin, 320px); gap: .6rem; }
+  .btn { padding: 8px 10px; border-radius: 8px; }
+}
 
-    display: flex;
-    
-    font-size: 1em;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    padding: 10px;
-    background-color: transparent;
-    
-    border-width: 10px;
-    background-color:  #005144;
-    color: rgb(0, 0, 0);
+.bottombar {
+  position: fixed; left: 0; right: 0; bottom: 12px;
+  height: var(--bottombar-height);
+  display: flex; align-items: center; justify-content: center;
+  gap: clamp(0.75rem, 2.5vw, 2.5rem);
+  padding: 12px 18px;
+  pointer-events: auto;
+  flex-wrap: wrap; 
+}
 
-    position: absolute;
-    top: 10%;
-    left: 10%;
-    
+.bottombar .btn {
+  flex: 1 1 315px; 
+  min-width: 240px; 
+  max-width: 38%;
+  padding: 27px 32px; 
+  font-size: 1.406rem; 
+  border-radius: 14px;
+  box-sizing: border-box;
+}
 
-    cursor: pointer;
+@media (max-width: 900px) {
+  .bottombar .btn { flex: 1 1 45%; max-width: 45%; }
+}
+@media (max-width: 520px) {
+  .bottombar { gap: 0.6rem; padding: 10px; }
+  .bottombar .btn { flex: 1 1 100%; max-width: 100%; min-width: 0; }
+}
 
-  }
+.topbar .btn { padding: 10px 12px; min-width: 56px; }
 
-  .voor > button {
-   
-   
-    position: absolute;
-    top: 35%;
-    left: 50%;
-  }
-  .links > button{
-    position: absolute;
-    top: 50%;
-    left: 38%;
-  }
-  .rechts > button{
-    position: absolute;
-    top: 50%;
-    left: 62%;
-  }
-  .achter > button{
-    position: absolute;
-    top: 61%;
-    left: 50%;
-
-  }
-  .stop > button{
-    position: absolute;
-    top: 20%;
-    left: 10%;
-  }
-  .cms > button{
-    position: absolute;
-    top: 30%;
-    left: 10%;
-  }
-  .quiz > button{
-    position: absolute;
-    top: 10%;
-    left: 10%;
-  }
-
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }

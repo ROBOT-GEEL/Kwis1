@@ -1,51 +1,45 @@
-
 const socket = io(`ws://${window.location.hostname}`);
 
 
-
 function driveForward(){
-        
-        
-        
-        console.log('driving forward...');
+        console.log('drive forward...');
         socket.emit('drive-forward');
-        
 }
 
 function driveLeft(){
-        
-        
-        
-        console.log('driving leftwards...');
+        console.log('drive left...');
         socket.emit('drive-left');
-        
 }
 
 function driveRight(){
-        
-        
-        
-        console.log('driving rightwards...');
+        console.log('drive right...');
         socket.emit('drive-right');
-        
 }
-function driveBackward(){
-        
-        
-        
-        console.log('driving backwards...');
-        socket.emit('drive-backward');
-        
-}
-function driveStop(){
-        
-        
-        
-        console.log('stoooooooooooooooooooooooooop...');
-        socket.emit('drive-stop');
 
+function driveBackward(){
+        console.log('drive backward...');
+        socket.emit('drive-backward');
 }
-document.addEventListener('contextmenu', function(event){
-        event.preventDefault();
-        event.stopPropagation();
-});
+
+function quiz(){
+        window.location.href = '../app';
+}
+
+function driveStop(){
+        console.log('drive stop');
+        socket.emit('drive-stop');
+}
+
+function goCMS(){
+        window.location.href = '../cms';
+}
+
+
+function goHome(){
+        console.log('going charge...');
+        socket.emit('go-charge');
+}
+
+
+
+

@@ -62,6 +62,7 @@ export function registerSocketHandlers(io) {
     // Robot platform events
     //
     const robotEvents = [
+      "robot-startup",
       "robot-explore",
       "robot-go-to-visitors",
       "robot-arrived-at-visitors",

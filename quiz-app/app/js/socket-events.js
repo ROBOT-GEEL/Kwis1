@@ -6,6 +6,10 @@
  * - quiz.js (Quiz)
  */
 
+socket.on('robot-startup', () => {
+    changeScreen('robot-startup-screen');
+});
+
 socket.on('robot-explore', () => {
     changeScreen('robot-explore-screen');
 

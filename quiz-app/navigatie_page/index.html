@@ -1,93 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <title>Quiz Interface</title>
-        <script src="socket.io/socket.io.js"></script>
-
-        <!-- Meta Tags -->
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    
+        <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
 
-
-        <!-- <title>Emphasis on hover</title>
-    <style>
-        em {font-style: normal}
-        .red {color:red}
-    </style>-->
-
-        <!-- Favicon -->
-        <link rel="icon" image="image/x-icon" href="./assets/favicon.ico">
-
-        <!-- Co Headline Font Family -->
         <link href="https://fonts.cdnfonts.com/css/co-headline" rel="stylesheet">
-
-        <!-- Open Sans Font Family -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wdth,wght@0,75..100,300..800;1,75..100,300..800&display=swap" rel="stylesheet">
 
-        <!-- CSS -->
         <link rel="stylesheet" href="./navigatiescherm.css">
 
-        <!-- Get exposed client bundle from server for Socket.IO -->
-        <!--<script src="socket.io/socket.io.js"></script> -->
-
-        <!-- Frontend Javascript -->
-        
-
-        <!-- TextFit Library -->
-        
+        <script src="socket.io/socket.io.js"></script>
     </head>
 
     <body>
-        <div class="quiz">
-            <button onclick="location.href='../'"> back to quiz</button>
-        </div>
-        <div class="stop">
-            <button ontouchstart="driveStop()" ontouchend="driveStop()" onmouseup="driveStop()" onmousedown="driveStop()"onclick="driveStop()"> STOP ROBOT</button>
+        <div class="page">
+            <header class="topbar">
+            </header>
 
-        </div>
-        <div onclick="location.href='../cms'" class="cms">
-            <button > go cms         </button>
+            <main class="main">
+                <div class="arrows-grid">
+                    <button class="arrow up" ontouchstart="driveBackward()" ontouchend="driveStop()" onmouseup="driveStop()" onmousedown="driveBackward()">
+                        <img src="arrow_up_0.png" alt="Up">
+                    </button>
 
-        </div>
-        
+                    <button class="arrow left" ontouchstart="driveLeft()" ontouchend="driveStop()" onmouseup="driveStop()" onmousedown="driveLeft()">
+                        <img src="arrow_left_0.png" alt="Left">
+                    </button>
 
-        
-        
-        
-            
-                <div class="voor" >
-                    <button ontouchstart="driveForward()" ontouchend="driveStop()" onmouseup="driveStop()" onmousedown="driveForward()">
+                    <button class="arrow right" ontouchstart="driveRight()" ontouchend="driveStop()" onmouseup="driveStop()" onmousedown="driveRight()">
+                        <img src="arrow_right.png" alt="Right">
+                    </button>
 
-                        <img src="arrow_up_0.png" />
-                      </button>            
+                    <button class="arrow down" ontouchstart="driveForward()" ontouchend="driveStop()" onmouseup="driveStop()" onmousedown="driveForward()">
+                        <img src="arrow_down_0.png" alt="Down">
+                    </button>
                 </div>
-            
-            <div class="links">
-                <button ontouchstart="driveLeft()"  ontouchend="driveStop()" onmouseup="driveStop()" onmousedown="driveLeft()" >
+            </main>
+        </div>
 
-                    <img src="arrow_left_0.png" />
-                  </button>  
-            </div>
-            <div class="rechts">
-                    <button ontouchstart="driveRight()" ontouchend="driveStop()" onmouseup="driveStop()" onmousedown="driveRight()" >
-                        <img src="arrow_right.png" />
-                      </button>            
-
-            </div>
-            <div class="achter">
-                <button ontouchstart="driveBackward()" ontouchend="driveStop()" onmouseup="driveStop()" onmousedown="driveBackward()">
-                    <img src="arrow_down_0.png" />
-                  </button>            
-            </div>
-        
-        
+        <footer class="bottombar" role="navigation">
+            <button class="btn" onclick="quiz()">Go to quiz</button>
+            <button class="btn" onclick="goHome()">Go home</button>
+            <button class="btn" onclick="goCMS()">Go CMS</button>
+        </footer>
 
         <script defer src="./nav.js"></script>
-        <!--<script src="assets/scripts/textFit.min.js"></script>-->
-        
     </body>
 </html>
