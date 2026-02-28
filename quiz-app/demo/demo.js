@@ -19,3 +19,11 @@ function atVisitor() {
 function atQuizLocation() {
     socket.emit("robot-arrived-at-quiz-location");
 }
+
+function goCharge() {
+    socket.emit("robot-go-charge");
+}
+
+function charging() {
+    socket.emit("robot-charging");
+}

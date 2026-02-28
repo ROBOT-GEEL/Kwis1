@@ -66,3 +66,11 @@ socket.on('robot-arrived-at-quiz-location', () => {
     console.log('Robot has arrived at the quiz location!');
     Quiz.start();
 });
+
+socket.on('robot-go-charge', () => {
+    changeScreen('robot-go-charge-screen');
+});
+
+socket.on('robot-charging', () => {
+    changeScreen('robot-charging-screen');
+});

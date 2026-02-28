@@ -68,7 +68,8 @@ export function registerSocketHandlers(io) {
       "robot-arrived-at-visitors",
       "drive-to-quiz-location",
       "robot-arrived-at-quiz-location",
-      "robot-battery",
+      "robot-go-charge",
+      "robot-charging",
     ];
 
     robotEvents.forEach((event) => {

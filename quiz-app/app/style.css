@@ -579,6 +579,62 @@ body {
     padding: 20px;
 }
 
+/***************************/
+/* ROBOT GO CHARGE SCREEN  */
+/***************************/
+
+#robot-go-charge-screen {
+    background-color: var(--green-bg-color-light);
+}
+
+#robot-go-charge-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: 2.5em; /* Matcht met de explore/visitor schermen */
+    text-align: center;
+}
+
+#robot-go-charge-container > h1 {
+    font-family: 'Co Headline', sans-serif;
+    margin-bottom: 20px;
+}
+
+#robot-go-charge-container > p {
+    max-width: 60vw;
+    font-weight: 100;
+}
+
+/**************************/
+/* ROBOT CHARGING SCREEN  */
+/**************************/
+
+#robot-charging-screen {
+    background-color: var(--green-bg-color-light);
+}
+
+#robot-charging-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: 2.5em;
+    text-align: center;
+}
+
+#robot-charging-container > h1 {
+    font-family: 'Co Headline', sans-serif;
+    margin-bottom: 20px;
+}
+
+#robot-charging-container > p {
+    max-width: 60vw;
+    font-weight: 100;
+}
+
 /************************/
 /*    DEBUG OVERLAY     */
 /************************/
