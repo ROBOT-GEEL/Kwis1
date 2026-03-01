@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" translate="no"> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="google" content="notranslate"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kiosk Control Master</title>
+    <style>
+        /* Styles based on the original master file */
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            overflow: hidden; background: #121212; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            cursor: none; /* Hide cursor for touchscreen use */
+        }
+        iframe { 
+            width: 100%; height: 100%; border: none; 
+            display: none; background: black; 
+            pointer-events: auto; 
+        }
+        #status-screen { 
+            display: flex; flex-direction: column; justify-content: center; 
+            align-items: center; width: 100%; height: 100%; color: white; 
+            text-align: center; padding: 20px; box-sizing: border-box;
+        }
+        /* Adjusted font sizes for small screens while keeping the original style */
+        h1 { font-size: 5em; margin: 0 0 10px 0; color: #e74c3c; font-weight: 600; }
+        p { font-size: 2.5em; line-height: 1.4; opacity: 0.8; max-width: 1000px; margin: 0; }
+        
+        /* Original loader style */
+        .loader {
+            border: 5px solid #333; 
+            border-top: 5px solid #3498db; 
+            border-radius: 50%;
+            width: 50px; height: 50px; 
+            animation: spin 1s linear infinite; 
+            margin-top: 30px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div id="status-screen">
+        <h1 id="status-title">System Boot</h1>
+        <p id="status-desc">Initializing connection to local server...</p>
+        <div class="loader" id="loader"></div>
+    </div>
+
+    <iframe id="main-frame"></iframe>
+
+    <script>
+        /* Server is always on the same device */
+        const SERVER_URL = `http://localhost:80/`; 
+
+        const frame = document.getElementById('main-frame');
+        const statusScreen = document.getElementById('status-screen');
+        const statusTitle = document.getElementById('status-title');
+        const statusDesc = document.getElementById('status-desc');
+        const loader = document.getElementById('loader');
+
+        let currentState = 'INIT'; 
+        let checkLoopTimer; 
+
+        function updateUI(newState) {
+            if (currentState === newState) return; 
+            currentState = newState;
+
+            if (newState === 'ONLINE') {
+                frame.src = SERVER_URL;
+                frame.style.display = "block";
+                statusScreen.style.display = "none";
+            } else {
+                frame.style.display = "none";
+                statusScreen.style.display = "flex";
+                
+                // Clear frame source to prevent stale content from appearing on reconnect
+                if (frame.src !== "") frame.src = ""; 
+                
+                if (newState === 'ERROR') {
+                    statusTitle.innerText = "Netwerkfout";
+                    statusTitle.style.color = "#e74c3c";
+                    statusDesc.innerText = "Robotoo kan geen verbinding maken met de server.";
+                    loader.style.display = "block";
+                }
+            }
+        }
+
+        async function checkConnection() {
+            const controller = new AbortController();
+            /* 2-second timeout for the fetch request */
+            const timeoutId = setTimeout(() => controller.abort(), 2000); 
+
+            try {
+                /* Ping the local server */
+                await fetch(SERVER_URL, { 
+                    mode: 'no-cors', 
+                    cache: 'no-store',
+                    signal: controller.signal 
+                });
+                
+                clearTimeout(timeoutId); 
+                updateUI('ONLINE');
+                scheduleNextCheck(5000); /* Success: check every 5 seconds */
+                
+            } catch (error) {
+                clearTimeout(timeoutId);
+                updateUI('ERROR');
+                scheduleNextCheck(3000); /* Failure: retry every 3 seconds */
+            }
+        }
+
+        function scheduleNextCheck(delay) {
+            clearTimeout(checkLoopTimer);
+            checkLoopTimer = setTimeout(checkConnection, delay);
+        }
+
+        /* Start the connection monitoring */
+        checkConnection();
+    </script>
+</body>
+</html>

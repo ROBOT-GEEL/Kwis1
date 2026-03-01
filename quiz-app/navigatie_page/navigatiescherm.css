@@ -1,3 +1,10 @@
+@font-face {
+  font-family: "CO Headline";
+  src: url("/shared/assets/fonts/Co-Headline.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   --bg: #80c8cc;
   --accent: #005144;
