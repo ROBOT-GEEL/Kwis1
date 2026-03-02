@@ -3,13 +3,11 @@
     <head>
         <title>Quiz Interface</title>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-        <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
+        <link rel="icon" type="image/x-icon" href="../shared/assets/icons/favicon.ico">
 
         <link rel="stylesheet" href="./navigatiescherm.css">
-
-        <script src="socket.io/socket.io.js"></script>
     </head>
 
     <body>
@@ -36,13 +34,12 @@
                     </button>
                 </div>
             </main>
-        </div>
 
-        <footer class="bottombar" role="navigation">
-            <button class="btn" onclick="quiz()">Go to quiz</button>
-            <button class="btn" onclick="goHome()">Go home</button>
-            <button class="btn" onclick="goCMS()">Go CMS</button>
-        </footer>
+            <footer class="bottombar" role="navigation">
+                <button class="btn" onclick="quiz()">Go to quiz</button>
+                <button class="btn" onclick="goCMS()">Go CMS</button>
+            </footer>
+        </div>
 
         <script defer src="./nav.js"></script>
     </body>

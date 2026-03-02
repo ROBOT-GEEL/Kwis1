@@ -7,7 +7,7 @@
   <title>Robotoo dashboard</title>
 
   <!-- fav icon -->
-  <link rel="icon" type="image/x-icon" href="https://tabloo.com/themes/contrib/rocketship_theme_flex/favicon.ico">
+  <link rel="icon" image="image/x-icon" href="../shared/assets/icons/favicon.ico">
 </head>
 
 <body>
@@ -94,6 +94,28 @@
   </script>
 
   <style>
+    @font-face {
+      font-family: "CO Headline";
+      src: url("/shared/assets/fonts/Co-Headline.otf") format("opentype");
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'Open Sans';
+      src: url('/shared/assets/fonts/OpenSans-VariableFont_wdth,wght.ttf') format('truetype-variations');
+      font-weight: 100 900;
+      font-stretch: 75% 100%;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'Open Sans';
+      src: url('/shared/assets/fonts/OpenSans-Italic-VariableFont_wdth,wght.ttf') format('truetype-variations');
+      font-weight: 100 900;
+      font-style: italic;
+    }
+
     :root {
       --darkGreen: #005144;
       --darkGreen-hover: #026151;
@@ -157,7 +179,7 @@
 
     /************** side balk **************/
     .rectangleSideBalk {
-      background-color: #80c8cc;
+      background-color: var(--darkGreen);
       border-top-right-radius: 1rem;
       border-bottom-right-radius: 1rem;
       height: 100vh;

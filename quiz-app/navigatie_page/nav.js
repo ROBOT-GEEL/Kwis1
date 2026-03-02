@@ -1,45 +1,34 @@
-const socket = io(`ws://${window.location.hostname}`);
+const socket = io('ws://localhost');
 
-
-function driveForward(){
+function driveForward() {
         console.log('drive forward...');
         socket.emit('drive-forward');
 }
 
-function driveLeft(){
+function driveLeft() {
         console.log('drive left...');
         socket.emit('drive-left');
 }
 
-function driveRight(){
+function driveRight() {
         console.log('drive right...');
         socket.emit('drive-right');
 }
 
-function driveBackward(){
+function driveBackward() {
         console.log('drive backward...');
         socket.emit('drive-backward');
 }
 
-function quiz(){
-        window.location.href = '../app';
+function quiz() {
+        window.location.href = '../';
 }
 
-function driveStop(){
+function driveStop() {
         console.log('drive stop');
         socket.emit('drive-stop');
 }
 
-function goCMS(){
+function goCMS() {
         window.location.href = '../cms';
 }
-
-
-function goHome(){
-        console.log('going charge...');
-        socket.emit('go-charge');
-}
-
-
-
-

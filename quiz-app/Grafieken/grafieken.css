@@ -117,7 +117,7 @@ button:hover {
 
 /************** side balk **************/
 .rectangleSideBalk {
-    background-color: #80c8cc;
+    background-color: var(--darkGreen);
     border-top-right-radius: 1rem;
     border-bottom-right-radius: 1rem;
     height: 100vh;

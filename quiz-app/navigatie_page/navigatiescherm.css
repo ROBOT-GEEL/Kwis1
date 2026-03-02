@@ -26,12 +26,19 @@
   --muted: rgba(255,255,255,0.9);
   --btn-bg: #1d6b62;
   --gap: 1rem;
-  --bottombar-height: 207px;
   font-size: 16px;
 }
 
 * { box-sizing: border-box; }
-html, body { height: 100%; margin: 0; }
+
+/* Prevent all scrolling and pull-to-refresh actions */
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  overflow: hidden; 
+  touch-action: none; 
+}
+
 body {
   background: var(--bg);
   font-family: 'Open Sans', system-ui, Arial, sans-serif;
@@ -39,12 +46,21 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.page { display: flex; flex-direction: column; min-height: 100vh; }
+/* Flex container to perfectly fit the viewport height */
+.page { 
+  display: flex; 
+  flex-direction: column; 
+  height: 100dvh; 
+  overflow: hidden; 
+}
 
 .topbar {
   --topbar-height: 64px;
   display: flex; justify-content: flex-start; align-items: center;
-  padding: 12px 18px; height: var(--topbar-height); background: transparent;
+  padding: 12px 18px; 
+  height: var(--topbar-height); 
+  background: transparent;
+  flex-shrink: 0;
 }
 
 .topbar .actions-left { display: flex; align-items: center; gap: 8px; }
@@ -72,18 +88,22 @@ body {
 }
 .btn:active { transform: translateY(1px); box-shadow: 0 4px 10px rgba(0,0,0,0.12); }
 
-/* Merged .main declarations */
+/* Main takes remaining space, min-height: 0 ensures flex children do not overflow */
 .main { 
   flex: 1; 
   display: flex; 
   align-items: center; 
   justify-content: center; 
-  padding: 2rem; 
-  padding-bottom: calc(var(--bottombar-height) + 1rem); 
+  padding: 1rem; 
+  min-height: 0; 
 }
 
+/* Dynamically sizing arrows grid so it never overflows vertically or horizontally */
 .arrows-grid {
-  width: min(70vmin, 1000px);
+  width: 100%;
+  max-width: 500px;
+  height: 100%;
+  max-height: 500px;
   aspect-ratio: 1 / 1;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -92,7 +112,6 @@ body {
   align-items: center; justify-items: center;
   background: transparent;
   border-radius: 18px;
-  padding: 1rem;
 }
 
 .arrow { 
@@ -106,16 +125,17 @@ body {
   width: 100%; 
   height: 100%; 
   transition: transform .08s ease, filter .08s ease;
+  touch-action: manipulation;
 }
 
 /* Fixed Image Scaling */
 .arrow img { 
-  max-width: 80%; /* Keeps the image inside the button nicely */
+  max-width: 80%;
   max-height: 80%;
   object-fit: contain;
   display: block; 
   filter: invert(1) brightness(2); 
-  pointer-events: none; /* Prevents dragging the image instead of clicking */
+  pointer-events: none;
 }
 
 .arrow:active,
@@ -130,38 +150,34 @@ body {
 .arrow.down { grid-column: 2; grid-row: 3; }
 
 @media (max-width: 600px) {
-  .arrows-grid { width: min(80vmin, 320px); gap: .6rem; }
+  .arrows-grid { gap: .6rem; }
   .btn { padding: 8px 10px; border-radius: 8px; }
 }
 
+/* Footer takes up only the space it needs at the bottom */
 .bottombar {
-  position: fixed; left: 0; right: 0; bottom: 12px;
-  height: var(--bottombar-height);
-  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
   gap: clamp(0.75rem, 2.5vw, 2.5rem);
-  padding: 12px 18px;
-  pointer-events: auto;
+  padding: 12px 18px 24px;
   flex-wrap: wrap; 
 }
 
 .bottombar .btn {
-  flex: 1 1 315px; 
-  min-width: 240px; 
-  max-width: 38%;
-  padding: 27px 32px; 
+  flex: 1 1 auto; 
+  min-width: 200px; 
+  max-width: 45%;
+  padding: 20px 24px; 
   font-size: 1.406rem; 
   border-radius: 14px;
   box-sizing: border-box;
 }
 
-@media (max-width: 900px) {
-  .bottombar .btn { flex: 1 1 45%; max-width: 45%; }
-}
 @media (max-width: 520px) {
-  .bottombar { gap: 0.6rem; padding: 10px; }
+  .bottombar { gap: 0.6rem; padding: 10px 10px 20px; }
   .bottombar .btn { flex: 1 1 100%; max-width: 100%; min-width: 0; }
 }
-
-.topbar .btn { padding: 10px 12px; min-width: 56px; }
 
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
