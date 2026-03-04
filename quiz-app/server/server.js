@@ -28,6 +28,7 @@ app.use(express.static(path.join(ROOT_DIR, "app")));
 app.use(express.static(path.join(ROOT_DIR, "app-projector")));
 app.use(express.static(path.join(ROOT_DIR, "demo")));
 app.use(express.static(path.join(ROOT_DIR, "navigatie_page")));
+app.use("/admin-panel", express.static(path.join(ROOT_DIR, "admin-panel")));
 app.use("/shared", express.static(path.join(ROOT_DIR, "shared")));
 app.use("/cms", express.static(path.join(ROOT_DIR, "Cms")));
 app.use("/grafieken", express.static(path.join(ROOT_DIR, "Grafieken")));

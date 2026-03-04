@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robotoo Overview</title>
+    <link rel="icon" type="image/x-icon" href="../shared/assets/icons/favicon.ico">
+    <link rel="stylesheet" href="admin-panel.css">
+</head>
+<body>
+    <div class="overview-container">
+        
+        <div class="overview-title">Robotoo Admin Panel</div>
+
+        <div class="main-grid">
+            <button class="grid-btn" onclick="location.href='../cms'">
+                <img src="assets/icons/questions.svg" alt="figuur vragen" class="btn-icon">
+                <span>Vragen</span>
+            </button>
+            <button class="grid-btn" onclick="location.href='../settings'">
+                <img src="assets/icons/settings.svg" alt="figuur instellingen" class="btn-icon">
+                <span>Instellingen</span>
+            </button>
+            <button class="grid-btn" onclick="location.href='../grafieken'">
+                <img src="assets/icons/gauge.svg" alt="figuur dashboard" class="btn-icon">
+                <span>Dashboard</span>
+            </button>
+            <button class="grid-btn" onclick="location.href='../manual-driving'">
+                <img src="assets/icons/bezoekers.svg" alt="figuur manueel rijden" class="btn-icon">
+                <span>Manueel Rijden</span>
+            </button>
+        </div>
+
+        <div class="hardware-controls">
+            <div class="control-group">
+                <span class="control-label">Projector</span>
+                <div class="control-buttons">
+                    <button class="action-btn on" onclick="toggleProjector('1')">On</button>
+                    <button class="action-btn off" onclick="toggleProjector('0')">Off</button>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <span class="control-label">Lens</span>
+                <div class="control-buttons">
+                    <button class="action-btn on" onclick="toggleLens('wake')">Wake</button>
+                    <button class="action-btn off" onclick="toggleLens('sleep')">Sleep</button>
+                </div>
+            </div>
+        </div>
+
+       <button id="backToQuizBtn" class="back-to-quiz-btn" style="display: none;" onclick="location.href='../'">
+            Terug naar quiz
+        </button>
+
+    </div>
+
+    <!-- <script src="js/common.js"></script> -->
+    <script>
+        // Execute when the DOM is fully loaded
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            // Get the search parameters from the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const isRobotScreen = urlParams.get('robot-screen');
+            const backBtn = document.getElementById('backToQuizBtn');
+
+            // Show the button only if the parameter exactly matches 'true'
+            if (isRobotScreen === 'true') {
+                backBtn.style.display = 'block';
+            }
+        });
+
+        // Placeholder function for lens control
+        function toggleLens(state) {
+            console.log("Lens set to:", state);
+            // Add fetch call to localhost backend here
+        }
+    </script>
+</body>
+</html>

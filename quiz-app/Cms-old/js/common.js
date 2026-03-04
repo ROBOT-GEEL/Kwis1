@@ -1,67 +1,42 @@
 /********************************************************************
  * common.js
- * Common helper functions
+ * Gemeenschappelijke hulpfuncties
  ********************************************************************/
 
-// Object holding the explanations for each page
-const pageExplanations = {
-    "Vragen": "Beheer de inhoud van alle quizvragen en hun vertalingen. Zorg ervoor dat je alle wijzigingen opslaat.",
-    "Actief": "Kies welke vragen worden gebruikt tijdens de quiz.",
-    "Bezocht": "Kies welke vragen worden getoond aan mensen dat de expo hebben bezocht."
-};
-
 /**
- * Updates the page title, active navigation button, and explanation text.
+ * Updates the page title and highlights the active navigation button.
  * @param {string} title - The new text for the main title.
  * @param {string} activeNavId - The ID of the nav button to highlight.
  */
 function updatePageUI(title, activeNavId) {
-    // Set the main title and explanation text
+    // Set the main title
     document.getElementById("title").innerHTML = title;
-    document.getElementById("pageExplanation").innerHTML = pageExplanations[title] || "";
 
-    // Reset styles for all nav buttons
-    const navFrames = ["questionsButtonFrame", "enabledFrame", "visitedFrame"];
+    // Reset background color for all nav buttons
+    const navFrames = ["questionsButtonFrame", "enabledFrame", "visitedFrame", "settingsFrame"];
     navFrames.forEach(frameId => {
         const el = document.getElementById(frameId);
         if (el) {
-            el.classList.remove("active");
-            el.style.background = "#80c8cc"; 
+            el.style.background = "#80c8cc"; // Default color
         }
     });
 
-    // Set active style for current nav
+    // Set active background color
     const activeNav = document.getElementById(activeNavId);
     if (activeNav) {
-        activeNav.classList.add("active");
-        activeNav.style.background = "rgb(144 213 218)"; 
+        activeNav.style.background = "rgb(144 213 218)"; // Active color
     }
 }
 
 /**
- * Hides standard action buttons.
+ * Hides all buttons with the class '.buttonAddQuestion'.
+ * Used to manage which primary action buttons are visible.
  */
 function hideAllActionButtons() {
-    document.getElementById("btnSave").style.display = "none";
-    document.getElementById("btnCancel").style.display = "none";
-    document.getElementById("buttonAddQuestion").style.display = "none";
-}
-
-/**
- * Sets up the Save and Cancel buttons dynamically based on the current context.
- * @param {Function} saveCallback - Function to execute on save.
- * @param {Function} cancelCallback - Function to execute on cancel.
- */
-function configureActionButtons(saveCallback, cancelCallback) {
-    const btnSave = document.getElementById("btnSave");
-    const btnCancel = document.getElementById("btnCancel");
-
-    btnSave.style.display = "block";
-    btnSave.textContent = "Opgeslagen"; // Default state until changed
-    btnSave.onclick = saveCallback;
-
-    btnCancel.style.display = "block";
-    btnCancel.onclick = cancelCallback;
+    let allButtons = document.querySelectorAll('.buttonAddQuestion');
+    allButtons.forEach(function(button) {
+        button.style.display = 'none';
+    });
 }
 
 /**
@@ -107,7 +82,7 @@ async function saveCheckboxState(endpoint, buttonId, propertyName) {
         if (response.ok) {
             console.log(`Flags saved successfully to ${endpoint}`);
             saveButton.textContent = "Opgeslagen";
-            return response.text();
+            return response.json();
         } else {
             console.error(`Failed to save flags to ${endpoint}`);
             throw new Error(`Failed to save flags to ${endpoint}`);
@@ -119,15 +94,52 @@ async function saveCheckboxState(endpoint, buttonId, propertyName) {
 }
 
 /**
+ * Sends a command to toggle the projector on or off.
+ * @param {string} state - The desired state (e.g., "on" or "off").
+ */
+function toggleProjector(state) {
+    console.log('Projector toggle requested, going to state:', state);
+    fetch('/cms/toggleProjector', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                projectorState: state
+            })
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log("Projector toggled successfully");
+                return response.json();
+            } else {
+                throw new Error('Failed to toggle projector');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+/**
+ * Navigates the browser back to the main quiz page.
+ */
+function buttonBackToQuiz() {
+    window.location.href = "../";
+}
+
+/**
  * Adds 'change' event listeners to all checkboxes on the page.
  * When a checkbox changes, it updates the "Save" button text.
+ * @param {string} buttonId - The ID of the save button to update (e.g., "buttonEnableSave").
  */
-function initializeCheckboxChangeListeners() {
+function initializeCheckboxChangeListeners(buttonId) {
     const inputElements = document.querySelectorAll('input[type="checkbox"]');
-    const saveButton = document.getElementById("btnSave");
+    const saveButton = document.getElementById(buttonId);
 
     inputElements.forEach(input => {
         input.addEventListener('change', () => {
+            console.log("Change detected");
             if (saveButton) {
                 saveButton.textContent = "Opslaan";
             }

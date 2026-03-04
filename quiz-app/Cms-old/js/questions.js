@@ -1,6 +1,6 @@
 /********************************************************************
  * questions.js
- * Logic for displaying, editing, and saving questions.
+ * Logica voor het tonen, bewerken en opslaan van vragen.
  ********************************************************************/
 
 /**
@@ -65,9 +65,6 @@ function displayQuestions() {
                 <div class="editframe" onclick="enableEditing(this.parentElement)">
                     <img class="editIcon" src="icons/edit.svg"/>
                 </div>
-                <div class="deleteframe" onclick="deleteQuestion(this.parentElement)">
-                    <img class="deleteIcon" src="icons/delete.svg"/>
-                </div>
                 <div class="language">nl</div>
                 <div class="previousLanguage" onclick="previousLanguage(this.parentElement)">
                     <img class="editIcon" src="icons/arrowLeft.svg"/>
@@ -126,9 +123,6 @@ function buttonAddQuestion(questionsFrame) {
     <div class="editframe" onclick="enableEditing(this.parentElement)">
         <img class="editIcon" src="icons/edit.svg"/>
     </div>
-    <div class="deleteframe" onclick="deleteQuestion(this.parentElement)">
-        <img class="deleteIcon" src="icons/delete.svg"/>
-    </div>
     <div class="language">nl</div>
     <div class="previousLanguage" onclick="previousLanguage(this.parentElement)">
         <img class="editIcon" src="icons/arrowLeft.svg"/>
@@ -140,46 +134,6 @@ function buttonAddQuestion(questionsFrame) {
     questionsFrame.appendChild(questionFrame);
     // Automatically enable editing for the new question
     enableEditing(questionFrame);
-}
-
-/**
- * Handles the deletion of a question.
- * @param {HTMLElement} questionFrame - The .questionFrame element to delete.
- */
-function deleteQuestion(questionFrame) {
-    const questionId = questionFrame.getAttribute("id");
-    
-    // Safety check to prevent accidental deletions
-    if (!confirm("Weet je zeker dat je deze vraag wilt verwijderen?")) {
-        return;
-    }
-
-    // New questions that haven't been saved yet can just be removed from the DOM
-    if (questionId === "new" || !questionId) {
-        questionFrame.remove();
-        return;
-    }
-
-    // Call the backend API to delete the question
-    fetch(`/cms/deleteQuestion`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ questionId: questionId })
-    })
-    .then(response => {
-        if (response.ok) {
-            questionFrame.remove();
-            console.log(`Successfully deleted question: ${questionId}`);
-        } else {
-            throw new Error('Failed to delete question');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert("Fout bij het verwijderen van de vraag.");
-    });
 }
 
 /**
@@ -315,17 +269,11 @@ function saveChanges(questionFrame) {
     // Change "Save" button back to "Edit"
     let editFrame = questionFrame.querySelector('.editframe');
     editFrame.innerHTML = '<img class="editIcon" src="icons/edit.svg">';
-    editFrame.onclick = function() {
-        enableEditing(this.parentElement);
-    };
+    editFrame.setAttribute("onclick", "enableEditing(this.parentElement);");
 
     // Re-enable answer toggling
-    questionBundle.children[languageIndex].onclick = function() {
-        showAnswers(this.parentElement);
-    };
-
-    // Hide the answers
-    answersBundle.style.display = 'none';
+    questionBundle.children[languageIndex].setAttribute("onclick", "showAnswers(this.parentElement)");
+    answersBundle.setAttribute("toggleEnable", true);
 
     // --- Send data to server ---
     fetch("/cms/editQuestion", {
@@ -376,24 +324,6 @@ function saveChanges(questionFrame) {
         .catch(error => {
             console.error('Error:', error);
         });
-}
-
-/**
- * Synchronizes the selected correct answer across all language tabs.
- * @param {HTMLElement} currentLanguageDiv - The specific language div containing the clicked radio button.
- * @param {string} choice - The selected answer ('A', 'B', or 'C').
- */
-function selectCorrectAnswer(currentLanguageDiv, choice) {
-    // Determine the index of the radio button based on the choice (0 for A, 2 for B, 4 for C)
-    let radioIndex = (choice === 'A') ? 0 : (choice === 'B') ? 2 : 4;
-    
-    // The parent of the current language div is the main "answers" bundle
-    let answersBundle = currentLanguageDiv.parentElement;
-    
-    // Loop through all 3 languages (en, nl, fr) and sync the radio buttons
-    for (let i = 0; i < 3; i++) {
-        answersBundle.children[i].children[radioIndex].checked = true;
-    }
 }
 
 /**

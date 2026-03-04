@@ -1,6 +1,6 @@
 /********************************************************************
  * visited.js
- * Logic for the "Visited" page (marking questions as visited).
+ * Logica voor de "Bezocht" pagina (vragen als bezocht markeren).
  ********************************************************************/
 
 /**
@@ -9,15 +9,11 @@
  * Sorts to show visited questions first.
  */
 function buttonVisited() {
-    // Update UI using the new responsive layout functions
+    // Update UI
     updatePageUI("Bezocht", "visitedFrame");
     hideAllActionButtons();
-    
-    // Bind the unified buttons to the specific Visited actions
-    configureActionButtons(
-        () => buttonVisitedSave(),
-        () => buttonVisited() // Cancel simply reloads the current view from the database
-    );
+    document.getElementById("buttonVisitedSave").style.display = "block";
+    document.getElementById("buttonVisited").style.display = "block";
 
     fetch('/cms/getQuestions')
         .then(response => response.json())
@@ -37,11 +33,9 @@ function buttonVisited() {
                 let questionFrame = document.createElement('div');
                 questionFrame.className = "questionFrame";
                 questionFrame.id = question._id;
-                
-                // Construct the HTML for each question, including the toggle switch
                 questionFrame.innerHTML = `
                 <div class="questionBorder"></div>
-                <div onclick="showAnswers(this.parentElement)" class="question" contenteditable="false">${question.nl.question}</div>
+                <div onclick="enableQuestion(this.previousElementSibling)" class="question" contenteditable="false">${question.nl.question}</div>
                 <label class="enableSwitch">
                     <input type="checkbox" ${question.bezocht ? 'checked' : ''}>
                     <span class="slider round"></span>
@@ -55,8 +49,8 @@ function buttonVisited() {
                 questionsFrame.appendChild(questionFrame);
             });
 
-            // Add listeners to the new checkboxes to trigger the "Save" button state
-            initializeCheckboxChangeListeners();
+            // Add listeners to the new checkboxes
+            initializeCheckboxChangeListeners("buttonVisitedSave");
         })
         .catch(error => console.error(`Error getting questions: ${error}`));
 }
@@ -66,6 +60,5 @@ function buttonVisited() {
  * This calls the generic saveCheckboxState function from common.js
  */
 function buttonVisitedSave() {
-    // Send the updated states to the local server
-    saveCheckboxState('/cms/saveVisitedCheckBoxes', 'btnSave', 'visitedSwitch');
+    saveCheckboxState('/cms/saveVisitedCheckBoxes', 'buttonVisitedSave', 'visitedSwitch');
 }

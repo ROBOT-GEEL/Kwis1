@@ -9,14 +9,11 @@
  * Sorts to show enabled questions first.
  */
 function buttonEnable() {
+    // Update UI
     updatePageUI("Actief", "enabledFrame");
     hideAllActionButtons();
-    
-    // Bind the unified buttons to the specific Enable actions
-    configureActionButtons(
-        () => saveCheckboxState('/cms/saveEnabledCheckBoxes', 'btnSave', 'enableSwitch'),
-        () => buttonEnable() // Cancel simply reloads the current view from the database
-    );
+    document.getElementById("buttonEnableSave").style.display = "block";
+    document.getElementById("buttonEnable").style.display = "block";
 
     fetch('/cms/getQuestions')
         .then(response => response.json())
