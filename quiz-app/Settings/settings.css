@@ -1,3 +1,6 @@
+/* ==========================================================================
+   Fonts configuration
+   ========================================================================== */
 @font-face {
     font-family: "CO Headline";
     src: url("/shared/assets/fonts/Co-Headline.otf") format("opentype");
@@ -13,379 +16,403 @@
     font-style: normal;
 }
 
-@font-face {
-    font-family: 'Open Sans';
-    src: url('/shared/assets/fonts/OpenSans-Italic-VariableFont_wdth,wght.ttf') format('truetype-variations');
-    font-weight: 100 900;
-    font-style: italic;
-}
-
+/* ==========================================================================
+   Global Variables
+   ========================================================================== */
 :root {
     --darkGreen: #005144;
     --darkGreen-hover: #026151;
+    --lightBlue: #80c8cc;
+    --bgColor: #d3d3d3;
+    --cardBg: #ffffff;
+    --textColor: #000000;
+    --subTextColor: #555555;
+    --borderColor: #b9b9b9;
+    --dangerColor: #cc0000;
+    --dangerHover: #990000;
+    --successColor: #28a745;
+    --successHover: #218838;
 }
 
+/* ==========================================================================
+   Base & Layout
+   ========================================================================== */
 body {
     margin: 0;
     padding: 0;
-    background-color: #f1f1f1;
+    background-color: var(--bgColor);
+    font-family: 'Open Sans', sans-serif;
 }
 
-.rectangleSideBalk {
-    background-color: #80c8cc;
-    border-top-right-radius: 1rem;
-    border-bottom-right-radius: 1rem;
-    height: 100vh;
-    left: 0;
-    position: fixed;
-    top: 0;
-    width: 12rem;
-    overflow: hidden;
-}
-
-.dashBoardFrame {
-    height: 4rem;
-    position: absolute;
-    top: 1rem;
-    width: 100%;
-}
-
-.rectangleDashBoard {
-    background-color: var(--darkGreen);
-    height: 2.4rem;
-    position: absolute;
-    top: 0.8rem;
-    width: 100%;
-}
-
-.gaugeIcon {
-    height: 1.3712rem;
-    left: 0.3526rem;
-    position: absolute;
-    top: 1.2105rem;
-    width: 1.8947rem;
-}
-
-.dashBoard {
-    font-family: "CO Headline";
-    color: #f1f1f1;
-    display: flex;
-    font-size: 1.4rem;
-    font-weight: 700;
-    height: 1.7rem;
-    left: 2.5rem;
-    line-height: 0.7;
-    position: absolute;
-    top: 1.15rem;
-    white-space: nowrap;
-    width: 7.5rem;
-}
-
-.settingsFrame {
-    align-items: center;
-    display: flex;
-    height: 1.55rem;
-    position: absolute;
-    top: 5.25rem;
-    width: 100%;
-}
-
-.settingsFrame:hover .settings {
-    font-size: 1.3rem;
-    cursor: pointer;
-}
-
-.gear {
-    height: 1.4438rem;
-    margin-right: 0.2rem;
-    width: 2.1rem;
-}
-
-.beamerPowerToggle{
-    font-family: "CO Headline";
-    color: var(--darkGreen);
-    display: flex;
-    flex-shrink: 0;
-    font-size: 1.2rem;
-    font-weight: 400;
-    line-height: 1.2125;
-    white-space: nowrap;
-    padding-bottom: 0.4rem;
-    bottom: 7rem;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-}
-.beamerPowerToggleDiv {
-    align-items: center;
-    display: flex;
-    height: 1.55rem;
-    position: absolute;
-    top: 13.25rem;
-    width: 100%;
-}
-.beamerPowerToggleDivOn {
-    align-items: center;
-    display: flex;
-    height: 1.55rem;
-    position: absolute;
-    bottom: 5rem;
-    width: 5.2rem;
-    left: 0.6rem;
-}
-.beamerPowerToggleOn{
-    height: 100%;
-    font-family: "CO Headline";
-    font-size: 0.9rem;
-    font-weight: 500;
-    background-color: var(--darkGreen);
-    color: #ffffff;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    line-height: 0;
-    width: 100%;
-}
-.beamerPowerToggleDivOff {
-    align-items: center;
-    display: flex;
-    height: 1.55rem;
-    position: absolute;
-    bottom: 5rem;
-    width: 5.2rem;
-    right: 0.6rem;
-}
-.beamerPowerToggleOff{
-    height: 100%;
-    font-family: "CO Headline";
-    font-size: 0.9rem;
-    font-weight: 500;
-    background-color: var(--darkGreen);
-    color: #ffffff;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    line-height: 0;
-    width: 100%;
-}
-.beamerPowerToggleOn:hover {
-    font-size: 1rem;
-    cursor: pointer;
-    background-color: var(--darkGreen-hover);
-}
-.beamerPowerToggleOff:hover {
-    font-size: 1rem;
-    cursor: pointer;
-    background-color: var(--darkGreen-hover);
-}
-
-.powerIcon {
-    height: 1.4438rem;
-    margin-right: 0.2rem;
-    width: 2.1rem;
-}
-
-.settings {
-    font-family: "CO Headline";
-    color: var(--darkGreen);
-    display: flex;
-    flex-shrink: 0;
-    font-size: 1.2rem;
-    font-weight: 400;
-    line-height: 1.2125;
-    margin-bottom: 0.05rem;
-    white-space: nowrap;
-    padding-bottom: 0.4rem
-}
-
-.settingsLine {
-    background-color: var(--darkGreen);
-    height: 0.1rem;
-    left: 0;
-    position: absolute;
-    top: 12rem;
-    width: 100%;
-}
-
-.body {
-    flex-shrink: 0;
-    margin-top: 1.25rem;
-    width: 100%;
-    width: calc(100% - 12.5rem);
-    max-width: 45rem;
-    margin-left: 13rem;
-}
-
-.vragen {
-    color: #000000;
-    display: flex;
-    font-family: Inter, 'CO Headline';
-    font-size: 2rem;
-    font-weight: 700;
-    line-height: 1.2125;
-    margin-bottom: 1rem;
-    white-space: nowrap;
-}
-
-.questionsBody {
-    background-color: #ffffff;
-    border-radius: 0.5rem;
-    box-sizing: border-box;
-    padding: 1rem 1rem 1.2rem 1rem;
-    width: 100%;
-    margin-top: 1rem;
-}
-
-.questionsFrame {
-    align-items: center;
+.settings-page-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    box-sizing: content-box;
 }
 
-.settingsBodyFrame {
-    gap: 10px;
+.settings-content {
     display: flex;
-    margin-bottom: 0.4rem;
+    flex-direction: column;
+    gap: 2rem; /* Forces a clear margin between all the cards */
+}
+
+/* ==========================================================================
+   Header & Button Row Alignment
+   ========================================================================== */
+.settings-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 2rem;
     width: 100%;
+}
+
+.settings-title {
+    color: var(--darkGreen);
+    font-family: "CO Headline", sans-serif;
+    font-size: 2.5rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.settings-description {
+    color: var(--subTextColor);
+    font-size: 1rem;
+    margin: 0;
+}
+
+.settings-button-row {
+    display: flex;
+    justify-content: space-between; /* Pushes back-btn to the right */
+    align-items: center;
+    width: 100%;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.settings-actions {
+    display: flex;
+    gap: 1rem;
     flex-wrap: wrap;
 }
-.setting {
-    flex: 1 1 calc(50% - 5px);
-    margin-bottom: 10px;
-}
-.setting label {
-    display: block;
-    margin-bottom: 5px;
-    font-family: Inter, 'Open Sans';
-    font-size: 1.2rem;
-    font-weight: 400;
-}
-.setting-input {
-    display: flex;
-    flex-direction: column;
-}
-.buttonSaveSettings {
-    background-color: var(--darkGreen);
-    color: #ffffff;
-    padding: 10px 20px;
+
+/* ==========================================================================
+   Button Shared Styles - Final Centering Fix
+   ========================================================================== */
+.settings-btn-primary, 
+.settings-btn-secondary, 
+.settings-back-btn, 
+.settings-btn-danger,
+.settings-btn-success {
+    font-family: "CO Headline", sans-serif;
+    font-size: 1rem;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    width: 100%;
+    height: 3rem;
+    padding: 0 1.5rem;
+    
+    /* Center text using flexbox */
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1;
+
+    /* Only animate colors/transform, not layout properties */
+    transition-property: background-color, transform;
+    transition-duration: 0.3s, 0.2s;
+    transition-timing-function: ease;
+    vertical-align: middle;
+}
+
+.btn-text {
+    display: inline;
+    position: static; 
+    margin: 0;
+    line-height: 1;
+}
+
+/* Button Colors */
+.settings-btn-primary { background-color: var(--darkGreen); color: #ffffff; }
+.settings-btn-primary:hover { background-color: var(--darkGreen-hover); }
+
+.settings-btn-secondary { background-color: var(--borderColor); color: var(--textColor); }
+.settings-btn-secondary:hover { background-color: #bcbcbc; }
+
+.settings-back-btn { background-color: var(--darkGreen); color: #ffffff; font-size: 1.1rem; }
+.settings-back-btn:hover { background-color: var(--darkGreen-hover); transform: translateY(-2px); }
+
+.settings-btn-danger { background-color: var(--dangerColor); color: #ffffff; }
+.settings-btn-danger:hover { background-color: var(--dangerHover); }
+
+.settings-btn-success { background-color: var(--successColor); color: #ffffff; }
+.settings-btn-success:hover { background-color: var(--successHover); }
+
+/* ==========================================================================
+   Cards & Grids
+   ========================================================================== */
+.settings-card {
+    background-color: var(--cardBg);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: filter 0.3s, opacity 0.3s;
+}
+
+.settings-card-title {
+    font-family: "CO Headline", sans-serif;
+    color: var(--darkGreen);
+    font-size: 1.5rem;
+    margin: 0 0 1.5rem 0;
+    border-bottom: 2px solid var(--bgColor);
+    padding-bottom: 0.5rem;
+}
+
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Allows a grid item to span the entire width */
+.full-width-grid {
+    grid-column: 1 / -1; 
+}
+
+/* ==========================================================================
+   Form Inputs & Labels
+   ========================================================================== */
+.settings-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.settings-label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.settings-input {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1rem;
+    padding: 0.6rem;
+    border: 1px solid var(--borderColor);
+    border-radius: 0.4rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.settings-input:focus {
+    border-color: var(--darkGreen);
+}
+
+/* ==========================================================================
+   Custom Toggle Switch
+   ========================================================================== */
+.settings-toggle-group {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f9f9f9;
+    padding: 0.6rem 1rem;
+    border-radius: 0.4rem;
+    border: 1px solid #eee;
+}
+
+.settings-toggle {
+    position: relative;
+    display: inline-block;
+    width: 3.2rem;
+    height: 1.6rem;
+}
+
+.settings-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.settings-toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.settings-toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 1.2rem;
+    width: 1.2rem;
+    left: 0.2rem;
+    bottom: 0.2rem;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.settings-toggle input:checked + .settings-toggle-slider {
+    background-color: var(--darkGreen);
+}
+
+.settings-toggle input:checked + .settings-toggle-slider:before {
+    transform: translateX(1.6rem);
+}
+
+/* ==========================================================================
+   Active Days Chips (Modern Checkboxes)
+   ========================================================================== */
+.days-row {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
     margin-top: 0.2rem;
 }
 
-.buttonSaveSettings:hover {
-    background-color: #026958;
+.day-toggle {
+    position: relative;
+    cursor: pointer;
 }
 
-
-
-
-
-
-
-
-.BackButtonDiv {
+.day-toggle input {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    border-radius: 0px;
-    height: 4rem;
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
-#backButton {
-    height: 100%;
+.day-chip {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: var(--borderColor);
+    color: var(--textColor);
+    border-radius: 2rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: background-color 0.3s, color 0.3s;
+    user-select: none;
+}
 
-    font-family: "CO Headline";
-    font-size: 0.9rem;
-    font-weight: 500;
-
+.day-toggle input:checked + .day-chip {
     background-color: var(--darkGreen);
     color: #ffffff;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    margin-top: 0.2rem;
 }
 
-.settingsgreen {
-    color: var(--darkGreen);
-    font-family: Inter, 'Open Sans';
-    font-size: 1rem;
-    font-weight: 800;
+.day-toggle:hover .day-chip {
+    filter: brightness(0.95);
 }
 
-.settingsblack {
-    color: black;
-    font-family: Inter, 'Open Sans';
-    font-size: 1rem;
-    font-weight: 400;
+/* ==========================================================================
+   Reconfigure Section (Desktop/Mobile logic)
+   ========================================================================== */
+.reconfigure-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--borderColor);
 }
 
-#backButton:hover {
-    background-color: var(--darkGreen-hover);
+.mobile-only-warning {
+    display: none; /* Hidden on desktop */
+    color: var(--dangerColor);
+    font-size: 0.95rem;
+    font-style: italic;
+    margin: 0;
+    line-height: 1.5;
 }
 
+/* ==========================================================================
+   Power Management (Activate & Shutdown)
+   ========================================================================== */
+.power-management-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
 
-    /******************************************* Switch ***************************************** */
-    .cancelInactiveQuizSwitch {
-        position: absolute;
-        display: inline-block;
-        width: 3rem;
-        height: 1.2rem;
+.activate-card {
+    border-left: 5px solid var(--successColor);
+}
+
+.shutdown-card {
+    border-left: 5px solid var(--dangerColor);
+}
+
+.success-text { color: var(--successColor); }
+.danger-text { color: var(--dangerColor); }
+
+/* Class to grey out cards when robot is already on/off */
+.disabled-card {
+    opacity: 0.5;
+    pointer-events: none; /* Prevents button clicks */
+    filter: grayscale(100%);
+    background-color: #fafafa;
+}
+
+/* ==========================================================================
+   Legend Text
+   ========================================================================== */
+.settings-legend p {
+    font-size: 0.9rem;
+    color: var(--subTextColor);
+    margin: 0 0 0.8rem 0;
+    line-height: 1.5;
+}
+
+.settings-legend p:last-child {
+    margin-bottom: 0;
+}
+
+/* ==========================================================================
+   Mobile Responsiveness
+   ========================================================================== */
+@media (max-width: 850px) {
+    .settings-page-wrapper {
+        padding: 1rem;
     }
 
-    .cancelInactiveQuizSwitch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
+    .settings-content {
+        gap: 2.5rem; /* Slightly smaller gap between cards on mobile */
     }
 
-    .slider {
-        display: flex;
-        align-items: center;
-        width: 3rem;
-        height: 1.2rem;
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #ccc;
-        -webkit-transition: .4s;
-        transition: .4s;
-        border-radius: 34px;
+    .settings-grid {
+        grid-template-columns: 1fr;
     }
 
-    .slider:before {
-        height: 80%;
-        aspect-ratio: 1 / 1;
-        position: absolute;
-        content: "";
-        left: 4px;
-        background-color: white;
-        -webkit-transition: .4s;
-        transition: .4s;
-        border-radius: 50%;
+    /* Stack power cards on top of each other on small screens */
+    .power-management-container {
+        grid-template-columns: 1fr;
     }
 
-    input:checked+.slider {
-        background-color: #2196F3;
+    .settings-button-row {
+        flex-direction: column;
+        align-items: stretch;
     }
 
-    input:focus+.slider {
-        box-shadow: 0 0 1px #2196F3;
+    .settings-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+    
+    .settings-btn-primary, .settings-btn-secondary, .settings-back-btn, 
+    .settings-btn-danger, .settings-btn-success {
+        width: 100%;
     }
 
-    input:checked+.slider:before {
-        -webkit-transform: translateX(26px);
-        -ms-transform: translateX(26px);
-        transform: translateX(26px);
+    /* Hide the reconfigure button, show the warning text */
+    .desktop-only-btn {
+        display: none !important;
     }
+
+    .mobile-only-warning {
+        display: block;
+        margin-top: 1rem;
+    }
+}

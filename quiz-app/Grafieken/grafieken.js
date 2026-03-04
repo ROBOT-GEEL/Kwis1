@@ -1,248 +1,355 @@
 /*
- This file contains the functions to handle the pie charts and the time series. It uses the Chart.js library for the pie charts and the ApexCharts library for the time series.
-  The pie charts are created by the addPieChart function and the time series is created by the addTimeline function.
-  Those functions are called from the fetchResults and fetchTimeResultsfunction in the script.js file.
-*/
+ * Combined script for handling both pie charts (Chart.js) and time series (ApexCharts).
+ * Handles fetching data from the backend and rendering the appropriate visualizations.
+ */
 
-// colours to use in the pie charts
+// Colors used in the pie charts
 const barColors = [
     "#5b9bd5", // blue
     "#70ad47", // green
-    "#ffc000" // yellow
+    "#d49f00"  // yellow
 ];
 
-let timechart;
+let timechart = null;
+
+// ============================================================================
+// Initialization & Data Fetching (Pie Charts)
+// ============================================================================
 
 window.addEventListener('load', function () {
-  })
-
-// function to add a pie chart to the page, this function is called from the fetchResults function (onLoad) in the script.js file
-// name: the name of the pie chart
-// xValues: the labels for the pie chart
-// yValues: the values for the pie chart
-// title: the title of the pie chart
-// total: the total number of answers
-// showLegend: boolean to show the legend or not
-function addPieChart(name, xValues, yValues, title, total, showLegend) {
-
-  // create a div element to hold the pie chart and its legend
-  let div = document.createElement('div');
-  div.className = 'divpieChart';
-
-  // every pie chart gets its own canvas element and contains the chart itself
-  // the canvas has the id of the question
-  let canv = document.createElement('canvas');
-  canv.id = name;
-  canv.className = 'pieChart';
-
-  div.appendChild(canv);
-  document.getElementById('divGrafieken').appendChild(div); // adds the canvas to div
+    // Parse URL parameters (format: ?bezocht=x&enable=x)
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
     
-  // define graph options
-  pieChart = new Chart(canv, {
-    type: "pie",
-    data: {
-      labels: xValues,
-      datasets: [{
-        backgroundColor: barColors,
-        data: yValues,
-      }]
-    },
-    options: {
-      plugins: {
-        labels: {
-          fontColor: '#FFFFFF',
+    // Get parameters and convert to boolean (null if not defined)
+    const bezocht = JSON.parse(urlParams.get('bezocht'));
+    const enable = JSON.parse(urlParams.get('enable'));
+    
+    console.log("Parameters - bezocht:", bezocht, "enable:", enable);
+
+    // Generate specific text based on selected filters
+    const enableString = enable === true ? "actieve" : enable === false ? "gearchiveerde" : "";
+    const bezochtString = bezocht === true ? "bezoekers die de expo al hebben gedaan" : bezocht === false ? "bezoekers die de expo nog niet hebben gedaan" : "";
+    const filterTextEl = document.getElementById("filterText");
+    
+    if (enable !== null && bezocht !== null) {
+        filterTextEl.textContent = `Filter: ${enableString} vragen voor ${bezochtString}`;
+    } else if (enable !== null) {
+        filterTextEl.textContent = `Filter: alleen ${enableString} vragen`;
+    } else if (bezocht !== null) {
+        filterTextEl.textContent = `Filter: vragen voor ${bezochtString}`;
+    } else {
+        filterTextEl.textContent = "Filter: alle vragen";
+    }
+    
+    // Fetch data using the filter parameters
+    fetchResults({ "bezocht": bezocht, "enable": enable });
+});
+
+/*
+ * Fetches the overall quiz results from the backend for the pie charts.
+ */
+async function fetchResults(config) {
+    try {
+        const response = await fetch("/grafieken/get-results", {
+            method: "POST",
+            body: JSON.stringify({
+                userId: 1,
+                title: "Quiz results",
+                config: config,
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        });
+
+        if (response.status !== 200) {
+            throw new Error(`Error getting quiz results: ${response.status}`);
         }
-      }, 
-      legend: {
-        display: false,
-        position: 'right',
-        align: 'left'
-      },
-      title: {
-        display: true,
-        text: title,
-        align: 'middle'
-      },
-      maintainAspectRatio: false
-    },    
-  });
 
+        const data = await response.json();
+        console.log("Quiz results fetch successful: ", data);
 
-  // the legend conatiains the number of answers and a button to show the time series
-  if(showLegend){
-    let legend = document.createElement('div');
-    legend.className = 'legend';
-    legend.innerHTML =  pieChart.generateLegend();
-
-    // Add colors to the legend
-    let ul = legend.querySelector('ul');
-    let liElements = ul.querySelectorAll('li');
-    for (let i = 0; i < liElements.length; i++) {
-      let coloredSpan = document.createElement('span');
-      coloredSpan.style.display = 'inline-block';
-      coloredSpan.style.width = '40px';
-      coloredSpan.style.height = '20px';
-      coloredSpan.style.marginRight = '5px';
-      coloredSpan.style.backgroundColor = barColors[i];
-      liElements[i].insertBefore(coloredSpan, liElements[i].firstChild);
-      liElements[i].style.listStyleType = 'none'; // Remove the dot before the item
+        // Render charts if data exists, otherwise show error
+        if (data.length > 0) {
+            data.forEach(addGraphs);
+        } else {
+            const grid = document.getElementById("divGrafieken");
+            grid.innerHTML = "<h3 style='color:var(--dangerColor); width: 100%; text-align: center;'>Geen resultaten gevonden voor deze filterinstellingen.</h3>";
+        }
+    } catch (error) {
+        console.error("Failed to fetch pie chart data:", error);
     }
+}
 
+/*
+ * Prepares data for a specific question and triggers the pie chart creation.
+ */
+function addGraphs(value) {
+    // Calculate the total number of answers
+    let totalAnswers = value.sumResults.reduce((a, b) => a + b, 0);
+    
+    // Scale the results to percentages (1 decimal)
+    let scaledResults = value.sumResults.map(item => ((item / totalAnswers) * 100).toFixed(1));
+
+    // Determine titles and labels (Fallback to defaults if Dutch info is missing)
+    if (value.nl !== undefined) {
+        addPieChart(String(value._id), value.nl.answers, scaledResults, value.nl.question, totalAnswers, true);
+    } else {
+        addPieChart(String(value._id), ["A", "B", "C"], value.sumResults, "Unknown", totalAnswers, true);
+    }
+}
+
+// ============================================================================
+// Chart Generation (Pie Charts)
+// ============================================================================
+
+/*
+ * Generates the Chart.js pie chart and builds the custom legend card.
+ */
+function addPieChart(name, xValues, yValues, title, total, showLegend) {
+    // Create card container
+    let cardDiv = document.createElement('div');
+    cardDiv.className = 'chart-card';
+
+    // 1. ADD THE HTML TITLE FIRST
+    // This allows natural text wrapping over 2 lines without squishing the chart
+    let titleEl = document.createElement('h3');
+    titleEl.className = 'chart-title';
+    titleEl.textContent = title;
+    cardDiv.appendChild(titleEl);
+
+    // 2. CREATE CANVAS CONTAINER
+    let canvasContainer = document.createElement('div');
+    canvasContainer.className = 'pieChart-container';
+
+    let canv = document.createElement('canvas');
+    canv.id = name;
+    
+    canvasContainer.appendChild(canv);
+    cardDiv.appendChild(canvasContainer);
+    document.getElementById('divGrafieken').appendChild(cardDiv);
+    
+    // Initialize Chart.js
+    let pieChart = new Chart(canv, {
+        type: "pie",
+        data: {
+            labels: xValues,
+            datasets: [{
+                backgroundColor: barColors,
+                data: yValues,
+            }]
+        },
+        options: {
+            plugins: {
+                labels: { fontColor: '#FFFFFF' }
+            }, 
+            legend: {
+                display: false
+            },
+            title: {
+                display: false // Disabled here, handled by the HTML title above
+            },
+            maintainAspectRatio: false,
+            responsive: true
+        }
+    });
+
+    // Generate Custom Legend if required
+    if (showLegend) {
+        let legendDiv = document.createElement('div');
+        legendDiv.className = 'chart-legend';
+        legendDiv.innerHTML = pieChart.generateLegend();
+
+        // Style the generated legend items
+        let ul = legendDiv.querySelector('ul');
+        if(ul) {
+            let liElements = ul.querySelectorAll('li');
+            for (let i = 0; i < liElements.length; i++) {
+                let coloredSpan = document.createElement('span');
+                coloredSpan.style.display = 'inline-block';
+                coloredSpan.style.width = '20px';
+                coloredSpan.style.height = '20px';
+                coloredSpan.style.borderRadius = '3px';
+                coloredSpan.style.backgroundColor = barColors[i];
+                
+                liElements[i].insertBefore(coloredSpan, liElements[i].firstChild);
+            }
+            
+            // Append Total Answers count
+            let totalLi = document.createElement('li');
+            totalLi.innerHTML = `<strong>Total answers:</strong> ${total}`;
+            totalLi.style.marginTop = "0.5rem";
+            ul.appendChild(totalLi);
+        }
+
+        // Add button to open time series
+        let button = document.createElement('button');
+        button.className = 'btn-primary chart-action-btn';
+        button.innerHTML = '<span class="btn-text">View Timeline</span>';
+        button.onclick = function() {
+            showTimeSeries(name); 
+        };
         
-    // Add extra list element to display the total number of answers
-    let li = document.createElement('li');
-    li.textContent = "Aantal antwoorden: " + total;
-    li.style.listStyleType = 'none'; // Remove the dot before the item
-    ul.appendChild(li);
-
-    // Add button to open time series
-    let button = document.createElement('button');
-    button.textContent = "Toon tijdreeks";
-    button.onclick = function() {
-      // call the function to show the time series when the button is clicked
-      showTimeSeries(name); 
+        legendDiv.appendChild(button);
+        cardDiv.appendChild(legendDiv);
     }
-    ul.appendChild(button);
-
-        div.appendChild(legend);
-  }
 }
 
-// function to show the time series, this function is called when the button in the legend is clicked
-// name: the name of the pie chart (= the id of the question)
-function showTimeSeries(name){
-  console.log("Show time series for " + name);
+// ============================================================================
+// Time Series (ApexCharts & Modal Logic)
+// ============================================================================
 
-  // enable the overlay and the modal
-  overlay = document.getElementById("grapgoverlay");
-  overlay.style.display = "block";
-  modal = document.getElementById("graphmodal");
-  modal.style.display = "block";
+/*
+ * Opens the modal and fetches data for the time series.
+ */
+function showTimeSeries(name) {
+    console.log("Displaying time series for question ID: " + name);
 
-  // fetch the time series data for a given question id
-  fetchTimeResults(name);
+    const overlay = document.getElementById("grapgoverlay");
+    const modal = document.getElementById("graphmodal");
+    const closeBtn = document.getElementById("closeModalBtn");
 
-  // close the modal when the overlay is clicked
-  overlay.addEventListener('click', function(e) {
-    modal.style.display = "none";
-    timechart.destroy();
-    overlay.style.display = "none";
-  });
+    // Display modal
+    overlay.style.display = "block";
+    modal.style.display = "block";
+
+    // Fetch the time series data
+    fetchTimeResults(name);
+
+    // Event listeners to close the modal
+    const closeModal = function() {
+        modal.style.display = "none";
+        overlay.style.display = "none";
+        if (timechart) {
+            timechart.destroy();
+            timechart = null;
+        }
+        document.getElementById('modalContent').innerHTML = ""; // Clear container
+    };
+
+    overlay.onclick = closeModal;
+    closeBtn.onclick = closeModal;
 }
 
-// this function is called if the fetch in the showTimeSeries function is successful
-// adds the time series graph to the modal
-function addTimeline(data){
-  timeline = document.createElement('div');
-  timeline.id = 'divtimeline';
-  document.getElementById('graphmodal').appendChild(timeline);
-   
-  // graph options
-  let options = {
-    // data for the 3 separate lines in the time series (zone A, B and C)
-    series: [
-      {
-        name: data.info.nl.answers[0],
-        data: data.results.A
-      },
-      {
-        name: data.info.nl.answers[1],
-        data: data.results.B
-      },
-      {
-        name: data.info.nl.answers[2],
-        data: data.results.C
-      }
-    ],
-    chart: {
-      type: 'area',
-      stacked: false,
-      width: '100%',
-      height: '100%',
-      zoom: {
-        type: 'x',
-        enabled: true,
-        autoScaleYaxis: true
-      },
-      toolbar: {
-        autoSelected: 'zoom',
-        show: true,
-        tools: {
-          download: true,
+/*
+ * Fetches time series data from the backend.
+ */
+async function fetchTimeResults(id) {
+    try {
+        const response = await fetch("/grafieken/get-timeseries", {
+            method: "POST",
+            body: JSON.stringify({
+                userId: 1,
+                title: "Quiz time results",
+                questionId: id
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        });
+
+        if (response.status !== 200) {
+            throw new Error(`Error getting time series results: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Time series fetch successful: ", data);
+
+        addTimeline(data);
+    } catch (error) {
+        console.error("Failed to fetch time series data:", error);
+    }
+}
+
+/*
+ * Renders the ApexCharts area graph inside the modal.
+ */
+function addTimeline(data) {
+    const timelineContainer = document.getElementById('modalContent');
+    
+    let options = {
+        series: [
+            { name: data.info.nl.answers[0], data: data.results.A },
+            { name: data.info.nl.answers[1], data: data.results.B },
+            { name: data.info.nl.answers[2], data: data.results.C }
+        ],
+        chart: {
+            type: 'area',
+            stacked: false,
+            width: '100%',
+            height: '100%',
+            zoom: {
+                type: 'x',
+                enabled: true,
+                autoScaleYaxis: true
+            },
+            toolbar: {
+                autoSelected: 'zoom',
+                show: true,
+                tools: { download: true },
+                export: {
+                    csv: { filename: data.info.nl.question },
+                    png: { filename: data.info.nl.question },
+                    svg: { filename: data.info.nl.question }
+                }
+            }
+        },
+        dataLabels: {
+            enabled: false
+        },
+        markers: {
+            size: 5
+        },
+        title: {
+            text: data.info.nl.question,
+            align: 'left',
+            style: {
+                fontSize: '18px',
+                fontFamily: 'Open Sans, sans-serif',
+                color: '#005144'
+            }
+        },
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shadeIntensity: 1,
+                inverseColors: false,
+                opacityFrom: 0.5,
+                opacityTo: 0,
+                stops: [0, 90, 100]
+            }
+        },
+        yaxis: {
+            labels: {
+                formatter: function (val) { return val; }
+            },
+            title: {
+                text: 'Number of answers'
+            }
+        },
+        xaxis: {
+            type: 'datetime',
+            tooltip: { enabled: false }
+        },
+        tooltip: {
+            shared: true,
+            y: {
+                formatter: function (val) { return val; }
+            }
         },
         export: {
-          csv: {
-            filename: data.info.nl.question, 
-          },
-          png: {
-            filename: data.info.nl.question, 
-          },
-          svg: {
-            filename: data.info.nl.question, 
-          },  
-        },
-      },
-    },
-    dataLabels: {
-      enabled: false
-    },
-    markers: {
-      size: 5,
-    },
-    title: {
-      text: data.info.nl.question,
-      align: 'left'
-    },
-    fill: {
-      type: 'gradient',
-      gradient: {
-        shadeIntensity: 1,
-        inverseColors: false,
-        opacityFrom: 0.5,
-        opacityTo: 0,
-        stops: [0, 90, 100]
-      },
-    },
-    yaxis: {
-      labels: {
-        formatter: function (val) {
-          return val;
-        },
-      },
-      title: {
-        text: 'Aantal antwoorden'
-      },
-    },
-    xaxis: {
-      type: 'datetime',
-      tooltip: {
-        enabled: false
-      }
-    },
-    tooltip: {
-      shared: true,
-      y: {
-        formatter: function (val) {
-          return val;
+            csv: {
+                columnDelimiter: ',',
+                headerCategory: 'category',
+                headerValue: 'value',
+                dateFormatter(timestamp) {
+                    return new Date(timestamp).toDateString();
+                }
+            }
         }
-      }
-    },
-    export: {
-      // csv configuration
-      csv: {
-        columnDelimiter: ',',
-        headerCategory: 'category',
-        headerValue: 'value',
-        dateFormatter(timestamp) {
-          return new Date(timestamp).toDateString()
-        }
-      }
-    }
-  };
+    };
 
-  // create the new chart with the given options
-  timechart = new ApexCharts(timeline, options);
-  timechart.render();
+    timechart = new ApexCharts(timelineContainer, options);
+    timechart.render();
 }
-  

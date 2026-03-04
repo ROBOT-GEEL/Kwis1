@@ -34,7 +34,7 @@ function updatePageUI(title, activeNavId) {
     const activeNav = document.getElementById(activeNavId);
     if (activeNav) {
         activeNav.classList.add("active");
-        activeNav.style.background = "rgb(144 213 218)"; 
+        activeNav.style.background = "#6dbbc0"; 
     }
 }
 

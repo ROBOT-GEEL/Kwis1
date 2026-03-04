@@ -1,3 +1,6 @@
+/* ==========================================================================
+   Fonts configuration
+   ========================================================================== */
 @font-face {
     font-family: "CO Headline";
     src: url("/shared/assets/fonts/Co-Headline.otf") format("opentype");
@@ -13,172 +16,275 @@
     font-style: normal;
 }
 
-@font-face {
-    font-family: 'Open Sans';
-    src: url('/shared/assets/fonts/OpenSans-Italic-VariableFont_wdth,wght.ttf') format('truetype-variations');
-    font-weight: 100 900;
-    font-style: italic;
-}
-
+/* ==========================================================================
+   Global Variables
+   ========================================================================== */
 :root {
     --darkGreen: #005144;
     --darkGreen-hover: #026151;
+    --bgColor: #d3d3d3;
+    --cardBg: #ffffff;
+    --textColor: #000000;
+    --subTextColor: #555555;
+    --borderColor: #b9b9b9;
+    --dangerColor: #cc0000;
 }
 
-body {
-    min-height: 100%;
-    min-width: auto;
-    background-color: #f1f1f1;
-    font-family: 'Open Sans';
+/* ==========================================================================
+   Base Layout
+   ========================================================================== */
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: var(--bgColor);
+    font-family: 'Open Sans', sans-serif;
 }
 
-.container {
-    /* offset from nav bar */
-    margin-left: 14rem;
-}
-
-.divpieChart {
+.page-wrapper {
+    max-width: 1400px; 
+    margin: 0 auto;
+    padding: 2rem;
     display: flex;
-    /* Align items to the start of the container */
-    justify-content: flex-start;
-    /* Vertically center items in the container */
-    align-items: center;
-    flex-wrap: wrap;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+    flex-direction: column;
 }
 
-.pieChart {
-    width: 50%;
-    max-width: 400px;
+/* ==========================================================================
+   Header Section
+   ========================================================================== */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.page-title {
+    color: var(--darkGreen);
+    font-family: "CO Headline", sans-serif;
+    font-size: 2.5rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.page-description {
+    color: var(--subTextColor);
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.filter-description {
+    color: var(--darkGreen);
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin: 0.5rem 0 0 0;
+    padding: 0.5rem 1rem;
+    background-color: #e0f2f1;
+    border-radius: 0.5rem;
+    display: inline-block;
+}
+
+.header-button-row {
+    display: flex;
+    flex-direction: column; /* Stack the buttons vertically */
+    align-items: flex-end;  /* Align them to the right */
+    gap: 0.8rem;
+    margin-top: 1rem;
+}
+
+/* ==========================================================================
+   Buttons (Shared styling)
+   ========================================================================== */
+.btn-primary, 
+.btn-secondary,
+.btn-back {
+    font-family: "CO Headline", sans-serif;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 280px;
+    height: 3.5rem;
+    padding: 0 1.5rem;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transition-property: background-color, transform;
+    transition-duration: 0.3s, 0.2s;
+    transition-timing-function: ease;
+    vertical-align: middle;
+}
+
+.btn-text {
+    display: inline;
+    position: static; 
+    margin: 0;
+    line-height: 1;
+}
+
+.btn-primary { background-color: var(--darkGreen); color: #ffffff; }
+.btn-primary:hover { background-color: var(--darkGreen-hover); }
+
+.btn-secondary { background-color: var(--borderColor); color: var(--textColor); }
+.btn-secondary:hover { background-color: #bcbcbc; }
+
+.btn-back { background-color: var(--darkGreen); color: #ffffff; }
+.btn-back:hover { background-color: var(--darkGreen-hover);}
+
+/* ==========================================================================
+   Charts Grid & Cards
+   ========================================================================== */
+.charts-grid {
+    display: grid;
+    /* Minimaal 400px breed, verdeelt beschikbare ruimte */
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    /* Zorgt dat alle tegels in een rij even hoog zijn */
+    grid-auto-rows: 1fr; 
+    gap: 2rem;
+    width: 100%;
+}
+
+.chart-card {
+    background-color: var(--cardBg);
+    border-radius: 0.5rem;
+    padding: 2rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    /* Zorgt dat de kaart niet kleiner wordt dan zijn inhoud */
+    min-height: 500px; 
+    box-sizing: border-box;
+    overflow: hidden; /* Voorkomt overlappen van inhoud */
+}
+
+.chart-title {
+    color: var(--darkGreen);
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1rem;
+    /* Reserveert ruimte voor 2-3 regels tekst zonder de layout te breken */
+    min-height: 3.5rem; 
+    line-height: 1.3;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pieChart-container {
+    width: 100%;
+    /* Verkleind naar 250px om meer ruimte te geven aan de legenda */
+    height: 250px; 
+    position: relative;
+    margin-bottom: 1.5rem;
 }
 
 .chart-legend {
-    height: 250px;
-    overflow: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    /* Dit is de 'magic' die de legenda en knop onderin houdt */
+    flex-grow: 1; 
+}
+
+.chart-legend ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1; /* Neemt alle resterende ruimte in */
 }
 
 .chart-legend li {
-    /* Align the text to the left */
-    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
 }
 
-.chart-legend li span {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    margin-right: 5px;
+.chart-action-btn {
+    width: 100%;
+    margin-top: 1.5rem; /* Altijd een vaste afstand tot de lijst erboven */
+    flex-shrink: 0; /* Zorgt dat de knop nooit wordt samengedrukt */
 }
 
-
-/* overlay styles, all needed */
+/* ==========================================================================
+   Modal & Overlay (Time Series)
+   ========================================================================== */
 .overlay {
     position: fixed;
     top: 0;
     left: 0;
     height: 100%;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 10;
-    /* hide initially */
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(3px);
+    z-index: 1000;
     display: none;
 }
 
 .modal {
-    width: 75vw;
-    height: 75vh;
+    width: 85vw;
+    height: 85vh;
+    max-width: 1200px;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #e6e3d9;
-    border-radius: 5px;
-    text-align: center;
-    /* 1px higher than the overlay layer */
-    z-index: 11;
-    /* hide initially */
+    background-color: var(--cardBg);
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    z-index: 1001;
     display: none;
-    padding: 20px;
+    padding: 3rem 2rem 2rem 2rem;
+    box-sizing: border-box;
 }
 
-button {
-    background-color: var(--darkGreen);
-    color: #ffffff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 0.2rem;
-}
-
-button:hover {
-    background-color: var(--darkGreen-hover);
-}
-
-/************** side balk **************/
-.rectangleSideBalk {
-    background-color: var(--darkGreen);
-    border-top-right-radius: 1rem;
-    border-bottom-right-radius: 1rem;
-    height: 100vh;
-    left: 0;
-    position: fixed;
-    top: 0;
-    width: 12rem;
-    overflow: hidden;
-}
-
-.dashBoardFrame {
-    height: 4rem;
-    position: absolute;
-    top: 1rem;
+#modalContent {
     width: 100%;
-}
-
-.rectangleDashBoard {
-    background-color: var(--darkGreen);
-    height: 2.4rem;
-    position: absolute;
-    top: 0.8rem;
-    width: 100%;
-}
-
-.gaugeIcon {
-    height: 1.3712rem;
-    left: 0.3526rem;
-    position: absolute;
-    top: 1.2105rem;
-    width: 1.8947rem;
-}
-
-.dashBoard {
-    font-family: "CO Headline";
-    color: #f1f1f1;
-    display: flex;
-    font-size: 1.4rem;
-    font-weight: 700;
-    height: 1.7rem;
-    left: 2.5rem;
-    line-height: 0.7;
-    position: absolute;
-    top: 1.15rem;
-    white-space: nowrap;
-    width: 7.5rem;
-}
-
-.BackButtonDiv {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    border-radius: 0px;
-    height: 4rem;
-}
-
-#backButton {
     height: 100%;
-    width: 100%;
-    font-family: "CO Headline";
-    font-size: 0.9rem;
-    font-weight: 500;
+}
+
+.btn-close-modal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 2.5rem;
+    color: var(--subTextColor);
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.btn-close-modal:hover {
+    color: var(--dangerColor);
+}
+
+/* ==========================================================================
+   Mobile Responsiveness
+   ========================================================================== */
+@media (max-width: 600px) {
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .page-header {
+        flex-direction: column;
+    }
+    
+    .header-button-row {
+        width: 100%;
+        align-items: stretch;
+    }
+
+    .modal {
+        width: 95vw;
+        height: 70vh;
+        padding: 2.5rem 1rem 1rem 1rem;
+    }
 }

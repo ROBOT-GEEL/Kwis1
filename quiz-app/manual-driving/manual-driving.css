@@ -1,0 +1,232 @@
+/* ==========================================================================
+   Fonts configuration
+   ========================================================================== */
+@font-face {
+    font-family: "CO Headline";
+    src: url("/shared/assets/fonts/Co-Headline.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    src: url('/shared/assets/fonts/OpenSans-VariableFont_wdth,wght.ttf') format('truetype-variations');
+    font-weight: 100 900;
+    font-stretch: 75% 100%;
+    font-style: normal;
+}
+
+/* ==========================================================================
+   Global Variables
+   ========================================================================== */
+:root {
+    --darkGreen: #005144;
+    --darkGreen-hover: #026151;
+    --bgColor: #d3d3d3;
+    --cardBg: #ffffff;
+    --textColor: #000000;
+    --subTextColor: #555555;
+    --borderColor: #b9b9b9;
+}
+
+/* ==========================================================================
+   Base Layout
+   ========================================================================== */
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: var(--bgColor);
+    font-family: 'Open Sans', sans-serif;
+    /* Prevents pull-to-refresh on mobile devices */
+    overscroll-behavior-y: none; 
+}
+
+.page-wrapper {
+    max-width: 900px; 
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================================================
+   Header Section
+   ========================================================================== */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.page-title {
+    color: var(--darkGreen);
+    font-family: "CO Headline", sans-serif;
+    font-size: 2.5rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.page-description {
+    color: var(--subTextColor);
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+/* ==========================================================================
+   Main Content & Card
+   ========================================================================== */
+.content-body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 2rem;
+}
+
+.selection-card {
+    background-color: var(--cardBg);
+    border-radius: 0.5rem;
+    padding: 3rem; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    width: 100%;
+    max-width: 650px; 
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ==========================================================================
+   Driving Controls (D-pad & Rotate)
+   ========================================================================== */
+.dpad-grid {
+    display: grid;
+    grid-template-columns: 120px 120px 120px;
+    grid-template-rows: 120px 120px 120px;
+    gap: 30px;
+    justify-content: center;
+    margin-bottom: 3rem;
+}
+
+/* Positioning the arrows in a cross shape */
+.btn-up { grid-column: 2; grid-row: 1; }
+.btn-left { grid-column: 1; grid-row: 2; }
+.btn-right { grid-column: 3; grid-row: 2; }
+.btn-down { grid-column: 2; grid-row: 3; }
+
+.rotate-container {
+    display: flex;
+    justify-content: center;
+    gap: 8rem;
+    margin-bottom: 3rem;
+}
+
+.dpad-btn {
+    background-color: var(--darkGreen);
+    border: none;
+    border-radius: 20px; 
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    /* Prevents zooming or text selection while aggressively tapping */
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: background-color 0.1s, transform 0.1s;
+}
+
+.dpad-btn:active {
+    background-color: var(--darkGreen-hover);
+    transform: scale(0.95);
+    box-shadow: 0 2px 3px rgba(0,0,0,0.2);
+}
+
+.dpad-btn img {
+    /* Image scales beautifully inside the button */
+    width: 55%;
+    height: auto;
+    pointer-events: none; /* Prevents image dragging */
+    filter: invert(1); /* Inverts black PNGs/SVGs to white */
+}
+
+.rotate-btn {
+    width: 120px;
+    height: 120px;
+}
+
+.divider {
+    width: 100%;
+    height: 2px;
+    background-color: var(--borderColor);
+    margin: 0 0 2rem 0;
+}
+
+/* ==========================================================================
+   Bottom Button
+   ========================================================================== */
+.card-actions {
+    width: 100%;
+}
+
+.btn-secondary {
+    font-family: "CO Headline", sans-serif;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 0 1.5rem;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transition-property: background-color, transform;
+    transition-duration: 0.3s, 0.2s;
+    transition-timing-function: ease;
+    vertical-align: middle;
+    background-color: var(--borderColor); 
+    color: var(--textColor);
+    width: 100%;
+    height: 4rem;
+}
+
+.btn-secondary:hover { 
+    background-color: #bcbcbc; 
+}
+
+.btn-text {
+    display: inline;
+    position: static; 
+    margin: 0;
+    line-height: 1;
+}
+
+/* ==========================================================================
+   Mobile Responsiveness
+   ========================================================================== */
+@media (max-width: 650px) {
+    .page-wrapper {
+        padding: 1rem;
+    }
+
+    .selection-card {
+        padding: 2rem 1rem;
+    }
+    
+    .dpad-grid {
+        grid-template-columns: 95px 95px 95px;
+        grid-template-rows: 95px 95px 95px;
+        gap: 20px;
+    }
+
+    .rotate-container {
+        gap: 4rem;
+    }
+
+    .rotate-btn {
+        width: 95px;
+        height: 95px;
+    }
+}

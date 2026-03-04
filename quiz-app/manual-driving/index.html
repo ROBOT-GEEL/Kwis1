@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <title>Admin Panel - Manueel Rijden</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="icon" type="image/x-icon" href="../shared/assets/icons/favicon.ico">
+    <link rel="stylesheet" href="./manual-driving.css">
+    
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+    <div class="page-wrapper">
+        
+        <header class="page-header">
+            <div>
+                <h1 class="page-title">Manueel rijden</h1>
+                <p class="page-description">Bestuur de robot handmatig met de onderstaande knoppen.</p>
+            </div>
+        </header>
+
+        <main class="content-body">
+            <section class="selection-card">
+                
+                <div class="dpad-grid">
+                    <button class="dpad-btn btn-up" ontouchstart="driveBackward()" ontouchend="driveStop()" onmouseup="driveStop()" onmousedown="driveBackward()">
+                        <img src="assets/icons/arrow_up.png" alt="Up">
+                    </button>
+
+                    <button class="dpad-btn btn-left" ontouchstart="driveLeft()" ontouchend="driveStop()" onmouseup="driveStop()" onmousedown="driveLeft()">
+                        <img src="assets/icons/arrow_left.png" alt="Left">
+                    </button>
+
+                    <button class="dpad-btn btn-right" ontouchstart="driveRight()" ontouchend="driveStop()" onmouseup="driveStop()" onmousedown="driveRight()">
+                        <img src="assets/icons/arrow_right.png" alt="Right">
+                    </button>
+
+                    <button class="dpad-btn btn-down" ontouchstart="driveForward()" ontouchend="driveStop()" onmouseup="driveStop()" onmousedown="driveForward()">
+                        <img src="assets/icons/arrow_down.png" alt="Down">
+                    </button>
+                </div>
+
+                <div class="rotate-container">
+                    <button class="dpad-btn rotate-btn" ontouchstart="driveRotateCCW()" ontouchend="driveStop()" onmouseup="driveStop()" onmousedown="driveRotateCCW()">
+                        <img src="assets/icons/ccw-arrow.svg" alt="CCW spin">
+                    </button>
+                    
+                    <button class="dpad-btn rotate-btn" ontouchstart="driveRotateCW()" ontouchend="driveStop()" onmouseup="driveStop()" onmousedown="driveRotateCW()">
+                        <img src="assets/icons/cw-arrow.svg" alt="CW spin">
+                    </button>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="card-actions">
+                    <button class="btn-secondary action-btn" onclick="location.href='../admin-panel'">
+                        <span class="btn-text">Terug naar admin panel</span>
+                    </button>
+                </div>
+
+            </section>
+        </main>
+        
+    </div>
+
+    <script defer src="./manual-driving.js"></script>
+</body>
+</html>

@@ -3,8 +3,6 @@ async function buttonSaveSettings() {
     try {
         // Store all the settings in a dictionary
         var settingsDict = {};
-        
-        // Parse standard quiz integers
         settingsDict.answerTime = parseInt(document.getElementById("answerTime").value);
         settingsDict.maxQuestions = parseInt(document.getElementById("maxQuestions").value);
         settingsDict.nextQuestionDelay = parseInt(document.getElementById("nextQuestionDelay").value);
@@ -14,11 +12,6 @@ async function buttonSaveSettings() {
 
         // Retrieve boolean inputs
         settingsDict.cancelInactiveQuiz = document.getElementById("cancelInactiveQuizCheckbox").checked;
-
-        // Retrieve new system time settings (strings in "HH:MM" format)
-        settingsDict.currentTime = document.getElementById("currentTime").value;
-        settingsDict.workHourStart = document.getElementById("workHourStart").value;
-        settingsDict.workHourEnd = document.getElementById("workHourEnd").value;
 
         // Send the settings dictionary to the server to update the database
         const response = await fetch('/cms/saveSettings', {
@@ -30,10 +23,9 @@ async function buttonSaveSettings() {
                 settingsDict
             })
         });
-
         if (response.ok) {
             console.log("Settings saved successfully");
-            // Give a visual indicator that the document is saved successfully
+            // Give a visual indicator that the document is saved sucsesfuly
             document.getElementById("buttonSaveSettings").textContent = "Opgeslagen";
             return response.json();
         } else {
@@ -42,15 +34,16 @@ async function buttonSaveSettings() {
         }
     } catch (error) {
         console.error('Error:', error);
-        document.getElementById("buttonSaveSettings").textContent = "Fout bij opslaan";
     }
 }
+
+
 
 function retrieveSettings() {
     fetch('/cms/getSettings')
     .then(response => response.json())
     .then(Settings  => {
-        // Update the UI with the retrieved quiz settings
+        // Update the UI with the retrieved settings
         document.getElementById("answerTime").value = Settings.answerTime;
         document.getElementById("maxQuestions").value = Settings.maxQuestions;
         document.getElementById("nextQuestionDelay").value = Settings.nextQuestionDelay;
@@ -58,26 +51,43 @@ function retrieveSettings() {
         document.getElementById("instructionsScreenTime").value = Settings.instructionsScreenTime;
         document.getElementById("finishedScreenTime").value = Settings.finishedScreenTime;
         document.getElementById("timeToStartQuiz").value = Settings.timeToStartQuiz;
-        
-        // Update the UI with the retrieved system time settings
-        // Expecting the backend to return strings like "14:30"
-        if(Settings.currentTime) document.getElementById("currentTime").value = Settings.currentTime;
-        if(Settings.workHourStart) document.getElementById("workHourStart").value = Settings.workHourStart;
-        if(Settings.workHourEnd) document.getElementById("workHourEnd").value = Settings.workHourEnd;
-        
-        // Reset the save button text
-        document.getElementById("buttonSaveSettings").textContent = "Opslaan";
     })
     .catch(error => console.error(`Error getting Settings: ${error}`));
 }
 
-// Function to change button text to "Opslaan" when any setting changes
+
+// Function to change button text to "Save" when any setting changes
 function initializeSettingsChangeListeners() {
-    const inputElements = document.querySelectorAll('input[type="number"], input[type="checkbox"], input[type="time"]');
+    const inputElements = document.querySelectorAll('input[type="number"], input[type="checkbox"]');
     inputElements.forEach(input => {
         input.addEventListener('change', () => {
             document.getElementById("buttonSaveSettings").textContent = "Opslaan";
         });
+    });
+}
+
+// Function to control projector
+function toggleProjector(state) {
+    console.log('Projector toggle requested, going to state:', state);
+    fetch('/cms/toggleProjector', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            projectorState: state
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log("Projector toggled successfully");
+            return response.json();
+        } else {
+            throw new Error('Failed to toggle projector');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
     });
 }
 

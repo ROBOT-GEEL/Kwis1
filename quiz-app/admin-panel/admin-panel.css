@@ -18,7 +18,7 @@
     --darkGreen: #005144;
     --darkGreen-hover: #026151;
     --lightBlue: #80c8cc;
-    --bgColor: #f1f1f1;
+    --bgColor: #d3d3d3;
 }
 
 body {
@@ -92,8 +92,6 @@ body {
     font-family: "CO Headline", sans-serif;
     color: #ffffff; 
     font-size: 2rem;
-    /* Push the text upwards to correct the font baseline */
-    transform: translateY(-0.3rem); 
     display: inline-block;
 }
 
@@ -133,8 +131,6 @@ body {
     height: 3rem; 
     /* Box-sizing ensures padding doesn't change the button's total height */
     box-sizing: border-box;
-    /* Asymmetrical padding pushes the flexbox content upwards */
-    padding: 0 0 0.4rem 0; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -161,7 +157,6 @@ body {
     height: 4rem; 
     /* Same technique as the action buttons */
     box-sizing: border-box;
-    padding: 0 0 0.5rem 0; 
     border: none;
     border-radius: 0.5rem;
     cursor: pointer;

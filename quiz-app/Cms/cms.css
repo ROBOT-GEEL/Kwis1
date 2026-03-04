@@ -31,7 +31,7 @@
     --darkGreen-hover: #026151;
     --lightBlue: #80c8cc;
     --lightBlue-hover: #6dbbc0;
-    --bgColor: #f1f1f1;
+    --bgColor: #d3d3d3;
 }
 
 /* Base body styling */
@@ -82,15 +82,14 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0 1.2rem 0.4rem 1.2rem;
-    line-height: normal;
+    line-height: 1;
+    padding: 0 1.2rem 0 1.2rem;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s, transform 0.2s;
 }
 
 .nav-button:hover {
     background-color: var(--lightBlue-hover); 
-    transform: translateY(-2px); 
 }
 
 .nav-button.active {
@@ -103,14 +102,13 @@ body {
     background-color: var(--darkGreen);
     color: #fff;
     font-size: 1.1rem;
-    margin-top: 1rem;
+    margin-top: 3rem;
     height: 4rem;
     white-space: nowrap; 
 }
 
 .nav-button.back-admin:hover {
     background-color: var(--darkGreen-hover);
-    transform: translateY(-2px);
 }
 
 /* Main Content Area */
@@ -165,13 +163,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0 1.5rem 0.3rem 1.5rem; 
-    line-height: normal;
+    padding: 0 1.5rem 0.0rem 1.5rem; 
+    line-height: 1;
 }
 
 .btn-primary { background-color: var(--darkGreen); color: #ffffff; }
 .btn-primary:hover { background-color: var(--darkGreen-hover); }
-.btn-secondary { background-color: #d4d4d4; color: #000; }
+.btn-secondary { background-color: #b9b9b9; color: #000; }
 .btn-secondary:hover { background-color: #bcbcbc; }
 
 /* ==========================================================================

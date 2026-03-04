@@ -33,6 +33,7 @@ app.use("/shared", express.static(path.join(ROOT_DIR, "shared")));
 app.use("/cms", express.static(path.join(ROOT_DIR, "Cms")));
 app.use("/grafieken", express.static(path.join(ROOT_DIR, "Grafieken")));
 app.use("/settings", express.static(path.join(ROOT_DIR, "Settings")));
+app.use("/manual-driving", express.static(path.join(ROOT_DIR, "manual-driving")));
 
 // API routes
 app.use("/quiz", quizRoutes);
@@ -50,10 +51,6 @@ app.get("/projector", (req, res) => {
 
 app.get("/demo", (req, res) => {
   res.sendFile(path.join(ROOT_DIR, "demo", "index.html"));
-});
-
-app.get("/manual-driving", (req, res) => {
-  res.sendFile(path.join(ROOT_DIR, "navigatie_page", "index.html"));
 });
 
 app.get("/language", (req, res) => {
