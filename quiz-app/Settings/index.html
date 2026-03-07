@@ -99,47 +99,94 @@
                         <input type="time" id="currentTime" class="settings-input">
                     </div>
 
-                    <div class="settings-input-group">
-                        <label class="settings-label" for="workHourStart">Werkuren begin:</label>
-                        <input type="time" id="workHourStart" class="settings-input">
-                    </div>
-
-                    <div class="settings-input-group">
-                        <label class="settings-label" for="workHourEnd">Werkuren einde:</label>
-                        <input type="time" id="workHourEnd" class="settings-input">
-                    </div>
-
                     <div class="settings-input-group full-width-grid">
-                        <label class="settings-label">Actieve Dagen:</label>
-                        <div class="days-row">
-                            <label class="day-toggle">
-                                <input type="checkbox" id="dayMon" value="1">
-                                <span class="day-chip">Ma</span>
-                            </label>
-                            <label class="day-toggle">
-                                <input type="checkbox" id="dayTue" value="2">
-                                <span class="day-chip">Di</span>
-                            </label>
-                            <label class="day-toggle">
-                                <input type="checkbox" id="dayWed" value="3">
-                                <span class="day-chip">Wo</span>
-                            </label>
-                            <label class="day-toggle">
-                                <input type="checkbox" id="dayThu" value="4">
-                                <span class="day-chip">Do</span>
-                            </label>
-                            <label class="day-toggle">
-                                <input type="checkbox" id="dayFri" value="5">
-                                <span class="day-chip">Vr</span>
-                            </label>
-                            <label class="day-toggle">
-                                <input type="checkbox" id="daySat" value="6">
-                                <span class="day-chip">Za</span>
-                            </label>
-                            <label class="day-toggle">
-                                <input type="checkbox" id="daySun" value="0">
-                                <span class="day-chip">Zo</span>
-                            </label>
+                        <label class="settings-label">Actieve dagen en uren:</label>
+                        <div class="daily-schedule-container">
+                            
+                            <div class="daily-schedule-row">
+                                <label class="day-toggle">
+                                    <input type="checkbox" id="activeMon" value="1">
+                                    <span class="day-chip">Ma</span>
+                                </label>
+                                <div class="time-inputs">
+                                    <input type="time" id="startMon" class="settings-input">
+                                    <span>-</span>
+                                    <input type="time" id="endMon" class="settings-input">
+                                </div>
+                            </div>
+
+                            <div class="daily-schedule-row">
+                                <label class="day-toggle">
+                                    <input type="checkbox" id="activeTue" value="2">
+                                    <span class="day-chip">Di</span>
+                                </label>
+                                <div class="time-inputs">
+                                    <input type="time" id="startTue" class="settings-input">
+                                    <span>-</span>
+                                    <input type="time" id="endTue" class="settings-input">
+                                </div>
+                            </div>
+
+                            <div class="daily-schedule-row">
+                                <label class="day-toggle">
+                                    <input type="checkbox" id="activeWed" value="3">
+                                    <span class="day-chip">Wo</span>
+                                </label>
+                                <div class="time-inputs">
+                                    <input type="time" id="startWed" class="settings-input">
+                                    <span>-</span>
+                                    <input type="time" id="endWed" class="settings-input">
+                                </div>
+                            </div>
+
+                            <div class="daily-schedule-row">
+                                <label class="day-toggle">
+                                    <input type="checkbox" id="activeThu" value="4">
+                                    <span class="day-chip">Do</span>
+                                </label>
+                                <div class="time-inputs">
+                                    <input type="time" id="startThu" class="settings-input">
+                                    <span>-</span>
+                                    <input type="time" id="endThu" class="settings-input">
+                                </div>
+                            </div>
+
+                            <div class="daily-schedule-row">
+                                <label class="day-toggle">
+                                    <input type="checkbox" id="activeFri" value="5">
+                                    <span class="day-chip">Vr</span>
+                                </label>
+                                <div class="time-inputs">
+                                    <input type="time" id="startFri" class="settings-input">
+                                    <span>-</span>
+                                    <input type="time" id="endFri" class="settings-input">
+                                </div>
+                            </div>
+
+                            <div class="daily-schedule-row">
+                                <label class="day-toggle">
+                                    <input type="checkbox" id="activeSat" value="6">
+                                    <span class="day-chip">Za</span>
+                                </label>
+                                <div class="time-inputs">
+                                    <input type="time" id="startSat" class="settings-input">
+                                    <span>-</span>
+                                    <input type="time" id="endSat" class="settings-input">
+                                </div>
+                            </div>
+
+                            <div class="daily-schedule-row">
+                                <label class="day-toggle">
+                                    <input type="checkbox" id="activeSun" value="0">
+                                    <span class="day-chip">Zo</span>
+                                </label>
+                                <div class="time-inputs">
+                                    <input type="time" id="startSun" class="settings-input">
+                                    <span>-</span>
+                                    <input type="time" id="endSun" class="settings-input">
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 

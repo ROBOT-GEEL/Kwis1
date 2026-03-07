@@ -266,15 +266,35 @@ body {
 }
 
 /* ==========================================================================
-   Active Days Chips (Modern Checkboxes)
+   Daily Schedule Layout & Active Days Buttons
    ========================================================================== */
-.days-row {
+.daily-schedule-container {
     display: flex;
-    gap: 0.6rem;
-    flex-wrap: wrap;
-    margin-top: 0.2rem;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-top: 0.5rem;
 }
 
+.daily-schedule-row {
+    display: grid;
+    /* Fixed width for the button column to ensure times align perfectly vertically */
+    grid-template-columns: 7.5rem 1fr; 
+    align-items: center;
+    gap: 1.5rem;
+    background-color: #f9f9f9;
+    padding: 0.8rem 1rem;
+    border-radius: 0.4rem;
+    border: 1px solid #eee;
+}
+
+.time-inputs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--subTextColor);
+}
+
+/* Day Checkbox Buttons */
 .day-toggle {
     position: relative;
     cursor: pointer;
@@ -291,19 +311,31 @@ body {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    padding: 0.5rem 1rem;
-    background-color: var(--borderColor);
-    color: var(--textColor);
-    border-radius: 2rem;
-    font-size: 0.95rem;
+    width: 6.5rem; /* Larger width */
+    height: 2.8rem; /* Taller button */
+    background-color: var(--bgColor);
+    color: var(--subTextColor);
+    border: 2px solid var(--borderColor);
+    border-radius: 0.5rem;
+    font-size: 1.1rem;
     font-weight: 600;
-    transition: background-color 0.3s, color 0.3s;
+    transition: all 0.3s ease;
     user-select: none;
 }
 
+/* Selected state with dark green theme */
 .day-toggle input:checked + .day-chip {
-    background-color: var(--darkGreen);
-    color: #ffffff;
+    background-color: #ffffff;
+    color: var(--darkGreen);
+    border-color: var(--darkGreen);
+}
+
+/* Dark green checkmark using pseudo-element */
+.day-toggle input:checked + .day-chip::after {
+    content: '\2714'; /* Unicode Heavy Check Mark */
+    color: var(--darkGreen);
+    margin-left: 0.5rem;
+    font-size: 1.2rem;
 }
 
 .day-toggle:hover .day-chip {
@@ -414,5 +446,11 @@ body {
     .mobile-only-warning {
         display: block;
         margin-top: 1rem;
+    }
+
+    /* Stack the day button and time inputs nicely on mobile */
+    .daily-schedule-row {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
     }
 }
