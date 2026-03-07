@@ -89,7 +89,7 @@ function easy_numpad_done() {
     $('.easy-put').val(easy_numpad_output_val);
     if(easy_numpad_output_val === "1234"){
     console.log("yes code just zne");
-    window.location.href = "../manual-driving";
+    window.location.href = "../admin-panel";
     }
     easy_numpad_close();
     console.log("done");
