@@ -74,8 +74,10 @@
                 frame.style.display = "none";
                 statusScreen.style.display = "flex";
                 
-                // Clear frame source to prevent stale content from appearing on reconnect
-                if (frame.src !== "") frame.src = ""; 
+                /* Load about:blank to properly clear the iframe and trigger garbage collection */
+                if (frame.src !== "about:blank" && frame.src !== "") {
+                    frame.src = "about:blank"; 
+                }
                 
                 if (newState === 'ERROR') {
                     statusTitle.innerText = "Netwerkfout";
@@ -92,12 +94,16 @@
             const timeoutId = setTimeout(() => controller.abort(), 2000); 
 
             try {
-                /* Ping the local server */
-                await fetch(SERVER_URL, { 
+                /* Use HEAD method to only fetch headers, saving network and memory resources */
+                const response = await fetch(SERVER_URL, { 
+                    method: 'HEAD',
                     mode: 'no-cors', 
                     cache: 'no-store',
                     signal: controller.signal 
                 });
+                
+                /* Consume the response stream to prevent Chromium from keeping the buffer open */
+                await response.text();
                 
                 clearTimeout(timeoutId); 
                 updateUI('ONLINE');
