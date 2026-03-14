@@ -39,32 +39,95 @@
                     
                     <div class="settings-input-group">
                         <label class="settings-label" for="answerTime">Answer Time (sec):</label>
-                        <input type="number" id="answerTime" class="settings-input">
+                        <div class="number-input-wrapper">
+                            <input type="number" id="answerTime" class="settings-input" 
+                                min="1" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                            <div class="spinner-buttons">
+                                <button type="button" class="spinner-btn" onclick="document.getElementById('answerTime').stepDown()">
+                                    <img src="./icons/arrowDown.svg" alt="Omlaag" class="spinner-icon">
+                                </button>
+                                <button type="button" class="spinner-btn" onclick="document.getElementById('answerTime').stepUp()">
+                                    <img src="./icons/arrowUp.svg" alt="Omhoog" class="spinner-icon">
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="settings-input-group">
                         <label class="settings-label" for="maxQuestions">Max Questions:</label>
-                        <input type="number" id="maxQuestions" class="settings-input">
+                        <div class="number-input-wrapper">
+                            <input type="number" id="maxQuestions" class="settings-input" 
+                                min="1" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                            <div class="spinner-buttons">
+                                <button type="button" class="spinner-btn" onclick="document.getElementById('maxQuestions').stepDown()">
+                                    <img src="./icons/arrowDown.svg" alt="Omlaag" class="spinner-icon">
+                                <button type="button" class="spinner-btn" onclick="document.getElementById('maxQuestions').stepUp()">
+                                    <img src="./icons/arrowUp.svg" alt="Omhoog" class="spinner-icon">                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="settings-input-group">
                         <label class="settings-label" for="nextQuestionDelay">Next Question Delay (sec):</label>
-                        <input type="number" id="nextQuestionDelay" class="settings-input">
+                        <div class="number-input-wrapper">
+                            <input type="number" id="nextQuestionDelay" class="settings-input"
+                                min="1" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                            <div class="spinner-buttons">
+                                <button type="button" class="spinner-btn" onclick="document.getElementById('nextQuestionDelay').stepDown()">
+                                    <img src="./icons/arrowDown.svg" alt="Omlaag" class="spinner-icon">
+                                </button>
+                                <button type="button" class="spinner-btn" onclick="document.getElementById('nextQuestionDelay').stepUp()">
+                                    <img src="./icons/arrowUp.svg" alt="Omhoog" class="spinner-icon">
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="settings-input-group">
                         <label class="settings-label" for="timeToStartQuiz">Time To Start Quiz (sec):</label>
-                        <input type="number" id="timeToStartQuiz" class="settings-input">
+                        <div class="number-input-wrapper">
+                            <input type="number" id="timeToStartQuiz" class="settings-input"
+                                min="1" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                            <div class="spinner-buttons">
+                                <button type="button" class="spinner-btn" onclick="document.getElementById('timeToStartQuiz').stepDown()">
+                                    <img src="./icons/arrowDown.svg" alt="Omlaag" class="spinner-icon">
+                                </button>
+                                <button type="button" class="spinner-btn" onclick="document.getElementById('timeToStartQuiz').stepUp()">
+                                    <img src="./icons/arrowUp.svg" alt="Omhoog" class="spinner-icon">
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="settings-input-group">
                         <label class="settings-label" for="instructionsScreenTime">Instructions Screen Time (sec):</label>
-                        <input type="number" id="instructionsScreenTime" class="settings-input">
+                        <div class="number-input-wrapper">
+                            <input type="number" id="instructionsScreenTime" class="settings-input"
+                                min="1" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                            <div class="spinner-buttons">
+                                <button type="button" class="spinner-btn" onclick="document.getElementById('instructionsScreenTime').stepDown()">
+                                    <img src="./icons/arrowDown.svg" alt="Omlaag" class="spinner-icon">
+                                </button>
+                                <button type="button" class="spinner-btn" onclick="document.getElementById('instructionsScreenTime').stepUp()">
+                                    <img src="./icons/arrowUp.svg" alt="Omhoog" class="spinner-icon">
+                            </div>
+                        </div>
                     </div>
 
                     <div class="settings-input-group">
                         <label class="settings-label" for="finishedScreenTime">Finished Screen Time (sec):</label>
-                        <input type="number" id="finishedScreenTime" class="settings-input">
+                        <div class="number-input-wrapper">
+                            <input type="number" id="finishedScreenTime" class="settings-input"
+                                min="1" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                            <div class="spinner-buttons">
+                                <button type="button" class="spinner-btn" onclick="document.getElementById('finishedScreenTime').stepDown()">
+                                    <img src="./icons/arrowDown.svg" alt="Omlaag" class="spinner-icon">
+                                </button>
+                                <button type="button" class="spinner-btn" onclick="document.getElementById('finishedScreenTime').stepUp()">
+                                    <img src="./icons/arrowUp.svg" alt="Omhoog" class="spinner-icon">
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="settings-input-group settings-toggle-group">
@@ -76,7 +139,11 @@
                     </div>
 
                 </div>
+            </section>
 
+            <section class="settings-card">
+                <h2 class="settings-card-title">Antwoordzones</h2>
+                    <p>Wanneer de antwoordzones zijn verplaatst, kan je deze hier opnieuw instellen.</p>
                 <div class="reconfigure-section">
                     <button id="btnReconfigure" class="settings-btn-primary desktop-only-btn" onclick="window.location.href='./zones.html'"> 
                         <span class="btn-text">Herconfigureer antwoordzones</span>

@@ -99,7 +99,7 @@ body {
 }
 
 /* ==========================================================================
-   Button Shared Styles - Final Centering Fix
+   Button Shared Styles
    ========================================================================== */
 .settings-btn-primary, 
 .settings-btn-secondary, 
@@ -346,9 +346,8 @@ body {
    Reconfigure Section (Desktop/Mobile logic)
    ========================================================================== */
 .reconfigure-section {
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--borderColor);
+    margin-top: 1.5rem;
+    padding-top: 0rem;
 }
 
 .mobile-only-warning {
@@ -401,6 +400,71 @@ body {
 .settings-legend p:last-child {
     margin-bottom: 0;
 }
+
+/* ==========================================================================
+   Number Input Custom Spinners
+   ========================================================================== */
+
+/* Flex container to place input and buttons side-by-side */
+.number-input-wrapper {
+    display: flex;
+    align-items: stretch;
+    gap: 0.5rem;
+}
+
+/* Ensure the input takes up available horizontal space */
+.number-input-wrapper .settings-input {
+    flex: 1;
+    width: 100%;
+}
+
+/* Container for the two spinner buttons */
+.spinner-buttons {
+    display: flex;
+    gap: 0.3rem;
+}
+
+/* Base styling for the spinner buttons, matching primary buttons */
+.spinner-btn {
+    background-color: var(--darkGreen);
+    border: none;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.8rem;
+    height: auto;
+    padding: 0;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect matching primary buttons */
+.spinner-btn:hover {
+    background-color: var(--darkGreen-hover);
+}
+
+/* Keep the icon styling and color inversion */
+.spinner-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    pointer-events: none; 
+    user-select: none;
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
+}
+
+/* Hide the default browser number spinners */
+.number-input-wrapper input[type="number"]::-webkit-inner-spin-button,
+.number-input-wrapper input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Hide default spinners in Firefox */
+.number-input-wrapper input[type="number"] {
+    -moz-appearance: textfield;
+} 
 
 /* ==========================================================================
    Mobile Responsiveness

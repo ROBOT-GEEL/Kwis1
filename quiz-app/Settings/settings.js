@@ -143,11 +143,19 @@ async function shutdownRobot() {
     }
 }
 
-// Initialize listeners so the button resets to "Opslaan" when a standard setting changes
+// Initialize listeners so the button resets to "Opslaan" when a setting changes
 function initializeSettingsChangeListeners() {
     const inputElements = document.querySelectorAll('input[type="number"], input[type="checkbox"], input[type="time"], input[type="date"]');
     inputElements.forEach(input => {
         input.addEventListener('change', () => {
+            document.getElementById("buttonSaveSettings").textContent = "Opslaan";
+        });
+    });
+
+    // Add listeners for the newly added custom SVG spinner buttons
+    const spinnerButtons = document.querySelectorAll('.spinner-btn');
+    spinnerButtons.forEach(button => {
+        button.addEventListener('click', () => {
             document.getElementById("buttonSaveSettings").textContent = "Opslaan";
         });
     });
