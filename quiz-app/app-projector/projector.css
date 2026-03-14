@@ -97,6 +97,19 @@ main {
   box-shadow: 0 5px rgba(0, 0, 0, 0.25);
 }
 
+#inactive-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: black;
+  color: white;
+  font-size: 4rem;
+  text-align: center;
+  font-weight: bold;
+}
+
 #timer {
   font-size: 2em;
   margin-top: 10px;

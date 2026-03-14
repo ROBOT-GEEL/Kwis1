@@ -1,17 +1,14 @@
 // Store references to elements once.
 const mainElement = document.querySelector('#projector-quiz');
+const inactiveScreenElement = document.querySelector('#inactive-screen');
 const questionElement = document.querySelector('#question');
 const answerTextElements = document.querySelectorAll('.answer-text');
 const answerElements = document.querySelectorAll('.answer');
 const timerSpanElement = document.querySelector('#timer span');
 const timerProgressElement = document.querySelector('#timer progress');
 
-// io() connects to the host that served the page (works with http/https and ports).
+// io() connects to the host that served the page. 
 const socket = io();
-
-
-
-
 
 // Global timer variable
 let countdownInterval = null;
@@ -79,11 +76,11 @@ socket.on('disconnect', () => {
     clearInterval(countdownInterval);
 });
 
-
-
 socket.on('projector-update-question', (data) => {
-    // When the first question arrives, show the quiz view (from a black screen).
+    // Show the quiz view and hide the inactive screen
     mainElement.classList.remove('hidden');
+    inactiveScreenElement.classList.add('hidden');
+    
     questionElement.innerHTML = data.question;
 
     answerTextElements.forEach((element, index) => {
@@ -97,7 +94,7 @@ socket.on('projector-update-question', (data) => {
 
 socket.on('projector-start-countdown', (data) => {
     const { answerTime } = data;
-    // Use a purely local countdown to avoid cross‑device clock issues.
+    // Use a purely local countdown to avoid cross-device clock issues.
     startLocalCountdown(answerTime);
 });
 
@@ -119,8 +116,10 @@ socket.on('projector-clear-answers', () => {
 });
 
 socket.on('projector-reset', () => {
-    // After a reset, hide the quiz so the projector is fully black.
+    // After a reset, hide the quiz and show the inactive screen
     mainElement.classList.add('hidden');
+    inactiveScreenElement.classList.remove('hidden');
+    
     clearAnswerClasses();
 
     questionElement.innerHTML = '';
@@ -132,4 +131,3 @@ socket.on('projector-reset', () => {
     // Stop the timer on reset
     clearInterval(countdownInterval);
 });
-
