@@ -43,8 +43,8 @@
             <div class="control-group">
                 <span class="control-label">Lens</span>
                 <div class="control-buttons">
-                    <button class="action-btn on" onclick="toggleLens('wake')">Wake</button>
-                    <button class="action-btn off" onclick="toggleLens('sleep')">Sleep</button>
+                    <button class="action-btn on" onclick="toggleProjector('wake')">Wake</button>
+                    <button class="action-btn off" onclick="toggleProjector('sleep')">Sleep</button>
                 </div>
             </div>
         </div>
@@ -55,27 +55,6 @@
 
     </div>
 
-    <!-- <script src="js/common.js"></script> -->
-    <script>
-        // Execute when the DOM is fully loaded
-        document.addEventListener("DOMContentLoaded", () => {
-            
-            // Get the search parameters from the URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const isRobotScreen = urlParams.get('robot-screen');
-            const backBtn = document.getElementById('backToQuizBtn');
-
-            // Show the button only if the parameter exactly matches 'true'
-            if (isRobotScreen === 'true') {
-                backBtn.style.display = 'block';
-            }
-        });
-
-        // Placeholder function for lens control
-        function toggleLens(state) {
-            console.log("Lens set to:", state);
-            // Add fetch call to localhost backend here
-        }
-    </script>
+    <script src="./admin-panel.js"> </script>
 </body>
 </html>

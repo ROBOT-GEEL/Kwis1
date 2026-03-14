@@ -8,11 +8,11 @@ export const getJetsonIp = async (req, res, next) => {
 
 export const saveZones = async (req, res, next) => {
     let { coordinates } = req.body;
-    const REVEIVER_IP = process.env.PROJECTOR_RECEIVER_IP || "192.168.137.101";
-    const REVEIVER_PORT = process.env.ZONE_CONFIG_PORT || "5051";
+    const RECEIVER_IP = process.env.PROJECTOR_RECEIVER_IP || "192.168.137.101";
+    const RECEIVER_PORT = process.env.ZONE_CONFIG_PORT || "5051";
 
     try {
-        const response = await fetch(`http://${REVEIVER_IP}:${REVEIVER_PORT}/save_zones`, {
+        const response = await fetch(`http://${RECEIVER_IP}:${RECEIVER_PORT}/save_zones`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -35,28 +35,46 @@ export const saveZones = async (req, res, next) => {
 };
 
 export const toggleProjector = async (req, res, next) => {
-  let { projectorState } = req.body;
+  // Extract state from the request body
+  const { projectorState } = req.body;
   console.log("Projector toggle requested, state:", projectorState);
 
-  // Translate numeric state to command string
+  // Validate input: Check if projectorState is provided
+  if (!projectorState) {
+    return res.status(400).json({
+      success: false,
+      error: "Missing projectorState in request body"
+    });
+  }
 
+  // Translate numeric state to command string
   let command;
-  if (projectorState  == "1") {
-    command = "PROJECTORON"
-  }
-  else if (projectorState == "0") {
-    command = "PROJECTOROFF"
-  }
-  else if (projectorState == "sleep") {
-    command = "PROJECTORSLEEP"
-  }
-  else if (projectorState == "wake") {
-    command = "PROJECTORNOTSLEEP"
+  if (projectorState === "1") {
+    command = "PROJECTORON";
+  } else if (projectorState === "0") {
+    command = "PROJECTOROFF";
+  } else if (projectorState === "sleep") {
+    command = "PROJECTORSLEEP";
+  } else if (projectorState === "wake") {
+    command = "PROJECTORNOTSLEEP";
+  } else {
+    // Validate input: Check if the state is known
+    return res.status(400).json({
+      success: false,
+      error: `Invalid projectorState: ${projectorState}`
+    });
   }
 
   const client = new net.Socket();
-  const RECEIVER_IP = process.env.PROJECTOR_RECEIVER_IP || "192.168.137.101";         // IP of the Jetson Orin Nano running the Python listener
-  const RECEIVER_PORT = process.env.PROJECTOR_PORT || 5050;        // Must match LISTEN_PORT in Python
+  
+  const RECEIVER_IP = process.env.PROJECTOR_RECEIVER_IP || "192.168.137.101";
+  const RECEIVER_PORT = process.env.PROJECTOR_PORT || 5050;
+
+  // Track if a response has already been sent to prevent Express errors
+  let responseSent = false;
+
+  // Set a timeout to prevent hanging connections
+  client.setTimeout(7000);
 
   client.connect(RECEIVER_PORT, RECEIVER_IP, () => {
     console.log("Connected to projector receiver");
@@ -64,14 +82,54 @@ export const toggleProjector = async (req, res, next) => {
   });
 
   client.on("data", (data) => {
-    console.log("Receiver response:", data.toString().trim());
-    res.status(200).send(`Command '${command}' sent successfully`);
+    const responseText = data.toString().trim();
+    console.log("Receiver response:", responseText);
+    
+    if (!responseSent) {
+      // Check if the Orin Nano reported a projector error
+      if (responseText.includes("ERROR") || responseText.includes("FAIL")) {
+        res.status(502).json({
+          success: false,
+          error: "The orin nano is connected, but can't communicate with the projector.",
+          details: responseText
+        });
+      } else {
+        // Everything went perfectly
+        res.status(200).json({
+          success: true,
+          message: `Command sent to orin nano and executed successfully.`,
+          response: responseText
+        });
+      }
+      responseSent = true;
+    }
     client.destroy();
   });
 
   client.on("error", (err) => {
     console.error("Socket error:", err.message);
-    res.status(500).send("Error communicating with projector receiver: " + err.message);
+    if (!responseSent) {
+      // This means the Pi could not talk to the Orin Nano
+      res.status(503).json({
+        success: false,
+        error: "Could not connect with the orin nano",
+        details: err.message
+      });
+      responseSent = true;
+    }
+    client.destroy();
+  });
+
+  client.on("timeout", () => {
+    console.error("Socket connection timed out");
+    if (!responseSent) {
+      res.status(504).json({
+        success: false,
+        error: "Connection to projector receiver timed out"
+      });
+      responseSent = true;
+    }
+    client.destroy(); // Kill the connection on timeout
   });
 
   client.on("close", () => {
