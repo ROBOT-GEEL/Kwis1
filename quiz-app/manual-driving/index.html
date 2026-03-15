@@ -25,29 +25,53 @@
             <section class="selection-card">
                 
                 <div class="dpad-grid">
-                    <button class="dpad-btn btn-up" ontouchstart="driveBackward()" ontouchend="driveStop()" onmouseup="driveStop()" onmousedown="driveBackward()">
+                    <button class="dpad-btn btn-up"
+                            ontouchstart="startDriving('backward', event)"
+                            ontouchend="stopDriving()"
+                            onmousedown="startDriving('backward', event)"
+                            onmouseup="stopDriving()">
                         <img src="assets/icons/arrow_up.png" alt="Up">
                     </button>
 
-                    <button class="dpad-btn btn-left" ontouchstart="driveLeft()" ontouchend="driveStop()" onmouseup="driveStop()" onmousedown="driveLeft()">
+                    <button class="dpad-btn btn-left"
+                            ontouchstart="startDriving('left', event)"
+                            ontouchend="stopDriving()"
+                            onmousedown="startDriving('left', event)"
+                            onmouseup="stopDriving()">
                         <img src="assets/icons/arrow_left.png" alt="Left">
                     </button>
 
-                    <button class="dpad-btn btn-right" ontouchstart="driveRight()" ontouchend="driveStop()" onmouseup="driveStop()" onmousedown="driveRight()">
+                    <button class="dpad-btn btn-right"
+                            ontouchstart="startDriving('right', event)"
+                            ontouchend="stopDriving()"
+                            onmousedown="startDriving('right', event)"
+                            onmouseup="stopDriving()">
                         <img src="assets/icons/arrow_right.png" alt="Right">
                     </button>
 
-                    <button class="dpad-btn btn-down" ontouchstart="driveForward()" ontouchend="driveStop()" onmouseup="driveStop()" onmousedown="driveForward()">
+                    <button class="dpad-btn btn-down"
+                            ontouchstart="startDriving('forward', event)"
+                            ontouchend="stopDriving()"
+                            onmousedown="startDriving('forward', event)"
+                            onmouseup="stopDriving()">
                         <img src="assets/icons/arrow_down.png" alt="Down">
                     </button>
                 </div>
 
                 <div class="rotate-container">
-                    <button class="dpad-btn rotate-btn" ontouchstart="driveRotateCCW()" ontouchend="driveStop()" onmouseup="driveStop()" onmousedown="driveRotateCCW()">
+                    <button class="dpad-btn rotate-btn"
+                            ontouchstart="startDriving('ccw', event)"
+                            onmousedown="startDriving('ccw', event)"
+                            ontouchend="stopDriving()"
+                            onmouseup="stopDriving()">
                         <img src="assets/icons/ccw-arrow.svg" alt="CCW spin">
                     </button>
-                    
-                    <button class="dpad-btn rotate-btn" ontouchstart="driveRotateCW()" ontouchend="driveStop()" onmouseup="driveStop()" onmousedown="driveRotateCW()">
+
+                    <button class="dpad-btn rotate-btn"
+                            ontouchstart="startDriving('cw', event)"
+                            onmousedown="startDriving('cw', event)"
+                            ontouchend="stopDriving()"
+                            onmouseup="stopDriving()">
                         <img src="assets/icons/cw-arrow.svg" alt="CW spin">
                     </button>
                 </div>

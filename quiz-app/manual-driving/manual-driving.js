@@ -2,47 +2,63 @@
  * Script to handle manual driving events via WebSockets.
  */
 
-const socket = io('ws://localhost');
+// Connect to the local server
+const socket = io('http://localhost');
 
-// ============================================================================
-// Directional Driving Functions
-// ============================================================================
+let driveInterval = null;
+let currentEvent = null;
 
-function driveForward() {
-    console.log('drive forward...');
-    socket.emit('drive-forward');
+/**
+ * Starts the driving interval and emits the initial socket event.
+ * @param {string} direction - The direction name (e.g., 'forward', 'left').
+ * @param {Event} event - The original UI event (optional).
+ */
+function startDriving(direction, event) {
+    // Prevent double triggering on touch devices (prevents ghost clicks)
+    if (event && event.type === 'touchstart') {
+        event.preventDefault();
+    }
+
+    const eventName = `drive-${direction}`;
+    
+    // If we are already sending this specific event, do nothing (prevents log spam)
+    if (currentEvent === eventName) return;
+
+    // Log only the start of the action
+    console.log("START:", eventName);
+
+    // Clear any existing interval before starting a new one
+    if (driveInterval !== null) {
+        clearInterval(driveInterval);
+    }
+
+    currentEvent = eventName;
+
+    // Send the first event immediately
+    socket.emit(currentEvent);
+
+    // Background interval: sends the event every 100ms without logging
+    driveInterval = setInterval(() => {
+        if (currentEvent) {
+            socket.emit(currentEvent);
+        }
+    }, 100);
 }
 
-function driveLeft() {
-    console.log('drive left...');
-    socket.emit('drive-left');
-}
+/**
+ * Stops the driving interval and sends the stop signal to the server.
+ */
+function stopDriving() {
+    // Only trigger stop logic if we were actually moving
+    if (driveInterval !== null || currentEvent !== null) {
+        console.log("STOP");
 
-function driveRight() {
-    console.log('drive right...');
-    socket.emit('drive-right');
-}
+        if (driveInterval !== null) {
+            clearInterval(driveInterval);
+            driveInterval = null;
+        }
 
-function driveBackward() {
-    console.log('drive backward...');
-    socket.emit('drive-backward');
-}
-
-function driveStop() {
-    console.log('drive stop');
-    socket.emit('drive-stop');
-}
-
-// ============================================================================
-// Rotation Functions
-// ============================================================================
-
-function driveRotateCW() {
-    console.log('drive rotate clockwise...');
-    socket.emit('drive-rotate-cw');
-}
-
-function driveRotateCCW() {
-    console.log('drive rotate counter-clockwise...');
-    socket.emit('drive-rotate-ccw');
+        currentEvent = null;
+        socket.emit('drive-stop');
+    }
 }
