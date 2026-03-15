@@ -23,7 +23,18 @@ app.use(express.urlencoded({ extended: true }));
 
 const ROOT_DIR = "/home/robotoo/Documents/quiz-app";
 
-// Maak de juiste statische mappen beschikbaar
+// Socket.IO Initialization
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+  },
+});
+
+// Register existing Socket.IO event handlers
+registerSocketHandlers(io);
+
+// Make the correct static folders available
 app.use(express.static(path.join(ROOT_DIR, "app")));
 app.use(express.static(path.join(ROOT_DIR, "app-projector")));
 app.use(express.static(path.join(ROOT_DIR, "demo")));
@@ -40,7 +51,7 @@ app.use("/quiz", quizRoutes);
 app.use("/cms", cmsRoutes);
 app.use("/grafieken", grafiekenRoutes);
 
-// Routes
+// General Routes
 app.get("/", (req, res) => {
   res.sendFile(path.join(ROOT_DIR, "app", "index.html"));
 });
@@ -70,20 +81,12 @@ app.get("/error-log", (req, res) => {
 });
 
 // Start server and connect DB
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 80;
 
-const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "*",
-  },
-});
-
-// Koppel Socket.IO events
-registerSocketHandlers(io);
-
-// Start pas na DB-connectie
+// Start only after DB connection
 connectDB().then(() => {
+  // Use 'server.listen' instead of 'app.listen' for Socket.io support
+  // Bind explicitly to localhost
   server.listen(PORT, () => {
     logger.info(`Server listening on port ${PORT}`);
   });

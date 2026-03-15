@@ -1,18 +1,10 @@
-// Execute when the DOM is fully loaded
-document.addEventListener("DOMContentLoaded", () => {
-    
-    // Get the search parameters from the URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const isRobotScreen = urlParams.get('robot-screen');
-    const backBtn = document.getElementById('backToQuizBtn');
+// Initialize Socket.io connection pointing to localhost
+const socket = io("http://localhost");
 
-    // Show the button only if the parameter exactly matches 'true'
-    /*
-    if (isRobotScreen === 'false') {
-        backBtn.style.display = 'block';
-    }
-    */
-    backBtn.style.display = 'block';
+// Listen for successful connection to the server
+socket.on("connect", () => {
+    console.log("Connected to socket server successfully.");
+    socket.emit("admin-panel-open");
 });
 
 async function toggleProjector(state) {
