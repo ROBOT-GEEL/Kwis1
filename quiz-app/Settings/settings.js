@@ -50,7 +50,7 @@ async function buttonSaveSettings() {
         if (response.ok) {
             console.log("Settings saved successfully");
             document.getElementById("buttonSaveSettings").textContent = "Opgeslagen";
-            return response.json();
+            return response.text();
         } else {
             throw new Error('Failed to save settings');
         }
@@ -118,28 +118,43 @@ function updatePowerCards(isActive) {
 
 // Function to activate the robot and trigger a full save
 async function activateRobot() {
-    // Update local status and UI
     isRobotActive = true;
-    updatePowerCards(true);
-    
     // Save all settings, including the new status, to the server
-    await buttonSaveSettings();
-    console.log("Robot activated and settings saved.");
+    const saveSuccessful = await buttonSaveSettings();
+
+    if (saveSuccessful) {
+        console.log("Robot activated");
+
+        // Close the settings page once the robot needs to turn on
+        location.href='../'
+    } else {
+        console.error("Something went wrong while activating the robot. The settings could not be updated.")
+        isRobotActive = false;
+        updatePowerCards(false);
+    }
+    
 }
 
 // Function to show a warning, shutdown the robot, and trigger a full save
 async function shutdownRobot() {
+    isRobotActive = false;
     // Show confirmation dialog before proceeding
     const confirmShutdown = confirm("Weet je zeker dat je Robotoo wilt uitschakelen? Hij zal de huidige taken afbreken en naar het laadstation rijden.");
     
-    if (confirmShutdown) {
-        // Update local status and UI
-        isRobotActive = false;
-        updatePowerCards(false);
-        
+    if (confirmShutdown) {        
         // Save all settings, including the new status, to the server
-        await buttonSaveSettings();
-        console.log("Robot shutting down and settings saved.");
+        const saveSuccessful = await buttonSaveSettings();
+
+        if (saveSuccessful) {
+            console.log("Robot shutting down");
+            
+            // Close the settings page once the robot needs to turn off
+            location.href='../'
+        } else {
+            console.error("Something went wrong while shutting down the robot. The settings could not be updated.")
+            isRobotActive = true;
+            updatePowerCards(true);
+        }
     }
 }
 
