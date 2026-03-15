@@ -87,8 +87,8 @@ function easy_numpad_done() {
     var easy_numpad_output_val = $('#easy-numpad-output').text();
     $('.easy-put').val(easy_numpad_output_val);
     if(easy_numpad_output_val === "1234"){
-    console.log("yes code just zne");
-    window.location.href = "../admin-panel";
+        console.log("Correct code");
+        window.location.href = "../admin-panel";
     }
     easy_numpad_close();
     console.log("done");
