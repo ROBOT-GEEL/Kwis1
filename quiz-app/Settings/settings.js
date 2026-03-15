@@ -126,7 +126,7 @@ async function activateRobot() {
         console.log("Robot activated");
 
         // Close the settings page once the robot needs to turn on
-        location.href='../'
+        backToQuiz();
     } else {
         console.error("Something went wrong while activating the robot. The settings could not be updated.")
         isRobotActive = false;
