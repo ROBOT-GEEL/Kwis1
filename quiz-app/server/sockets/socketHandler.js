@@ -2,6 +2,11 @@ import logger from "../config/logger.js";
 import { getDB } from "../config/db.js";
 
 export function registerSocketHandlers(io) {
+
+    let currentAdminToken = null;
+    let currentAdminSocketId = null;
+    let disconnectTimer = null; // Used to track page navigation
+
   io.on("connection", (socket) => {
     logger.info(`Client connected: ${socket.id}`);
 
@@ -132,17 +137,65 @@ export function registerSocketHandlers(io) {
     //
     // Admin panel events
     //
-    const adminEvents = [
-      "admin-panel-open",
-      "admin-panel-closed"
-    ];
+    socket.on("admin-panel-open", (token, callback) => {
+        try {
+            // Clear any pending disconnect timers to prevent accidental lock releases
+            if (disconnectTimer) {
+                clearTimeout(disconnectTimer);
+                disconnectTimer = null;
+            }
 
-    adminEvents.forEach((event) => {
-      socket.on(event, () => {
-        logger.info(event);
-        socket.broadcast.emit(event);
-      });
-    })
+            // Check if there is an active session that belongs to someone else
+            if (currentAdminToken && currentAdminToken !== token && currentAdminSocketId) {
+                // Kick the old connection out
+                io.to(currentAdminSocketId).emit("admin-kick", "Je sessie is overgenomen door een ander apparaat.");
+                logger.info("Previous admin kicked because a new admin took over.");
+            }
+
+            // Register the NEW admin token and socket, effectively taking over
+            currentAdminToken = token;
+            currentAdminSocketId = socket.id;
+            
+            socket.broadcast.emit("admin-panel-open");
+
+            if (typeof callback === "function") callback();
+        } catch (error) {
+            console.error("Error in admin-panel-open:", error);
+        }
+    });
+
+    socket.on("admin-panel-closed", (token, callback) => {
+        try {
+            if (token === currentAdminToken) {
+                currentAdminToken = null; 
+                currentAdminSocketId = null;
+                socket.broadcast.emit("admin-panel-closed");
+                logger.info("Admin panel closed");
+            }
+            if (typeof callback === "function") callback();
+        } catch (error) {
+            console.error("Error in admin-panel-closed:", error);
+        }
+    });
+
+    socket.on("disconnect", () => {
+        try {
+            if (socket.id === currentAdminSocketId) {
+                // Give the frontend 5 seconds to load the new HTML page before releasing the lock
+                disconnectTimer = setTimeout(() => {
+                    currentAdminToken = null;
+                    currentAdminSocketId = null;
+                    socket.broadcast.emit("admin-panel-closed");
+                    logger.info("Admin connection lost");
+                }, 5000); 
+            }
+        } catch (error) {
+            console.error("Error during disconnect:", error);
+        }
+    });
+
+    
+
 
     //
     // Touchscreen display toggle (dummy implementation)

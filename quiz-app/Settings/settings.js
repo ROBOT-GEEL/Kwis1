@@ -149,7 +149,7 @@ async function shutdownRobot() {
             console.log("Robot shutting down");
             
             // Close the settings page once the robot needs to turn off
-            location.href='../'
+            backToQuiz();
         } else {
             console.error("Something went wrong while shutting down the robot. The settings could not be updated.")
             isRobotActive = true;

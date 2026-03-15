@@ -49,12 +49,14 @@
             </div>
         </div>
 
-       <button id="backToQuizBtn" class="back-to-quiz-btn" style="display: block;" onclick="location.href='../'">
+       <button id="backToQuizBtn" class="back-to-quiz-btn" style="display: block;" onclick="backToQuiz()">
             Terug naar quiz
         </button>
 
     </div>
 
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="../shared/scripts/admin-session.js"></script>
     <script src="./admin-panel.js"> </script>
 </body>
 </html>

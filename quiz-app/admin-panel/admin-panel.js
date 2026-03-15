@@ -1,11 +1,4 @@
-// Initialize Socket.io connection pointing to localhost
-const socket = io("http://localhost");
 
-// Listen for successful connection to the server
-socket.on("connect", () => {
-    console.log("Connected to socket server successfully.");
-    socket.emit("admin-panel-open");
-});
 
 async function toggleProjector(state) {
     // Check if a state was actually passed

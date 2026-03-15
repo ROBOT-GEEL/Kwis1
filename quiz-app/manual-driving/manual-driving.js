@@ -2,9 +2,6 @@
  * Script to handle manual driving events via WebSockets.
  */
 
-// Connect to the local server
-const socket = io('http://localhost');
-
 let driveInterval = null;
 let currentEvent = null;
 
