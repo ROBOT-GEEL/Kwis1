@@ -92,12 +92,14 @@ export function registerSocketHandlers(io) {
       "drive-left",
       "drive-right",
       "drive-stop",
+      "drive-cw",
+      "drive-ccw",
     ];
 
     driveEvents.forEach((event) => {
       socket.on(event, () => {
         logger.info(`manual control ${event}`);
-        socket.broadcast.emit(event.replace("-", "_"));
+        socket.broadcast.emit(event);
       });
     });
 
@@ -126,6 +128,21 @@ export function registerSocketHandlers(io) {
         socket.broadcast.emit(event);
       });
     });
+
+    //
+    // Admin panel events
+    //
+    const adminEvents = [
+      "admin-panel-open",
+      "admin-panel-closed"
+    ];
+
+    adminEvents.forEach((event) => {
+      socket.on(event, () => {
+        logger.info(event);
+        socket.broadcast.emit(event);
+      });
+    })
 
     //
     // Touchscreen display toggle (dummy implementation)
