@@ -1,7 +1,59 @@
 // Variable to keep track of the robot's active status
 let isRobotActive = false;
 
+// Function to validate all inputs before saving
+function validateInputs() {
+    // Validate numeric quiz settings to ensure they are not empty and >= 1
+    const numericFieldIds = [
+        "answerTime", "maxQuestions", "nextQuestionDelay", 
+        "timeToStartQuiz", "instructionsScreenTime", "finishedScreenTime"
+    ];
+    
+    for (const id of numericFieldIds) {
+        const value = document.getElementById(id).value;
+        if (!value || parseInt(value) < 1) {
+            alert("Zorg ervoor dat alle numerieke velden correct zijn ingevuld (minimaal 1).");
+            return false;
+        }
+    }
+
+    // Validate the daily schedule
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const dayNamesNL = {
+        'Mon': 'maandag', 'Tue': 'dinsdag', 'Wed': 'woensdag', 
+        'Thu': 'donderdag', 'Fri': 'vrijdag', 'Sat': 'zaterdag', 'Sun': 'zondag'
+    };
+
+    for (const day of days) {
+        const isActive = document.getElementById(`active${day}`).checked;
+        const startTime = document.getElementById(`start${day}`).value;
+        const endTime = document.getElementById(`end${day}`).value;
+
+        if (isActive) {
+            // If the day is active, both start and end times must be provided
+            if (!startTime || !endTime) {
+                alert(`Vul een begin- en einduur in voor ${dayNamesNL[day]}.`);
+                return false;
+            }
+
+            // Start time must strictly be before the end time
+            if (startTime >= endTime) {
+                alert(`Het einduur moet later zijn dan het beginuur op ${dayNamesNL[day]}.`);
+                return false;
+            }
+        }
+    }
+
+    // All checks passed
+    return true;
+}
+
 async function buttonSaveSettings() {
+    // Stop the save process if the validation fails
+    if (!validateInputs()) {
+        return false;
+    }
+
     document.getElementById("buttonSaveSettings").textContent = "Opslaan...";
     try {
         // Store all the settings in a dictionary
@@ -36,7 +88,7 @@ async function buttonSaveSettings() {
         // Add the robot status to the settings dictionary
         settingsDict.robotActive = isRobotActive;
 
-        // Send the settings to the localhost server
+        // Send the settings to the server
         const response = await fetch('/cms/saveSettings', {
             method: 'POST',
             headers: {
@@ -50,17 +102,19 @@ async function buttonSaveSettings() {
         if (response.ok) {
             console.log("Settings saved successfully");
             document.getElementById("buttonSaveSettings").textContent = "Opgeslagen";
-            return response.text();
+            return true;
         } else {
             throw new Error('Failed to save settings');
         }
     } catch (error) {
         console.error('Error:', error);
         document.getElementById("buttonSaveSettings").textContent = "Fout bij opslaan";
+        return false;
     }
 }
 
 function retrieveSettings() {
+    // Fetch settings from server
     fetch('/cms/getSettings')
     .then(response => response.json())
     .then(Settings => {
@@ -95,7 +149,8 @@ function retrieveSettings() {
             updatePowerCards(isRobotActive);
         }
         
-        document.getElementById("buttonSaveSettings").textContent = "Opslaan";
+        // Set button text to "Opgeslagen" upon successful retrieval of settings
+        document.getElementById("buttonSaveSettings").textContent = "Opgeslagen";
     })
     .catch(error => console.error(`Error getting Settings: ${error}`));
 }
@@ -119,20 +174,20 @@ function updatePowerCards(isActive) {
 // Function to activate the robot and trigger a full save
 async function activateRobot() {
     isRobotActive = true;
+    
     // Save all settings, including the new status, to the server
     const saveSuccessful = await buttonSaveSettings();
 
     if (saveSuccessful) {
         console.log("Robot activated");
-
+        
         // Close the settings page once the robot needs to turn on
-        backToQuiz();
+        if (typeof backToQuiz === "function") backToQuiz();
     } else {
-        console.error("Something went wrong while activating the robot. The settings could not be updated.")
+        console.error("Something went wrong while activating the robot. The settings could not be updated.");
         isRobotActive = false;
         updatePowerCards(false);
     }
-    
 }
 
 // Function to show a warning, shutdown the robot, and trigger a full save
@@ -149,12 +204,15 @@ async function shutdownRobot() {
             console.log("Robot shutting down");
             
             // Close the settings page once the robot needs to turn off
-            backToQuiz();
+            if (typeof backToQuiz === "function") backToQuiz();
         } else {
-            console.error("Something went wrong while shutting down the robot. The settings could not be updated.")
+            console.error("Something went wrong while shutting down the robot. The settings could not be updated.");
             isRobotActive = true;
             updatePowerCards(true);
         }
+    } else {
+        // If the user cancels the confirmation, reset the active state
+        isRobotActive = true;
     }
 }
 
@@ -167,7 +225,7 @@ function initializeSettingsChangeListeners() {
         });
     });
 
-    // Add listeners for the newly added custom SVG spinner buttons
+    // Add listeners for the custom SVG spinner buttons
     const spinnerButtons = document.querySelectorAll('.spinner-btn');
     spinnerButtons.forEach(button => {
         button.addEventListener('click', () => {
