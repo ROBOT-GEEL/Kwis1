@@ -1,6 +1,10 @@
 // Variable to keep track of the robot's active status
 let isRobotActive = false;
 
+// Variables for time management
+let timeAutoUpdateInterval = null;
+let isTimeManuallyEdited = false;
+
 // Function to validate all inputs before saving
 function validateInputs() {
     // Validate numeric quiz settings to ensure they are not empty and >= 1
@@ -48,6 +52,34 @@ function validateInputs() {
     return true;
 }
 
+// Function to fetch and update the true system time from the server headers
+async function updateSystemTimeUI() {
+    // Only update automatically if the user hasn't manually altered the inputs
+    if (!isTimeManuallyEdited) {
+        try {
+            // Send a lightweight HEAD request to localhost to read the server's exact HTTP Date header.
+            // This completely bypasses the browser's internal cached clock.
+            const response = await fetch(window.location.href, { method: 'HEAD' });
+            const serverTimeStr = response.headers.get('Date');
+            
+            if (serverTimeStr) {
+                const now = new Date(serverTimeStr);
+                
+                const yyyy = now.getFullYear();
+                const mm = String(now.getMonth() + 1).padStart(2, '0');
+                const dd = String(now.getDate()).padStart(2, '0');
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+
+                document.getElementById("currentDate").value = `${yyyy}-${mm}-${dd}`;
+                document.getElementById("currentTime").value = `${hours}:${minutes}`;
+            }
+        } catch (error) {
+            console.error("Could not fetch true server time:", error);
+        }
+    }
+}
+
 async function buttonSaveSettings() {
     // Stop the save process if the validation fails
     if (!validateInputs()) {
@@ -69,7 +101,7 @@ async function buttonSaveSettings() {
 
         settingsDict.cancelInactiveQuiz = document.getElementById("cancelInactiveQuizCheckbox").checked;
 
-        // Retrieve current date and time settings
+        // Retrieve current date and time settings from the UI
         settingsDict.currentDate = document.getElementById("currentDate").value;
         settingsDict.currentTime = document.getElementById("currentTime").value;
 
@@ -102,6 +134,14 @@ async function buttonSaveSettings() {
         if (response.ok) {
             console.log("Settings saved successfully");
             document.getElementById("buttonSaveSettings").textContent = "Opgeslagen";
+            
+            // Give the Raspberry Pi 1 second to actually change the OS clock
+            // before we fetch the new time from the server headers.
+            setTimeout(() => {
+                isTimeManuallyEdited = false;
+                updateSystemTimeUI(); 
+            }, 1000);
+
             return true;
         } else {
             throw new Error('Failed to save settings');
@@ -126,10 +166,6 @@ function retrieveSettings() {
         document.getElementById("instructionsScreenTime").value = Settings.instructionsScreenTime;
         document.getElementById("finishedScreenTime").value = Settings.finishedScreenTime;
         document.getElementById("timeToStartQuiz").value = Settings.timeToStartQuiz;
-        
-        // Update the UI with the retrieved system date and time
-        if(Settings.currentDate) document.getElementById("currentDate").value = Settings.currentDate;
-        if(Settings.currentTime) document.getElementById("currentTime").value = Settings.currentTime;
         
         // Update the UI with the retrieved daily schedule
         if(Settings.schedule) {
@@ -220,8 +256,13 @@ async function shutdownRobot() {
 function initializeSettingsChangeListeners() {
     const inputElements = document.querySelectorAll('input[type="number"], input[type="checkbox"], input[type="time"], input[type="date"]');
     inputElements.forEach(input => {
-        input.addEventListener('change', () => {
+        input.addEventListener('change', (e) => {
             document.getElementById("buttonSaveSettings").textContent = "Opslaan";
+            
+            // Pause auto-update if the user manually alters the date or time
+            if (e.target.id === "currentDate" || e.target.id === "currentTime") {
+                isTimeManuallyEdited = true;
+            }
         });
     });
 
@@ -235,5 +276,12 @@ function initializeSettingsChangeListeners() {
 }
 
 // Start sequence
-document.addEventListener('DOMContentLoaded', initializeSettingsChangeListeners);
+document.addEventListener('DOMContentLoaded', () => {
+    initializeSettingsChangeListeners();
+    
+    // Initialize system time immediately and start auto-updating every 15 seconds
+    updateSystemTimeUI();
+    timeAutoUpdateInterval = setInterval(updateSystemTimeUI, 15000);
+});
+
 retrieveSettings();

@@ -1,6 +1,7 @@
 import net from "net";
 import crypto from "crypto";
 import { ObjectId } from "mongodb";
+import { exec } from "child_process";
 
 export const getJetsonIp = async (req, res, next) => {
   res.json(process.env.PROJECTOR_RECEIVER_IP || "192.168.137.101");
@@ -285,6 +286,24 @@ export const saveSettings = async (req, res, next) => {
       { $set: settingsDict },
       { upsert: true }
     );
+
+    const newDate = settingsDict.currentDate; // e.g., "2026-03-25"
+    const newTime = settingsDict.currentTime; // e.g., "15:30"
+
+    if (newDate && newTime) {
+        // Construct the command to set the date and time on Linux
+        // Format required by 'date' command: "YYYY-MM-DD HH:MM:SS"
+        const command = `sudo date -s "${newDate} ${newTime}:00"`;
+
+        // Execute the terminal command
+        exec(command, (error, stdout, stderr) => {
+            if (error) {
+                console.error(`Failed to update system time: ${error.message}`);
+                return;
+            }
+            console.log(`System time successfully updated to: ${newDate} ${newTime}`);
+        });
+    }
 
     console.log("Settings saved successfully");
     res.status(200).send("Settings saved successfully");
