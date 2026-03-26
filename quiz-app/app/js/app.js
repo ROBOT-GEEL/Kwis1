@@ -135,6 +135,7 @@ document.querySelector('#visited-expoo-no').addEventListener('click', async () =
  * Event listener for the error close button.
  */
 document.querySelector('#error-close').addEventListener('click', () => {
+    socket.emit('quiz-finished');
     changeScreen('start-screen');
     document.querySelector('#error').close();
 });
