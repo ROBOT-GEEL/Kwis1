@@ -7,25 +7,6 @@
  * - error.js (logError)
  * - textFit.js (external library)
  */
-async function sendProjectorCommand(action) {
-  try {
-    const response = await fetch("/cms/toggleProjector", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ projectorState: action })
-    });
-
-    if (!response.ok) {
-      const error = await response.text();
-      throw new Error(error);
-    }
-
-    const text = await response.text();
-    console.log(text);
-  } catch (error) {
-    console.error("Error sending projector command:", error);
-  }
-}
 class Quiz {
     static #answerTime = 10;
     static #maxQuestions = 3;
@@ -54,6 +35,7 @@ class Quiz {
         // Add event listener for the people count from the Pi
         // This is used to cancel the quiz if there are no people in the answer zones twice in a row
         socket.on('pi-count-people-answer', async (data) => {
+
             // Check if the current quiz is the same as the one that was counted
             if (this.#quizId === data.quizId) {
                 // Increment the inactive quiz counter if there are no people in the answer zones
@@ -65,6 +47,7 @@ class Quiz {
             } else {
                 this.#inactiveQuizCounter = 0;
             }
+
             // If there are no people in the answer zones twice in a row and the quiz is allowed to be cancelled, cancel the quiz
             if (this.#inactiveQuizCounter >= 2 && this.#cancelInactiveQuiz) {
                 this.#cancelled = true;
@@ -73,9 +56,22 @@ class Quiz {
                 changeScreen('quiz-finished-screen');
                 await wait(this.#finishedScreenTime * 1000);
                 socket.emit('quiz-finished');
+                return;
+            }
+
+            // If the count went wrong, cancel the quiz and show an error
+            if (data.status !== "success") {
+                this.#cancelled = true;
+                this.#currentQuestionIndex = this.#questions.length;
+                socket.emit('projector-reset');
+                changeScreen('quiz-finished-screen');
+
+                error(data.error_code);
+                return;
             }
         });
     }
+
     /**
      * Initialize a new quiz.
      *
@@ -220,56 +216,112 @@ class Quiz {
         this.timeToStartQuiz = await this.#getTimeToStartQuiz();
     }
 
+    /**
+     * Sends a command to toggle the projector state.
+     * 
+     * @param {string} action - The action to perform ("wake" or "sleep")
+     */
+    static async #sendProjectorCommand(action) {
+        let response;
+        try {
+            response = await fetch("/cms/toggleProjector", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ projectorState: action })
+            });
+        } catch (error) {
+            logError("[Quiz Interface] Network error while toggling projector");
+            throw "ERROR_PARAMETERS_STATUS";
+        }
+
+        if (!response.ok) {
+            logError("[Quiz Interface] Error toggling projector: " + response.status);
+            throw "ERROR_PARAMETERS_STATUS";
+        }
+    }
+
     static async start() {
-        // If the quiz is not initialized, wait for it to be initialized
-        while (!this.#isInitialized) {
-            await wait(100);
-        }
-        // Reset the cancelled flag
-        this.#cancelled = false;
+        try {
+            // If the quiz is not initialized, wait for it to be initialized
+            while (!this.#isInitialized) {
+                await wait(100);
+            }
+            // Reset the cancelled flag
+            this.#cancelled = false;
 
-        // Show the instructions
-        await this.#showInstructions();
+            // Show the instructions
+            await this.#showInstructions();
 
-        // Change the screen to the quiz screen after the instructions
-        changeScreen('quiz-screen');
-        sendProjectorCommand("wake")
-        document.querySelector('#instructions-header').classList.add('instruction-header-big');
-        document.querySelector('#instruction-container').classList.add('instruction-container-invisible');
-        document.querySelector('#instruction-text').textContent = '';
-        document.querySelector('#instruction-image').src = './assets/transparent.png';
-        // Set the quiz as active for the language change callback
-        this.#active = true;
+            // Activate the lens of the projector
+            //await this.#sendProjectorCommand("wake")
 
-        // Loop through the questions
-        for (this.#currentQuestionIndex = 0; this.#currentQuestionIndex < this.#questions.length; this.#currentQuestionIndex++) {
-            this.#showQuestion();
-            await this.#answerCountdown();
-            // Notify the Pi to count the people in the answer zones
-            socket.emit('pi-count-people', { quizId: this.#quizId, questionId: this.#questions[this.#currentQuestionIndex].questionId });
-            this.#showCorrectAnswer();
-            // Wait until showing the next question
-            await wait(this.#nextQuestionDelay * 1000);
-            // Clear the answers on the projector
-            socket.emit('projector-clear-answers');
-            // Reset the correct/wrong answer classes
-            document.querySelectorAll('.answer-container').forEach(e => e.classList.remove('wrong-answer-container', 'correct-answer-container'));
-            document.querySelectorAll('.answer-label').forEach(e => e.classList.remove('correct-answer-label', 'wrong-answer-label'));
-        }
+            // Change the screen to the quiz screen after the instructions
+            changeScreen('quiz-screen');
+            
+            document.querySelector('#instructions-header').classList.add('instruction-header-big');
+            document.querySelector('#instruction-container').classList.add('instruction-container-invisible');
+            document.querySelector('#instruction-text').textContent = '';
+            document.querySelector('#instruction-image').src = './assets/transparent.png';
+            // Set the quiz as active for the language change callback
+            this.#active = true;
 
-        // Set the quiz as inactive for the language change callback
-        this.#active = false;
-        // Clear the questions array
-        this.#questions = [];
+            // Loop through the questions
+            for (this.#currentQuestionIndex = 0; this.#currentQuestionIndex < this.#questions.length; this.#currentQuestionIndex++) {
+                
+                // If the quiz was cancelled due to an error, break the loop
+                if (this.#cancelled) break;
 
-        // Finish the quiz if it was not cancelled
-        if (!this.#cancelled) {
-            sendProjectorCommand("sleep")
+                this.#showQuestion();
+                await this.#answerCountdown();
+
+                // If the quiz was cancelled due to an error, break the loop
+                if (this.#cancelled) break;
+
+                // Notify the Pi to count the people in the answer zones
+                socket.emit('pi-count-people', { quizId: this.#quizId, questionId: this.#questions[this.#currentQuestionIndex].questionId });
+                this.#showCorrectAnswer();
+
+                // Wait until showing the next question
+                await wait(this.#nextQuestionDelay * 1000);
+
+                // If the quiz was cancelled due to an error, break the loop
+                if (this.#cancelled) break;
+
+                // Clear the answers on the projector
+                socket.emit('projector-clear-answers');
+
+                // Reset the correct/wrong answer classes
+                document.querySelectorAll('.answer-container').forEach(e => e.classList.remove('wrong-answer-container', 'correct-answer-container'));
+                document.querySelectorAll('.answer-label').forEach(e => e.classList.remove('correct-answer-label', 'wrong-answer-label'));
+                
+                
+            }
+
+            // Set the quiz as inactive for the language change callback
+            this.#active = false;
+            // Clear the questions array
+            this.#questions = [];
+
+            // Finish the quiz if it was not cancelled
+            if (!this.#cancelled) {
+                //await this.#sendProjectorCommand("sleep");
+                socket.emit('projector-reset');
+                changeScreen('quiz-finished-screen');
+                await wait(this.#finishedScreenTime * 1000);
+                socket.emit('quiz-finished');
+            }
+        } catch (error) { 
+            logError("[Quiz Runtime Error] An error occurred during the quiz execution");
+
+            this.#cancelled = true;
+            this.#currentQuestionIndex = this.#questions.length;
             socket.emit('projector-reset');
             changeScreen('quiz-finished-screen');
-            await wait(this.#finishedScreenTime * 1000);
-            socket.emit('quiz-finished');
-        }
+            
+            throw error;
+        };
+
+        
     }
 
     /**
