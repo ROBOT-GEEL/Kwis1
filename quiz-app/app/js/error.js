@@ -9,7 +9,16 @@
  * @param {string} key The language key of the error message
  */
 function error(key) {
+    // 1. Set the generic title
+    document.querySelector('#error-title').textContent = LanguageData.get("ERROR_TITLE");
+    
+    // 2. Set the specific error message based on the provided key
     document.querySelector('#error-message').textContent = LanguageData.get(key);
+    
+    // 3. Set the text for the close button
+    document.querySelector('#error-close').textContent = LanguageData.get("ERROR_CLOSE");
+    
+    // Show the modal
     document.querySelector('#error').showModal();
 }
 
