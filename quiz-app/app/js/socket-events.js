@@ -62,9 +62,15 @@ socket.on('robot-arrived-at-visitors', () => {
     }
 });
 
-socket.on('robot-arrived-at-quiz-location', () => {
+socket.on('robot-arrived-at-quiz-location', async () => {
     console.log('Robot has arrived at the quiz location!');
-    Quiz.start();
+    try {
+        await Quiz.start();
+    } catch (e) {
+        error(e);
+        return;
+    }
+   
 });
 
 socket.on('robot-go-charge', () => {
