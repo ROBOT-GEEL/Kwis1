@@ -662,38 +662,17 @@ body {
 /************************/
 #debug-overlay-button {
     position: fixed;
-    top: 100%;
-    left: 100%;
-    transform: translate(-100%, -100%);
+    top: 0;
+    right: 0;
     z-index: 1001;
     background-color: rgb(255, 255, 255);
     border: none;
-    border-radius: 10px 0 0 0;
-    padding: 10px;
+    border-radius: 0 0 0 10px;
+    padding: 20px;
     cursor: pointer;
 
     transition: all 0.3s ease;
 }
-
-@keyframes color-cycle {
-    0% { background-color: rgb(255, 255, 255); }
-    25% { background-color: rgb(255, 0, 0); }
-    50% { background-color: rgb(0, 255, 0); }
-    75% { background-color: rgb(0, 0, 255); }
-    100% { background-color: rgb(255, 255, 255); }
-}
-
-@keyframes shake {
-    0%, 100% { transform: translate(-100%, -100%) translateX(0); }
-    25%, 75% { transform: translate(-100%, -100%) translateX(-3px); }
-    50% { transform: translate(-100%, -100%) translateX(3px); }
-}
-
-/* Make a very fancy hover effect */
-#debug-overlay-button:hover {
-    animation: color-cycle 5s infinite, shake 0.2s infinite;
-}
-
 
 #debug-overlay {
     position: fixed;
@@ -773,102 +752,28 @@ body {
 
 
 /*******************************/
-/*    MANUAL DRIVE OVERLAY     */
+/*      ADMIN PANEL BUTTON     */
 /*******************************/
 
-
-#manual-overlay-button {
+#admin-panel-button {
     position: fixed;
-    top: 100%;
-    left: 90%;
-    transform: translate(-100%, -100%);
+    bottom: 0;
+    right: 0;
     z-index: 1001;
     background-color: rgb(255, 255, 255);
     border: none;
     border-radius: 10px 0 0 0;
-    padding: 10px;
+    padding-top: 20px;
+    padding-right: 30px;
+    padding-left: 30px;
+    padding-bottom: 20px;
     cursor: pointer;
+
+    /* Make the button invisible for the users */
+    opacity: 100;
 
     transition: all 0.3s ease;
 }
-
-#manual-overlay {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    /* width: 100%; */
-    /* height: 100%; */
-    background-color: rgba(255, 255, 255, 0.4);
-    z-index: 1000;
-    border-radius: 10px;
-    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3);
-}
-
-#manual-overlay-content {
-    display: flex;
-    flex-direction: column;
-}
-
-#manual-overlay-content > * {
-    margin: 0;
-    padding: 0;
-}
-
-#manual-overlay-content > h1 {
-    font-size: 1.5em;
-    margin-bottom: 0.5em;
-    margin-left: 0.5em;
-    margin-right: 0.5em;
-    white-space: nowrap;
-}
-
-#manual-overlay-sections {
-    display: flex;
-    flex-direction: row;
-    padding-top: 0;
-    padding-right: 10px;
-    padding-left: 10px;
-    padding-bottom: 10px;
-    gap: 10px;
-}
-
-.manual-overlay-section {
-    display: flex;
-    flex-direction: column;
-    background-color: rgba(255, 255, 255, 0.4);
-    border-radius: 10px;
-}
-
-#manual-overlay-section > h2 {
-    margin: 0;
-    font-family: 'Co Headline', sans-serif;
-    font-size: medium;
-    text-align: center;
-}
-
-#manual-overlay-section-buttons {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 10px;
-    padding-top: 5px;
-    padding-bottom: 10px;
-    padding-left: 5px;
-    padding-right: 5px;
-}
-
-#manual-overlay-section-buttons > button {
-    padding-top: 5px;
-    padding-bottom: 5px;
-    border: none;
-    border-radius: 10px;
-    background-color: rgb(255, 255, 255);
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-
 
 /* numpad layout*/
 
