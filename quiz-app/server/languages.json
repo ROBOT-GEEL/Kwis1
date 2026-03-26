@@ -123,5 +123,51 @@
         "NL": "Er is een onverwachte fout opgetreden bij het ophalen van de instructies voor de quiz. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
         "EN": "An unexpected error occurred while fetching the instructions for the quiz. Please report this to the information desk. We apologize for the inconvenience.",
         "FR": "Une erreur inattendue s'est produite lors de la récupération des instructions pour le quiz. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+    },
+
+    "ERR_FS_DIR_CREATE": {
+        "NL": "Er is een systeemfout opgetreden bij het aanmaken van de vereiste mappen (opslagruimte/rechten). Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "A system error occurred while creating required folders (storage/permissions). Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "Une erreur système s'est produite lors de la création des dossiers requis (stockage/droits). Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+    },
+    "ERR_YOLO_LOAD": {
+        "NL": "Er is een systeemfout opgetreden bij het inladen van het AI-model. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "A system error occurred while loading the AI model. Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "Une erreur système s'est produite lors du chargement du modèle d'IA. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+    },
+    "ERR_ZONE_LOAD": {
+        "NL": "Er is een systeemfout opgetreden bij het inladen van de zone-configuratie. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "A system error occurred while loading the zone configuration. Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "Une erreur système s'est produite lors du chargement de la configuration des zones. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+    },
+    "ERR_CAM_LOCK": {
+        "NL": "Er is een communicatiefout opgetreden: de camera is momenteel geblokkeerd door een ander proces. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "A communication error occurred: the camera is currently locked by another process. Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "Une erreur de communication s'est produite : la caméra est actuellement bloquée par un autre processus. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+    },
+    "ERR_CAM_OPEN": {
+        "NL": "Er is een systeemfout opgetreden bij het verbinden met de camera. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "A system error occurred while connecting to the camera. Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "Une erreur système s'est produite lors de la connexion à la caméra. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+    },
+    "ERR_CAM_READ": {
+        "NL": "Er is een systeemfout opgetreden bij het uitlezen van het camerabeeld. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "A system error occurred while reading the camera feed. Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "Une erreur système s'est produite lors de la lecture du flux vidéo de la caméra. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+    },
+    "ERR_FS_WRITE": {
+        "NL": "Er is een systeemfout opgetreden bij het wegschrijven van gegevens naar de schijf. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "A system error occurred while saving data to the disk. Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "Une erreur système s'est produite lors de l'enregistrement des données sur le disque. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+    },
+    "ERR_YOLO_INFERENCE": {
+        "NL": "Er is een systeemfout opgetreden tijdens de beeldanalyse. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "A system error occurred during image analysis. Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "Une erreur système s'est produite lors de l'analyse d'image. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+    },
+    "ERR_SOCKET_EVENT": {
+        "NL": "Er is een systeemfout opgetreden tijdens de netwerkcommunicatie. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "A system error occurred during network communication. Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "Une erreur système s'est produite lors de la communication réseau. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
     }
 }
