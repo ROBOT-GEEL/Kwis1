@@ -54,8 +54,16 @@ export function registerSocketHandlers(io) {
         const db = getDB();
         const collection = db.collection("results");
 
-        msg.timestamp = new Date(); // voeg UTC timestamp toe
-        await collection.insertOne(msg);
+        if (msg.status === "success") {
+
+          const dataToSave = {
+              quizId: msg.quizId,
+              questionId: msg.questionId,
+              results: msg.results,
+              timestamp: new Date()
+          };
+          await collection.insertOne(dataToSave);
+        }
 
         socket.broadcast.emit("pi-count-people-answer", msg);
       } catch (e) {
