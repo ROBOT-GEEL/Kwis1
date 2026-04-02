@@ -770,7 +770,7 @@ body {
     cursor: pointer;
 
     /* Make the button invisible for the users */
-    opacity: 100;
+    opacity: 0;
 
     transition: all 0.3s ease;
 }
@@ -871,11 +871,7 @@ a#easy-numpad-close {
     color: #fff;
     font-size: 2.5rem;
     border-radius: 10px;
-    transition: background-color 0.2s;
-}
-
-.easy-numpad-number-container > table a:hover {
-    background-color: #616161;
+    -webkit-user-drag: none;
 }
 
 .easy-numpad-number-container .cancel {
