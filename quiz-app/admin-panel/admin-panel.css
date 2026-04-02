@@ -4,6 +4,19 @@
     src: url("../shared/assets/fonts/Co-Headline.woff2") format("woff2");
     font-weight: normal;
     font-style: normal;
+
+    ascent-override: 100%;
+    line-gap-override: 0%;
+}
+
+@font-face {
+    font-family: "CO Headline";
+    src: url("../shared/assets/fonts/Co-Headline-Bold.woff2") format("woff2");
+    font-weight: bold;
+    font-style: normal;
+
+    ascent-override: 100%;
+    line-gap-override: 0%;
 }
 
 @font-face {
@@ -44,6 +57,7 @@ body {
 
 .overview-title {
     font-family: "CO Headline", sans-serif;
+    font-weight: bold;
     color: var(--darkGreen);
     font-size: 3rem;
     margin-bottom: 2.5rem;

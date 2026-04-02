@@ -3,6 +3,19 @@
     src: url("../shared/assets/fonts/Co-Headline.woff2") format("woff2");
     font-weight: normal;
     font-style: normal;
+
+    ascent-override: 100%;
+    line-gap-override: 0%;
+}
+
+@font-face {
+    font-family: "CO Headline";
+    src: url("../shared/assets/fonts/Co-Headline-Bold.woff2") format("woff2");
+    font-weight: bold;
+    font-style: normal;
+
+    ascent-override: 100%;
+    line-gap-override: 0%;
 }
 
 @font-face {
@@ -44,6 +57,7 @@ button {
 
 h1, h1 > *, h1 * {
     font-family: 'Co Headline', 'Open Sans', sans-serif;
+    font-weight: bold;
 }
 
 .highlight {
@@ -102,7 +116,7 @@ body {
 #error {
     margin: auto;
     border-radius: 10px;
-    padding: 1rem;
+    padding: 2rem;
     border: none;
     max-width: 60vw;
 }
@@ -124,7 +138,7 @@ body {
     border-width: 0;
     background-color: var(--green-bg-color-dark);
     color: white;
-    padding: 10px;
+    padding: 1em;
     border-radius: 5px;
     cursor: pointer;
     font-size: 2em;
@@ -235,6 +249,8 @@ body {
 }
 
 .start-button-container > button {
+    font-family: 'Co Headline', sans-serif;
+    font-weight: bold;
     border-width: 0;
     padding: 25px 45px;
     color: white;
