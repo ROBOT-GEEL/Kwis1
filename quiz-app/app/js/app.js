@@ -19,7 +19,8 @@ window.socket = io(`ws://${window.location.hostname}`);
  * It updates most of the content of the frontend.
  */
 function onLanguageChange() {
-    document.querySelector('[data-lang-key=START_SCREEN_CARD_DESCRIPTION]').innerHTML = LanguageData.get("START_SCREEN_CARD_DESCRIPTION");
+    // Start screen
+    document.querySelector('[data-lang-key=START_SCREEN_HEADER]').innerHTML = LanguageData.get("START_SCREEN_HEADER");
     document.querySelector('[data-lang-key=START_SCREEN_START_BUTTON]').innerHTML = LanguageData.get("START_SCREEN_START_BUTTON");
     document.querySelector('[data-lang-key=FOLLOW_SCREEN_TEXT]').innerHTML = LanguageData.get("FOLLOW_SCREEN_TEXT");
 
@@ -37,11 +38,8 @@ function onLanguageChange() {
 
     // Exploring
     document.querySelector('[data-lang-key=EXPLORING]').innerHTML = LanguageData.get("EXPLORING");
-
-    // Go to visitors
-    document.querySelector('[data-lang-key=GO_TO_VISITOR_HEADER]').innerHTML = LanguageData.get("GO_TO_VISITOR_HEADER");
-    document.querySelector('[data-lang-key=GO_TO_VISITOR_DESCRIPTION]').innerHTML = LanguageData.get("GO_TO_VISITOR_DESCRIPTION");
 }
+
 // Register the callback function for the language change
 LanguageData.addLanguageChangeCallback(() => onLanguageChange());
 

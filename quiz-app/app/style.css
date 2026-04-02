@@ -36,7 +36,7 @@
 :root {
     --language-selection-height: 50px;
     --screen-height: calc(100vh - var(--language-selection-height));
-    --green-bg-color-light: #80c8cc;
+    --green-bg-color-light: #DAF5F0;
     --green-bg-color-dark: #005144;
     --start-button-bg-color: #1d6b62;
     font-size: 16px;
@@ -58,6 +58,7 @@ button {
 h1, h1 > *, h1 * {
     font-family: 'Co Headline', 'Open Sans', sans-serif;
     font-weight: bold;
+    color: var(--green-bg-color-dark);
 }
 
 .highlight {
@@ -178,7 +179,6 @@ body {
 #robot-explore-screen-content > img {
     width: 50vh;
     height: 50vh;
-    transform: translateX(-10%);
     object-fit: contain;
 }
 
@@ -206,38 +206,41 @@ body {
 /************************/
 /*     START SCREEN     */
 /************************/
-#start-screen {
+#robot-start-screen-content {
     background-color: var(--green-bg-color-light);
-    font-size: 1.25em;
+    height: var(--screen-height);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px;
+    box-sizing: border-box;
 }
 
-/* Info card */
-.info-card {
-    position: absolute;
-    top: 30px;
-    left: 30px;
+#start-screen h1 {
+    font-size: 5rem;
+    color: var(--green-bg-color-dark);
+    margin: 3rem 0 3rem 0;
 }
 
-/* Robotoo */
-.info-card > h1 {
-    position: absolute;
-    line-height: 1.5;
-    left: 150px;
-    top: -10px;
-    font-size: 4em;
-    font-weight: 400;
-    color: white;
+.waving-gif {
+    height: auto;
+    max-height: 40vh;
+    margin-bottom: 1rem;
 }
 
-/* Description */
-.info-card > p {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    color: white;
-    font-weight: 100;
-    font-size: 2.7em;
-    font-style: italic;
+.start-button-container > button:hover {
+    background-color: #1d6b62;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+
+.start-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem; /* Ruimte boven de knop */
 }
 
 /* Start button */
@@ -252,10 +255,10 @@ body {
     font-family: 'Co Headline', sans-serif;
     font-weight: bold;
     border-width: 0;
-    padding: 25px 45px;
+    padding: 15px 60px;
     color: white;
-    font-size: 2em;
-    border-radius: 15px;
+    font-size: 4em;
+    border-radius: 0 30px;
     background-color: var(--start-button-bg-color);
     box-shadow: 0 5px rgba(0, 0, 0, 0.25);
     transition: 0.3s;
@@ -272,17 +275,6 @@ body {
     background-color: #1d6b62;
     box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
     cursor: pointer;
-}
-
-/* Tabloo Logo */
-.tabloo-logo-container {
-    position: absolute;
-    right: 50px;
-    bottom: calc(50px + var(--language-selection-height));
-}
-
-.tabloo-logo-container > img {
-    height: 250px;
 }
 
 /************************/

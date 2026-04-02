@@ -1,33 +1,41 @@
 {
     "EXPLORING": {
-        "NL": "<span class=\"highlight\">Robotoo</span> is aan het verkennen...",
-        "EN": "<span class=\"highlight\">Robotoo</span> is exploring...",
-        "FR": "<span class=\"highlight\">Robotoo</span> explore..."
+        "NL": "Hugoo is aan het verkennen...",
+        "EN": "Hugoo is exploring...",
+        "FR": "Hugoo explore..."
     },
+
     "GO_TO_VISITOR_HEADER": {
-        "NL": "Hallo, ik ben <span class=\"highlight\">Robotoo</span>!",
-        "EN": "Hello, I'm <span class=\"highlight\">Robotoo</span>!",
-        "FR": "Bonjour, je suis <span class=\"highlight\">Robotoo</span>!"
+        "NL": "Hallo, ik ben Hugoo!",
+        "EN": "Hello, I'm Hugoo!",
+        "FR": "Bonjour, je suis Hugoo!"
     },
     "GO_TO_VISITOR_DESCRIPTION": {
         "NL": "Ik heb een interactieve quiz voor jou, wil je deze spelen?",
         "EN": "I have an interactive quiz for you, would you like to play it?",
         "FR": "J'ai un quiz interactif pour vous, voulez-vous le jouer?"
     },
-    "START_SCREEN_CARD_DESCRIPTION": {
-        "NL": "Wat weet jij over<br/>radioactief afval?<br/><br/><br/>Doe de test!",
-        "EN": "What do you know<br/>about radioactive<br/>waste?<br/><br/>Take the test!",
-        "FR": "Que savez-vous<br/>sur les déchets<br/>radioactifs?<br/><br/>Faites le test!"
+
+    "START_SCREEN_HEADER": {
+        "NL": "Hallo, ik ben Hugoo! <br>Quiz je mee?",
+        "EN": "Hello, I'm Hugoo! <br>Will you join the quiz?",
+        "FR": "Bonjour, je suis Hugoo! <br>Voulez-vous participer au quiz?"
+    },
+    "START_SCREEN_DESCRIPTION": {
+        "NL": "Quiz je mee?",
+        "EN": "Will you join the quiz?",
+        "FR": "Voulez-vous participer au quiz?"
     },
     "START_SCREEN_START_BUTTON": {
         "NL": "Start",
         "EN": "Start",
         "FR": "Commencer"
     },
+
     "FOLLOW_SCREEN_TEXT": {
-        "NL": "Volg <span class=\"highlight\">Robotoo</span> naar de quiz locatie<span class=\"highlight\">!</span>",
-        "EN": "Follow <span class=\"highlight\">Robotoo</span> to the quiz location<span class=\"highlight\">!</span>",
-        "FR": "Suivez <span class=\"highlight\">Robotoo</span> jusqu'à<br>l'emplacement du quiz<span class=\"highlight\">!</span>"
+        "NL": "Volg me naar de quizlocatie!",
+        "EN": "Follow me to the quiz location!",
+        "FR": "Suivez-moi jusqu'à<br>l'emplacement du quiz!"
     },
     "QUIZ_SCREEN_QUESTION": {
         "NL": "%question%",
@@ -45,14 +53,14 @@
         "FR": "Question"
     },
     "QUIZ_FINISHED_HEADER": {
-        "NL": "De quiz is <span class=\"highlight\">voltooid!</span>",
-        "EN": "The quiz is <span class=\"highlight\">completed!</span>",
-        "FR": "Le quiz est <span class=\"highlight\">terminé!</span>"
+        "NL": "De quiz is voltooid!",
+        "EN": "The quiz is completed!",
+        "FR": "Le quiz est terminé!"
     },
     "QUIZ_FINISHED_DESCRIPTION": {
-        "NL": "Als je de quiz interessant vond, vergeet dan zeker niet om de interactieve <span class=\"highlight\">Expoo</span> te bezoeken om meer te weten te komen over radioactiviteit!",
-        "EN": "If you found the quiz interesting, be sure to visit the interactive <span class=\"highlight\">Expoo</span> to learn more about radioactivity!",
-        "FR": "Si vous avez trouvé le quiz intéressant, n'oubliez pas de visiter l'<span class=\"highlight\">Expoo</span> interactive pour en savoir plus sur la radioactivité!"
+        "NL": "Fijn dat je meedeed! Er valt nog meer te beleven in Tabloo. Veel plezier!",
+        "EN": "Thanks for playing! There's more to experience in Tabloo. Have fun!",
+        "FR": "Merci d'avoir joué! Il y a plus à découvrir à Tabloo. Amusez-vous bien!"
     },
     "INSTRUCTIONS_HEADER": {
         "NL": "Instructies van de quiz",
@@ -74,6 +82,7 @@
         "EN": "No",
         "FR": "Non"
     },
+
     "ERROR_TITLE": {
         "NL": "Er is een onverwachte fout opgetreden!",
         "EN": "An unexpected error occurred!",
