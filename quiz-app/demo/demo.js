@@ -27,3 +27,7 @@ function goCharge() {
 function charging() {
     socket.emit("robot-charging");
 }
+
+function error() {
+    socket.emit("robot-error");
+}

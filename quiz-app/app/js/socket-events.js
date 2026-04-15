@@ -80,3 +80,7 @@ socket.on('robot-go-charge', () => {
 socket.on('robot-charging', () => {
     changeScreen('robot-charging-screen');
 });
+
+socket.on('robot-error', () => {
+    changeScreen('error-screen');
+});

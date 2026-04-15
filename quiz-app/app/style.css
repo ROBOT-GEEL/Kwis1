@@ -312,6 +312,7 @@ body {
 }
 
 .modal-header {
+    font-family: "CO Headline", sans-serif;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -333,6 +334,7 @@ body {
 }
 
 .modal-buttons > button {
+    font-family: "CO Headline", sans-serif;
     width: 100%;
     padding: 20px;
     border-radius: 20px;
@@ -663,6 +665,24 @@ body {
 #robot-charging-container > p {
     max-width: 60vw;
     font-weight: 100;
+}
+
+/**************************/
+/* ROBOT ERROR SCREEN     */
+/**************************/
+
+#error-screen {
+    background-color: var(--green-bg-color-light);
+    font-size: 2.5em;
+}
+
+#error-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
 }
 
 /************************/
