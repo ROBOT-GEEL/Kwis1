@@ -12,6 +12,7 @@ import { registerSocketHandlers } from "./sockets/socketHandler.js";
 import quizRoutes from "./routes/quiz.js";
 import cmsRoutes from "./routes/cms.js";
 import grafiekenRoutes from "./routes/grafieken.js";
+import projectorRoutes from "./routes/projector.js";
 
 dotenv.config();
 const app = express();
@@ -50,6 +51,7 @@ app.use("/manual-driving", express.static(path.join(ROOT_DIR, "manual-driving"))
 app.use("/quiz", quizRoutes);
 app.use("/cms", cmsRoutes);
 app.use("/grafieken", grafiekenRoutes);
+app.use("/projector-control", projectorRoutes);
 
 // General Routes
 app.get("/", (req, res) => {

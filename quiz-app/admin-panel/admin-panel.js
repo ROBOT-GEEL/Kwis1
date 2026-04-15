@@ -1,5 +1,3 @@
-
-
 async function toggleProjector(state) {
     // Check if a state was actually passed
     if (!state) {
@@ -12,14 +10,10 @@ async function toggleProjector(state) {
     let response;
     try {
         // Send a POST request to the server with the state in the body
-        response = await fetch('/cms/toggleProjector', {
+        response = await fetch('/projector-control/toggle', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json' // Tell the server we are sending JSON
-            },
-            body: JSON.stringify({
-                projectorState: String(state) // Match the exact variable name expected by the backend
-            })
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({projectorState: String(state)})
         });
     } catch (error) {
         console.error("Network error while communicating with the server:", error);

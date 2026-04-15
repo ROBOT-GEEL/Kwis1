@@ -1,5 +1,6 @@
 import logger from "../config/logger.js";
 import { getDB } from "../config/db.js";
+import { getTargetProjectorState } from "../controllers/ProjectorController.js";
 
 export function registerSocketHandlers(io) {
 
@@ -187,13 +188,15 @@ export function registerSocketHandlers(io) {
         }
     });
 
-    socket.on("admin-panel-closed", (token, callback) => {
+    socket.on("admin-panel-closed", async (token, callback) => {
         try {
             if (token === currentAdminToken) {
                 currentAdminToken = null; 
                 currentAdminSocketId = null;
                 socket.broadcast.emit("admin-panel-closed");
                 logger.info("Admin panel closed");
+
+                await syncProjectorState();
             }
             if (typeof callback === "function") callback();
         } catch (error) {
@@ -216,9 +219,6 @@ export function registerSocketHandlers(io) {
             console.error("Error during disconnect:", error);
         }
     });
-
-    
-
 
     //
     // Touchscreen display toggle (dummy implementation)
@@ -252,4 +252,35 @@ export function registerSocketHandlers(io) {
         // }
     });
   });
+
+  // Background ticker
+  setInterval(() => syncProjectorState(), 60000); 
 }
+
+async function syncProjectorState() {
+    const newState = await getTargetProjectorState();
+    
+    if (newState === true) {
+        logger.info("Projector schedule triggered: WAKE");
+        await toggleProjector("1");
+    } else if (newState === false) {
+        logger.info("Projector schedule triggered: SLEEP");
+        await toggleProjector("0");
+    }
+}
+
+async function toggleProjector(action) {
+        let response;
+        try {
+            response = await fetch("/projector-control/toggle", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ projectorState: action })
+            });
+        } catch (error) {
+            logError("Network error while toggling projector");
+        }
+        if (!response.ok) {
+            logError("Error toggling projector: " + response.status);
+        }
+    }

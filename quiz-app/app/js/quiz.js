@@ -231,7 +231,7 @@ class Quiz {
     static async #sendProjectorCommand(action) {
         let response;
         try {
-            response = await fetch("/cms/toggleProjector", {
+            response = await fetch("/projector-control/toggle", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ projectorState: action })

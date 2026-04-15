@@ -1,9 +1,8 @@
 import express from "express";
-import { toggleProjector, delQuestion, editQuestion, getQuestions, saveEnabledCheckBoxes, saveVisitedCheckBoxes,
+import { delQuestion, editQuestion, getQuestions, saveEnabledCheckBoxes, saveVisitedCheckBoxes,
     saveSettings, getSettings, saveZones, getJetsonIp } from "../controllers/cmsController.js";
 const router = express.Router();
 
-router.post("/toggleProjector", toggleProjector);
 router.post("/delQuestion", delQuestion);
 router.post("/editQuestion", editQuestion);
 router.get("/getQuestions", getQuestions);
