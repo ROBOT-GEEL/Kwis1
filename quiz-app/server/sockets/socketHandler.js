@@ -1,6 +1,6 @@
 import logger from "../config/logger.js";
 import { getDB } from "../config/db.js";
-import { getTargetProjectorState } from "../controllers/ProjectorController.js";
+import { getTargetProjectorState } from "../controllers/projectorController.js";
 
 export function registerSocketHandlers(io) {
 
