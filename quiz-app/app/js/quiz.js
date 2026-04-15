@@ -70,6 +70,13 @@ class Quiz {
                 return;
             }
         });
+
+        socket.on("robot-disconnected", async () => {
+            // await this.#sendProjectorCommand("sleep");
+            this.#cancelled = true;
+            this.#currentQuestionIndex = this.#questions.length;
+            socket.emit('projector-reset');
+        });
     }
 
     /**
@@ -284,9 +291,6 @@ class Quiz {
                 // Wait until showing the next question
                 await wait(this.#nextQuestionDelay * 1000);
 
-                // If the quiz was cancelled due to an error, break the loop
-                if (this.#cancelled) break;
-
                 // Clear the answers on the projector
                 socket.emit('projector-clear-answers');
 
@@ -294,7 +298,8 @@ class Quiz {
                 document.querySelectorAll('.answer-container').forEach(e => e.classList.remove('wrong-answer-container', 'correct-answer-container'));
                 document.querySelectorAll('.answer-label').forEach(e => e.classList.remove('correct-answer-label', 'wrong-answer-label'));
                 
-                
+                 // If the quiz was cancelled due to an error, break the loop
+                if (this.#cancelled) break;
             }
 
             // Set the quiz as inactive for the language change callback

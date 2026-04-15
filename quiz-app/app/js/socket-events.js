@@ -84,3 +84,11 @@ socket.on('robot-charging', () => {
 socket.on('robot-error', () => {
     changeScreen('error-screen');
 });
+
+socket.on('robot-disconnected', () => {
+    changeScreen('robot-disconnected-screen');
+});
+
+socket.on('robot-connected', () => {
+    changeScreen('robot-startup-screen');
+});

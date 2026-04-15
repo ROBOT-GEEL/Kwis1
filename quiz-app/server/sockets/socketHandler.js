@@ -7,11 +7,25 @@ export function registerSocketHandlers(io) {
     let currentAdminSocketId = null;
     let disconnectTimer = null; // Used to track page navigation
 
+    let orinNanoRobotId = null;
+
   io.on("connection", (socket) => {
     logger.info(`Client connected: ${socket.id}`);
 
     socket.on("disconnect", () => {
       logger.info(`Client disconnected: ${socket.id}`);
+      if (socket.id === orinNanoRobotId) {
+        orinNanoRobotId = null;
+        socket.broadcast.emit("robot-disconnected");
+      }
+    });
+
+    socket.on("identification", (data) => {
+      if (data === "orin-nano-robot") {
+        orinNanoRobotId = socket.id;
+        logger.info(`Orin Nano Robot connected with socket ID: ${socket.id}`);
+        socket.broadcast.emit("robot-connected");
+      }
     });
 
     //
