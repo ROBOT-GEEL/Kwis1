@@ -208,9 +208,14 @@ export const saveSettings = async (req, res, next) => {
   }
 };
 
+export const fetchSettingsFromDB = async () => {
+    const collection = global.db.collection("params");
+    const settings = await collection.findOne({ name: "settings" });
+    return settings || {};
+};
+
 export const getSettings = async (req, res, next) => {
   try {
-    const collection = global.db.collection("params");
     /**
      * Always return the CMS-managed settings document.
      * The CMS stores settings with { name: "settings", ... } via an upsert.
@@ -218,7 +223,7 @@ export const getSettings = async (req, res, next) => {
      * which makes the defaults shown in the Settings UI differ from the
      * values actually used by the quiz.
      */
-    const settings = await collection.findOne({ name: "settings" });
+    const settings = await fetchSettingsFromDB();
     res.json(settings || {});
   } catch (error) {
     console.error("Error fetching settings:", error);
