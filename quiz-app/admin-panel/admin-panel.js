@@ -17,7 +17,7 @@ async function toggleProjector(state) {
         });
     } catch (error) {
         console.error("Network error while communicating with the server:", error);
-        showHardwareError(`${data.error} (${data.details})` || "Er ging iets mis bij het communiceren met de projector");
+        showHardwareError("Er ging iets mis bij het communiceren met de server");
         return; // Exit on network error
     }
 
