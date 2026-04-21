@@ -254,33 +254,37 @@ export function registerSocketHandlers(io) {
   });
 
   // Background ticker
-  setInterval(() => syncProjectorState(), 60000); 
+  setInterval(() => syncProjectorState(), 10000); 
 }
 
 async function syncProjectorState() {
     const newState = await getTargetProjectorState();
     
     if (newState === true) {
-        logger.info("Projector schedule triggered: WAKE");
         await toggleProjector("1");
     } else if (newState === false) {
-        logger.info("Projector schedule triggered: SLEEP");
         await toggleProjector("0");
     }
 }
 
 async function toggleProjector(action) {
-        let response;
-        try {
-            response = await fetch("/projector-control/toggle", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ projectorState: action })
-            });
-        } catch (error) {
-            logError("Network error while toggling projector");
+    try {
+        const response = await fetch("http://localhost/projector-control/toggle", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ projectorState: action })
+        });
+
+        // Eerst controleren of we een antwoord hebben gekregen
+        if (response && response.ok) {
+            const data = await response.json();
+            console.log("Projector command successful:", data);
+        } else {
+            // Als de status niet 200 is (bijv. 502 of 404)
+            console.error("Server returned an error. Status:", response ? response.status : "No response");
         }
-        if (!response.ok) {
-            logError("Error toggling projector: " + response.status);
-        }
+    } catch (error) {
+        // Dit vangt de echte netwerkfouten op (EACCES, timeout, etc.)
+        console.error("Network error while toggling projector:", error.message);
     }
+}
