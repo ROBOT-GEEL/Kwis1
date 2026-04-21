@@ -98,7 +98,9 @@ export function registerSocketHandlers(io) {
       "robot-arrived-at-quiz-location",
       "robot-go-charge",
       "robot-charging",
-      "robot-error",
+      "robot-error-drive",
+      "robot-error-charge",
+      "robot-disconnected",
     ];
 
     robotEvents.forEach((event) => {
@@ -193,6 +195,9 @@ export function registerSocketHandlers(io) {
             if (token === currentAdminToken) {
                 currentAdminToken = null; 
                 currentAdminSocketId = null;
+
+                io.emit("time-updated", new Date().toISOString());
+
                 socket.broadcast.emit("admin-panel-closed");
                 logger.info("Admin panel closed");
 
@@ -253,8 +258,11 @@ export function registerSocketHandlers(io) {
     });
   });
 
-  // Background ticker
-  setInterval(() => syncProjectorState(), 10000); 
+  // Send the time to all the clients
+  setInterval(() => {io.emit("time-updated", new Date().toISOString());}, 3600000);
+
+  // Check if the projector needs to be turned on
+  setInterval(() => syncProjectorState(), 60000); 
 }
 
 async function syncProjectorState() {
