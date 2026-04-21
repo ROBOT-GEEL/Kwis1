@@ -28,6 +28,14 @@ function charging() {
     socket.emit("robot-charging");
 }
 
-function error() {
-    socket.emit("robot-error");
+function errorDrive() {
+    socket.emit("robot-error-drive");
+}
+
+function errorCharge() {
+    socket.emit("robot-error-charge");
+}
+
+function disconnect() {
+    socket.emit("robot-disconnected");
 }
