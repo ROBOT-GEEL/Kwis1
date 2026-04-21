@@ -685,24 +685,6 @@ body {
     text-align: center;
 }
 
-/*****************************/
-/* ROBOT DISCONNECTED SCREEN */
-/*****************************/
-
-#robot-disconnected-screen {
-    background-color: var(--green-bg-color-light);
-    font-size: 2.5em;
-}
-
-#robot-disconnected-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    text-align: center;
-}
-
 /************************/
 /*    DEBUG OVERLAY     */
 /************************/

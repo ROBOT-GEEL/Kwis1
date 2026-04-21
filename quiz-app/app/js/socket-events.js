@@ -81,12 +81,19 @@ socket.on('robot-charging', () => {
     changeScreen('robot-charging-screen');
 });
 
-socket.on('robot-error', () => {
+socket.on('robot-error-drive', () => {
     changeScreen('error-screen');
+    document.querySelector('#error-container').innerHTML = `<h1>Hugoo is verdwaald...</h1><p>Gelieve dit aan het onthaal te melden.</p>`;
+});
+
+socket.on('robot-error-charge', () => {
+    changeScreen('error-screen');
+    document.querySelector('#error-container').innerHTML = `<h1>Hugoo kan het laadstation niet vinden.</h1><p>Gelieve dit aan het onthaal te melden.</p>`;
 });
 
 socket.on('robot-disconnected', () => {
-    changeScreen('robot-disconnected-screen');
+    changeScreen('error-screen');
+    document.querySelector('#error-container').innerHTML = `<h1>De verbinding met het besturingsysteem is verloren gegaan.</h1><p>Gelieve dit aan het onthaal te melden.</p>`;
 });
 
 socket.on('robot-connected', () => {
