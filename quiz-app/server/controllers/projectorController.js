@@ -1,5 +1,5 @@
 import net from "net";
-import { getSettings } from "./cmsController.js";
+import { fetchSettingsFromDB } from "./cmsController.js";
 
 let lastProjectorStatus = null;
 
@@ -9,7 +9,7 @@ let lastProjectorStatus = null;
  */
 export async function getTargetProjectorState() {
     try {
-        const settings = await getSettings();
+        const settings = await fetchSettingsFromDB();
         const now = new Date();
 
         const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -93,10 +93,10 @@ export const toggleProjector = async (req, res, next) => {
 
         if (!responseSent) {
             // Check if the Orin Nano reported a projector error
-            if (responseText.includes("ERROR") || responseText.includes("FAIL")) {
+            if (responseText.includes("ERROR")) {
                 res.status(502).json({
                     success: false,
-                    error: "The orin nano is connected, but can't communicate with the projector.",
+                    error: "Het bericht is ontvangen door de Jetson Orin Nano, maar kon niet worden doorgestuurd naar de projector.",
                     details: responseText
                 });
             } else {
@@ -118,7 +118,7 @@ export const toggleProjector = async (req, res, next) => {
             // This means the Pi could not talk to the Orin Nano
             res.status(503).json({
                 success: false,
-                error: "Could not connect with the orin nano",
+                error: "Er kon geen verbinding worden gemaakt met de Jetson Orin Nano.",
                 details: err.message
             });
             responseSent = true;
@@ -131,7 +131,7 @@ export const toggleProjector = async (req, res, next) => {
         if (!responseSent) {
             res.status(504).json({
                 success: false,
-                error: "Connection to projector receiver timed out"
+                error: "De connectie met de Jetson Orin Nano is verlopen. Er is geen reactie ontvangen binnen de verwachte tijd.",
             });
             responseSent = true;
         }
