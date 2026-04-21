@@ -25,6 +25,7 @@ export function registerSocketHandlers(io) {
       if (data === "orin-nano-robot") {
         orinNanoRobotId = socket.id;
         logger.info(`Orin Nano Robot connected with socket ID: ${socket.id}`);
+        io.emit("time-updated", new Date().toISOString());
         socket.broadcast.emit("robot-connected");
       }
     });
