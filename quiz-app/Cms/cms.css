@@ -44,7 +44,7 @@
     --darkGreen-hover: #026151;
     --lightBlue: #80c8cc;
     --lightBlue-hover: #6dbbc0;
-    --bgColor: #d3d3d3;
+    --bgColor: #DAF5F0;
 }
 
 /* Base body styling */
@@ -102,10 +102,6 @@ body {
     transition: background-color 0.3s, color 0.3s, transform 0.2s;
 }
 
-.nav-button:hover {
-    background-color: var(--lightBlue-hover); 
-}
-
 .nav-button.active {
     background-color: var(--darkGreen) !important; 
     color: #ffffff;
@@ -119,10 +115,6 @@ body {
     margin-top: 3rem;
     height: 4rem;
     white-space: nowrap; 
-}
-
-.nav-button.back-admin:hover {
-    background-color: var(--darkGreen-hover);
 }
 
 /* Main Content Area */
@@ -148,7 +140,6 @@ body {
     margin-bottom: 0.5rem;
     white-space: nowrap;
     margin-top: 0;
-    transform: translateY(-0.2rem); 
 }
 
 .explanation-text {
