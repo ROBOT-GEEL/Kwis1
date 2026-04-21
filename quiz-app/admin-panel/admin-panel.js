@@ -17,6 +17,7 @@ async function toggleProjector(state) {
         });
     } catch (error) {
         console.error("Network error while communicating with the server:", error);
+        showHardwareError(`${data.error} (${data.details})` || "Er ging iets mis bij het communiceren met de projector");
         return; // Exit on network error
     }
 
@@ -26,15 +27,44 @@ async function toggleProjector(state) {
         data = await response.json();
     } catch (parseError) {
         console.error("Error parsing JSON from server:", parseError);
+        showHardwareError("Er ging iets mis bij het communiceren met de projector");
         return; // Exit on parse error
     }
 
     // Check if the HTTP request failed OR if the backend reported a logical error
     if (!response.ok || !data.success) {
         console.error(`Error (${response.status}):`, data.error || "Unknown error occurred");
+        showHardwareError(`${data.error} (${data.details})` || "Er ging iets mis bij het communiceren met de projector");
         return; // Exit on API error
     }
 
     // If everything went smoothly
     console.log("Success:", data.message);
+    disableHardwareError();
+}
+
+/**
+ * Function to display an error message
+ * @param {string} message - The error message to display
+ */
+function showHardwareError(message) {
+    const errorContainer = document.getElementById('hardwareErrorContainer');
+    const errorText = document.getElementById('errorText');
+
+    if (message) {
+        errorText.textContent = message;
+        errorContainer.style.display = 'block';
+    } else {
+        // Hide if message is empty
+        errorContainer.style.display = 'none';
+    }
+}
+
+
+/**
+ * Function to hide the error message
+ */
+function disableHardwareError() {
+    const errorContainer = document.getElementById('hardwareErrorContainer');
+    errorContainer.style.display = 'none';
 }

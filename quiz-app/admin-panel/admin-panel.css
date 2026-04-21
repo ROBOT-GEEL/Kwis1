@@ -29,9 +29,10 @@
 
 :root {
     --darkGreen: #005144;
-    --darkGreen-hover: #026151;
     --lightBlue: #80c8cc;
-    --bgColor: #d3d3d3;
+    --bgColor: #DAF5F0;
+    --yellow: #F8B200;
+    --darkYellow: #3e2c00;
 }
 
 body {
@@ -70,7 +71,7 @@ body {
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
     width: 100%;
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
 }
 
 /* Updated grid buttons: dark green background, white content */
@@ -87,12 +88,6 @@ body {
     transition: all 0.3s ease;
     aspect-ratio: 4/3; /* Keeps buttons nice and rectangular */
     box-shadow: 0 4px 6px rgba(0,0,0,0.15); /* Slightly stronger shadow for dark buttons */
-}
-
-.grid-btn:hover {
-    background-color: var(--darkGreen-hover); 
-    border-color: var(--darkGreen-hover);
-    transform: translateY(-5px);
 }
 
 .grid-btn .btn-icon {
@@ -115,7 +110,7 @@ body {
     gap: 4rem;
     justify-content: center;
     width: 100%;
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
     flex-wrap: wrap;
 }
 
@@ -128,7 +123,7 @@ body {
 .control-label {
     font-family: "CO Headline", sans-serif;
     color: var(--darkGreen);
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     margin-bottom: 0.8rem;
 }
 
@@ -157,14 +152,26 @@ body {
     line-height: normal; 
 }
 
-.action-btn:hover {
-    background-color: var(--darkGreen-hover);
+.hardware-error {
+    display: none; /* Wordt getoond via JS */
+    background-color: #ffcccc;
+    color: #cc0000;
+    padding: 0; /* Padding volledig verwijderd */
+    border: 1px solid #cc0000;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    text-align: center;
+    width: 100%; /* Zorgt dat hij de breedte van de container volgt */
+}
+
+.errorText {
+    margin: 5px 0; /* Een kleine margin op de tekst zelf is mooier dan padding op de box */
 }
 
 /* Back to quiz button */
 .back-to-quiz-btn {
-    background-color: var(--lightBlue);
-    color: var(--darkGreen);
+    background-color: var(--yellow);
+    color: var(--darkYellow);
     font-family: "CO Headline", sans-serif;
     font-size: 1.4rem;
     width: 16rem; 
@@ -180,15 +187,6 @@ body {
     justify-content: center;
     align-items: center;
     line-height: normal; 
-}
-
-.back-to-quiz-btn:hover {
-    background-color: #6dbbc0;
-}
-
-/* Helper class to hide the button from the server side */
-.hidden {
-    display: none !important;
 }
 
 /* Mobile Responsiveness */
