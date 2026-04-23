@@ -1,9 +1,11 @@
+/* ==========================================================================
+   1. FONTS & TYPOGRAPHY
+   ========================================================================== */
 @font-face {
     font-family: "CO Headline";
     src: url("../shared/assets/fonts/Co-Headline.woff2") format("woff2");
     font-weight: normal;
     font-style: normal;
-
     ascent-override: 100%;
     line-gap-override: 0%;
 }
@@ -13,7 +15,6 @@
     src: url("../shared/assets/fonts/Co-Headline-Bold.woff2") format("woff2");
     font-weight: bold;
     font-style: normal;
-
     ascent-override: 100%;
     line-gap-override: 0%;
 }
@@ -33,6 +34,9 @@
     font-style: italic;
 }
 
+/* ==========================================================================
+   2. GLOBAL VARIABLES & RESETS
+   ========================================================================== */
 :root {
     --language-selection-height: 50px;
     --screen-height: calc(100vh - var(--language-selection-height));
@@ -46,13 +50,25 @@
     margin: 0;
     padding: 0;
     font-family: 'Open Sans', sans-serif;
+    box-sizing: border-box; /* Better sizing calculation */
     user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
 }
 
+body {
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--green-bg-color-light); /* Fallback */
+}
+
+a {
+    text-decoration: none;
+}
+
 button {
     font-size: 1em;
+    cursor: pointer;
 }
 
 h1, h1 > *, h1 * {
@@ -66,113 +82,42 @@ h1, h1 > *, h1 * {
     font-size: 1.3em;
 }
 
-body {
-    margin: 0;
-    height: 100vh;
-    overflow: hidden;
-}
-
 .screen {
     height: var(--screen-height);
 }
 
-/************************/
-/*  LANGUAGE SELECTION  */
-/************************/
-.language-selection {
-    background-color: var(--green-bg-color-dark);
-    position: sticky;
-    top: 100%;
-    padding-left: 50px;
-    padding-right: 10px;
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    height: var(--language-selection-height);
-}
-
-.language-selection > button {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    background-color: transparent;
-    padding: 10px;
-    border-width: 0;
-    color: white;
-    cursor: pointer;
-}
-
-.language-selection > .selected-language {
-    background-color: var(--green-bg-color-light);
-    color: #005146;
-    margin-top: 0px;
-    margin-bottom: 10px;
-    border-radius: 0 0 5px 5px;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-    transition: margin-top 0.3s, margin-bottom 0.3s, background-color 0.6s 0.3s, color 0.3s 0.4s, box-shadow 0.3s 0.3s;
-}
-
-/************************/
-/*     ERROR DIALOG     */
-/************************/
-#error {
-    margin: auto;
-    border-radius: 10px;
-    padding: 2rem;
-    border: none;
-    max-width: 60vw;
-}
-
-#error::backdrop {
-    background-color: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(3px);
-}
-
-#error > h1 {
-    font-size: 2.8em;
-}
-
-#error > p {
-    font-size: 2em;
-}
-
-#error > button {
-    border-width: 0;
-    background-color: var(--green-bg-color-dark);
-    color: white;
-    padding: 1em;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 2em;
-}
-
-/************************/
-/* ROBOT STARTUP SCREEN */
-/************************/
-#robot-startup-screen-content {
+/* ==========================================================================
+   3. SHARED SCREEN LAYOUTS (Grouping identical center-aligned containers)
+   ========================================================================== */
+#robot-startup-screen-content,
+#robot-explore-screen-content,
+#robot-start-screen-content,
+.follow-robot-screen-container,
+.instructions-container,
+#quiz-finished-screen-container,
+#robot-go-charge-container,
+#robot-charging-container,
+#error-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100%;
     background-color: var(--green-bg-color-light);
+    text-align: center;
+}
+
+/* Specific overrides for the shared screens above */
+#robot-startup-screen-content {
     font-size: 4em;
 }
 
 #robot-startup-screen-content > p {
     max-width: 50vw;
-    text-align: center;
 }
 
-/**************************/
-/* ROBOT EXPLORING SCREEN */
-/**************************/
 #robot-explore-screen-content {
-    display: flex;
-    flex-direction: column;
     justify-content: space-evenly;
-    align-items: center;
-    height: 100%;
-    background-color: var(--green-bg-color-light);
     font-size: 2.5em;
 }
 
@@ -182,46 +127,49 @@ body {
     object-fit: contain;
 }
 
-/************************/
-/* ROBOT GO TO VISITOR  */
-/************************/
-#robot-go-to-visitor-screen-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    background-color: var(--green-bg-color-light);
+.follow-robot-screen-container > h1,
+.instructions-container > h1 {
+    font-size: 6em;
+}
+
+#quiz-finished-screen-container > h1 {
+    font-size: 8em;
+}
+
+#quiz-finished-screen-container > p {
+    font-size: 4em;
+    margin: 40px;
+    padding: 20px;
+}
+
+#robot-go-charge-screen,
+#robot-charging-screen,
+#error-screen {
     font-size: 2.5em;
 }
 
-#robot-go-to-visitor-screen-content > img {
-    margin-top: 50px;
-    width: 50vh;
-    height: 50vh;
-    object-fit: contain;
+#robot-go-charge-container > h1,
+#robot-charging-container > h1 {
+    font-family: 'Co Headline', sans-serif;
+    margin-bottom: 20px;
 }
 
+#robot-go-charge-container > p,
+#robot-charging-container > p {
+    max-width: 60vw;
+    font-weight: 100;
+}
 
-/************************/
-/*     START SCREEN     */
-/************************/
+/* ==========================================================================
+   4. START SCREEN & BUTTON
+   ========================================================================== */
 #robot-start-screen-content {
-    background-color: var(--green-bg-color-light);
-    height: var(--screen-height);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
     padding: 40px;
-    box-sizing: border-box;
 }
 
 #start-screen h1 {
     font-size: 5rem;
-    color: var(--green-bg-color-dark);
-    margin: 3rem 0 3rem 0;
+    margin: 3rem 0;
 }
 
 .waving-gif {
@@ -230,24 +178,11 @@ body {
     margin-bottom: 1rem;
 }
 
-.start-button-container > button:hover {
-    background-color: #1d6b62;
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
-    cursor: pointer;
-}
-
 .start-button-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 2rem; /* Ruimte boven de knop */
-}
-
-/* Start button */
-.start-button-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    margin-top: 2rem;
     height: 100%;
 }
 
@@ -265,196 +200,20 @@ body {
     animation: pulse 2s infinite;
 }
 
+.start-button-container > button:hover {
+    background-color: #1d6b62;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
+}
+
 @keyframes pulse {
     0% { transform: scale(1); }
     50% { transform: scale(1.1); }
     100% { transform: scale(1); }
 }
 
-.start-button-container > button:hover {
-    background-color: #1d6b62;
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
-    cursor: pointer;
-}
-
-/************************/
-/* VISITED EXPOO MODAL  */
-/************************/
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: calc(100vh - var(--language-selection-height));
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
-    font-family: 'Co Headline', sans-serif;
-}
-
-.modal-content {
-    position: relative;
-    background-color: var(--green-bg-color-light);
-    margin: 20% auto;
-    padding: 20px;
-    border: 3px solid var(--green-bg-color-dark);
-    border-radius: 20px;
-    width: 40%;
-    box-shadow: 0 10px rgba(0, 0, 0, 0.25);
-    animation-name: animatetop;
-    animation-duration: 0.4s;
-}
-
-@keyframes animatetop {
-    from { top: -300px; }
-    to { top: 0; }
-}
-
-.modal-header {
-    font-family: "CO Headline", sans-serif;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 30px;
-    font-size: 1.5em;
-}
-
-.modal-header > button {
-    border-width: 0;
-    background-color: transparent;
-    font-size: 1.5em;
-    cursor: pointer;
-}
-
-.modal-buttons {
-    display: flex;
-    justify-content: space-evenly;
-    gap: 15px
-}
-
-.modal-buttons > button {
-    font-family: "CO Headline", sans-serif;
-    width: 100%;
-    padding: 20px;
-    border-radius: 20px;
-    border-width: 0px;
-    box-shadow: 0 5px rgba(0, 0, 0, 0.25);
-    transition: 0.3s;
-    background-color: var(--green-bg-color-dark);
-    color: white;
-    font-size: 2em;
-}
-
-.close {
-    color: #c03737;
-    float: right;
-    font-size: 40px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-/************************/
-/* FOLLOW ROBOT SCREEN  */
-/************************/
-.follow-robot-screen-container {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--green-bg-color-light);
-    justify-content: center;
-    align-items: center;
-}
-
-.follow-robot-screen-container > h1 {
-    text-align: center;
-    font-size: 6em;
-}
-
-/****************************/
-/* QUIZ INSTRUCTIONS SCREEN */
-/****************************/
-.quiz-instructions-screen-container {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--green-bg-color-light);
-    justify-content: space-around;
-    align-items: center;
-    gap: 50px;
-}
-
-#instructions-header {
-    margin-top: 20px;
-    border-radius: 68px;
-    background-color: #D9D9D9;
-    box-shadow: 0 5px rgba(0, 0, 0, 0.25);
-    position: sticky;
-    top: 0;
-    transform: translateY(0);
-    font-size: 1.5em;
-    transition: all 2s;
-}
-
-.instruction-header-big {
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    font-size: 4em !important;
-}
-
-#instructions-header > h1 {
-    padding-left: 30px;
-    padding-right: 30px;
-    line-height: 1.5em;
-    color: black;
-    text-align: center;
-}
-
-#instruction-container {
-    background-color: rgba(0, 81, 68, 0.33);
-    box-shadow: 0 5px rgba(0, 0, 0, 0.25);
-    height: 800px;
-    width: calc(100% - 60px);
-    margin-bottom: 30px;
-    border-radius: 50px;
-    opacity: 1;
-    transform: translateY(0);
-    transition: transform 1500ms 500ms, opacity 1s;
-}
-
-.instruction-container-invisible {
-    opacity: 0 !important;
-    transform: translateY(100%) !important;
-}
-
-#instruction-text {
-    background-color: var(--green-bg-color-dark);
-    border-radius: 50px;
-    min-height: 120px;
-    box-shadow: 0 5px rgba(0, 0, 0, 0.25);
-    color: white;
-    padding-left: 30px;
-    padding-right: 30px;
-}
-
-#instruction-image-container {
-    height: calc(800px - 120px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#instruction-image-container > img {
-    box-sizing: border-box;
-    width: inherit;
-    height: inherit;
-    padding: 20px;
-    object-fit: contain;
-}
-
-/************************/
-/*   QUIZ SCREEN        */
-/************************/
+/* ==========================================================================
+   5. QUIZ SCREEN
+   ========================================================================== */
 .quiz-screen-container {
     height: 100%;
     display: flex;
@@ -463,8 +222,7 @@ body {
 }
 
 .question-container {
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 0 10px;
     background-color: var(--green-bg-color-dark);
     height: 180px;
     color: rgb(236, 236, 236);
@@ -486,10 +244,8 @@ body {
 .answer-row {
     max-height: 19vh;
     display: flex;
-    flex-direction: row;
     flex: 1;
-    padding-left: 50px;
-    padding-right: 20px;
+    padding: 0 20px 0 50px;
     align-items: center;
 }
 
@@ -514,31 +270,18 @@ body {
     display: flex;
     align-items: center;
     height: calc(100% - 40px);
-    margin-left: 70px;
-    margin-right: 70px;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin: 20px 70px;
     color: white;
     font-size: 80px;
     transition: 0.3s;
 }
 
-.correct-answer-container {
-    background-color: rgb(153, 255, 0);
-}
+.correct-answer-container { background-color: rgb(153, 255, 0); }
+.wrong-answer-container { background-color: rgb(255, 83, 83); }
+.correct-answer-label { color: rgb(153, 255, 0); }
+.wrong-answer-label { color: rgb(255, 83, 83); }
 
-.wrong-answer-container {
-    background-color: rgb(255, 83, 83);
-}
-
-.correct-answer-label {
-    color: rgb(153, 255, 0);
-}
-
-.wrong-answer-label {
-    color: rgb(255, 83, 83);
-}
-
+/* Quiz Footer / Timer */
 .quiz-footer {
     padding: 10px;
     margin-top: 30px;
@@ -549,7 +292,6 @@ body {
 
 .quiz-footer > div {
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     align-items: center;
     font-family: 'Co Headline', sans-serif;
@@ -560,7 +302,7 @@ body {
 #quiz-timer {
     text-overflow: ellipsis;
     overflow: hidden;
-    text-wrap: nowrap;
+    white-space: nowrap;
 }
 
 #quiz-remaining-questions {
@@ -570,7 +312,6 @@ body {
 .quiz-footer > progress {
     appearance: none;
     -webkit-appearance: none;
-
     width: 100%;
     height: 30px;
 }
@@ -588,106 +329,149 @@ body {
     transition: width 0.3s ease-out;
 }
 
-/************************/
-/* QUIZ FINSIHED SCREEN */
-/************************/
-#quiz-finished-screen-container {
-    height: 100%;
+/* ==========================================================================
+   6. UI COMPONENTS (Language, Modals, Admin)
+   ========================================================================== */
+.language-selection {
+    background-color: var(--green-bg-color-dark);
+    position: sticky;
+    top: 100%;
+    padding: 0 10px 0 50px;
     display: flex;
-    flex-direction: column;
+    gap: 20px;
+    height: var(--language-selection-height);
+}
+
+.language-selection > button {
+    margin: 5px 0;
+    background-color: transparent;
+    padding: 10px;
+    border: none;
+    color: white;
+}
+
+.language-selection > .selected-language {
     background-color: var(--green-bg-color-light);
-    justify-content: center;
-    align-items: center;
+    color: #005146;
+    margin: 0 0 10px 0;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+    transition: margin-top 0.3s, margin-bottom 0.3s, background-color 0.6s 0.3s, color 0.3s 0.4s, box-shadow 0.3s 0.3s;
 }
 
-#quiz-finished-screen-container > h1 {
-    font-size: 8em;
+#admin-panel-button {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 1001;
+    background-color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 10px 0 0 0;
+    padding: 20px 30px;
+    opacity: 0; /* Invisible for users */
+    transition: all 0.3s ease;
 }
 
-#quiz-finished-screen-container > p {
-    text-align: center;
-    font-size: 4em;
-    margin: 40px;
+/* Modal Styling */
+.modal {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: calc(100vh - var(--language-selection-height));
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    font-family: 'Co Headline', sans-serif;
+}
+
+.modal-content {
+    position: relative;
+    background-color: var(--green-bg-color-light);
+    margin: 20% auto;
     padding: 20px;
+    border: 3px solid var(--green-bg-color-dark);
+    border-radius: 20px;
+    width: 40%;
+    box-shadow: 0 10px rgba(0, 0, 0, 0.25);
+    animation: animatetop 0.4s;
 }
 
-/***************************/
-/* ROBOT GO CHARGE SCREEN  */
-/***************************/
-
-#robot-go-charge-screen {
-    background-color: var(--green-bg-color-light);
-    font-size: 2.5em;
+@keyframes animatetop {
+    from { top: -300px; }
+    to { top: 0; }
 }
 
-#robot-go-charge-container {
+.modal-header {
+    font-family: "CO Headline", sans-serif;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    height: 100%;
-    text-align: center;
+    padding-bottom: 30px;
+    font-size: 1.5em;
 }
 
-#robot-go-charge-container > h1 {
-    font-family: 'Co Headline', sans-serif;
-    margin-bottom: 20px;
+.modal-header > button {
+    border: none;
+    background-color: transparent;
+    font-size: 1.5em;
 }
 
-#robot-go-charge-container > p {
+.modal-buttons {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 15px;
+}
+
+.modal-buttons > button {
+    font-family: "CO Headline", sans-serif;
+    width: 100%;
+    padding: 20px;
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 5px rgba(0, 0, 0, 0.25);
+    transition: 0.3s;
+    background-color: var(--green-bg-color-dark);
+    color: white;
+    font-size: 2em;
+}
+
+.close {
+    color: #c03737;
+    float: right;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+/* Error Dialog */
+#error {
+    margin: auto;
+    border-radius: 10px;
+    padding: 2rem;
+    border: none;
     max-width: 60vw;
-    font-weight: 100;
 }
 
-/**************************/
-/* ROBOT CHARGING SCREEN  */
-/**************************/
-
-#robot-charging-screen {
-    background-color: var(--green-bg-color-light);
-    font-size: 2.5em;
+#error::backdrop {
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(3px);
 }
 
-#robot-charging-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    text-align: center;
+#error > h1 { font-size: 2.8em; }
+#error > p { font-size: 2em; }
+
+#error > button {
+    border: none;
+    background-color: var(--green-bg-color-dark);
+    color: white;
+    padding: 1em;
+    border-radius: 5px;
+    font-size: 2em;
 }
 
-#robot-charging-container > h1 {
-    font-family: 'Co Headline', sans-serif;
-    margin-bottom: 20px;
-}
-
-#robot-charging-container > p {
-    max-width: 60vw;
-    font-weight: 100;
-}
-
-/**************************/
-/* ROBOT ERROR SCREEN     */
-/**************************/
-
-#error-screen {
-    background-color: var(--green-bg-color-light);
-    font-size: 2.5em;
-}
-
-#error-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    text-align: center;
-}
-
-/************************/
-/*    DEBUG OVERLAY     */
-/************************/
+/* ==========================================================================
+   7. DEBUG OVERLAY
+   ========================================================================== */
 #debug-overlay-button {
     position: fixed;
     top: 0;
@@ -697,8 +481,6 @@ body {
     border: none;
     border-radius: 0 0 0 10px;
     padding: 20px;
-    cursor: pointer;
-
     transition: all 0.3s ease;
 }
 
@@ -707,8 +489,6 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    /* width: 100%; */
-    /* height: 100%; */
     background-color: rgba(255, 255, 255, 0.4);
     z-index: 1000;
     border-radius: 10px;
@@ -720,26 +500,15 @@ body {
     flex-direction: column;
 }
 
-#debug-overlay-content > * {
-    margin: 0;
-    padding: 0;
-}
-
 #debug-overlay-content > h1 {
     font-size: 1.5em;
-    margin-bottom: 0.5em;
-    margin-left: 0.5em;
-    margin-right: 0.5em;
+    margin: 0 0.5em 0.5em 0.5em;
     white-space: nowrap;
 }
 
 #debug-overlay-sections {
     display: flex;
-    flex-direction: row;
-    padding-top: 0;
-    padding-right: 10px;
-    padding-left: 10px;
-    padding-bottom: 10px;
+    padding: 0 10px 10px 10px;
     gap: 10px;
 }
 
@@ -750,69 +519,32 @@ body {
     border-radius: 10px;
 }
 
-#debug-overlay-section > h2 {
+.debug-overlay-section > h2 {
     margin: 0;
     font-family: 'Co Headline', sans-serif;
     font-size: medium;
     text-align: center;
 }
 
-#debug-overlay-section-buttons {
+[id="debug-overlay-section-buttons"] {
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 10px;
-    padding-top: 5px;
-    padding-bottom: 10px;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding: 5px 5px 10px 5px;
 }
 
-#debug-overlay-section-buttons > button {
-    padding-top: 5px;
-    padding-bottom: 5px;
+[id="debug-overlay-section-buttons"] > button {
+    padding: 5px 0;
     border: none;
     border-radius: 10px;
     background-color: rgb(255, 255, 255);
-    cursor: pointer;
     transition: all 0.3s ease;
 }
 
-
-/*******************************/
-/*      ADMIN PANEL BUTTON     */
-/*******************************/
-
-#admin-panel-button {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    z-index: 1001;
-    background-color: rgb(255, 255, 255);
-    border: none;
-    border-radius: 10px 0 0 0;
-    padding-top: 20px;
-    padding-right: 30px;
-    padding-left: 30px;
-    padding-bottom: 20px;
-    cursor: pointer;
-
-    /* Make the button invisible for the users */
-    opacity: 0;
-
-    transition: all 0.3s ease;
-}
-
-/* numpad layout*/
-
-body {
-    font-family: 'Roboto', sans-serif;
-}
-
-a {
-    text-decoration: none;
-}
-
+/* ==========================================================================
+   8. EASY NUMPAD
+   ========================================================================== */
 .easy-get:hover {
     cursor: pointer;
 }
@@ -839,10 +571,8 @@ a {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    box-sizing: border-box;
 }
 
-/* Close button - adjusted for larger container */
 a#easy-numpad-close {
     position: absolute;
     right: 0;
@@ -865,7 +595,6 @@ a#easy-numpad-close {
     height: 120px;
     border: 2px solid #666;
     background-color: rgba(255, 255, 255, 0.9);
-    box-sizing: border-box;
     text-align: center;
     font-size: 3.5rem;
     display: flex;
@@ -902,21 +631,14 @@ a#easy-numpad-close {
     -webkit-user-drag: none;
 }
 
-.easy-numpad-number-container .cancel {
-    background-color: #ef5350;
-}
+.easy-numpad-number-container .cancel { background-color: #ef5350; }
+.easy-numpad-number-container .done { background-color: #388E3C; }
 
-.easy-numpad-number-container .done {
-    background-color: #388E3C;
-}
-
-@media only screen and (max-width : 850px) {
-    /* Scale down if the screen is smaller than the numpad */
+@media only screen and (max-width: 850px) {
     .easy-numpad-container {
         width: 95%;
         height: 80vh;
     }
-    
     a#easy-numpad-close {
         right: 0;
         top: 0;

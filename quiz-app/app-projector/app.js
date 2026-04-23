@@ -1,21 +1,27 @@
-// Store references to elements once.
-const mainElement = document.querySelector('#projector-quiz');
+// Store references to the 4 main screens
 const inactiveScreenElement = document.querySelector('#inactive-screen');
+const instruction1ScreenElement = document.querySelector('#instruction-1-screen');
+const instruction2ScreenElement = document.querySelector('#instruction-2-screen');
+const quizScreenElement = document.querySelector('#projector-quiz');
+
+// Store references to dynamic quiz elements
 const questionElement = document.querySelector('#question');
 const answerTextElements = document.querySelectorAll('.answer-text');
-const answerElements = document.querySelectorAll('.answer');
+const answerContainers = document.querySelectorAll('.answer-container');
 const timerSpanElement = document.querySelector('#timer span');
 const timerProgressElement = document.querySelector('#timer progress');
 
-// io() connects to the host that served the page. 
-const socket = io();
+// Text elements for instructions (so we can apply textFit to them)
+const instruction1Text = document.querySelector('#instruction-1-text');
+const instruction2Text = document.querySelector('#instruction-2-text');
 
-// Global timer variable
+// Connect to localhost (server and website run on the same device)
+const socket = io(); 
+
+// Global variables for intervals and timeouts
 let countdownInterval = null;
+let instructionTimeout = null;
 
-/**
- * Constant for textFit options.
- */
 const textFitOptions = {
     multiLine: true,
     reProcess: true,
@@ -24,26 +30,30 @@ const textFitOptions = {
 };
 
 /**
- * Helper function to remove 'correct'/'wrong' classes from all answers.
+ * Helper function to hide all screens before showing a specific one.
+ */
+const hideAllScreens = () => {
+    inactiveScreenElement.classList.add('hidden');
+    instruction1ScreenElement.classList.add('hidden');
+    instruction2ScreenElement.classList.add('hidden');
+    quizScreenElement.classList.add('hidden');
+};
+
+/**
+ * Helper function to remove 'correct'/'wrong' classes from all answer containers.
  */
 const clearAnswerClasses = () => {
-    answerElements.forEach(e => e.classList.remove('correct-answer', 'wrong-answer'));
+    answerContainers.forEach(e => e.classList.remove('correct-answer', 'wrong-answer'));
 };
 
 /**
  * Starts a simple local countdown on the projector.
- *
- * This avoids relying on the system clocks of different devices
- * (quiz screen vs. projector). If those clocks are out of sync,
- * a timestamp‑based countdown can immediately jump to 0.
  */
 const startLocalCountdown = (answerTime) => {
-    // Stop any previous countdown
     clearInterval(countdownInterval);
 
     let remainingTime = answerTime;
 
-    // Initial render
     timerSpanElement.textContent = `${remainingTime}s`;
     timerProgressElement.value = 100;
 
@@ -72,37 +82,58 @@ socket.on('connect', () => {
 
 socket.on('disconnect', () => {
     console.log('Disconnected from socket.io server');
-    // Ensure the timer stops on disconnect
     clearInterval(countdownInterval);
+    clearTimeout(instructionTimeout);
+});
+
+socket.on('show-instructions', (data) => {
+    const totalDurationMs = (data && data.duration) ? data.duration : 10000;
+    const halfDurationMs = totalDurationMs / 2;
+
+    clearTimeout(instructionTimeout);
+
+    // 1. Maak het scherm zichtbaar
+    hideAllScreens();
+    instruction1ScreenElement.classList.remove('hidden');
+
+    instructionTimeout = setTimeout(() => {
+        if (!instruction1ScreenElement.classList.contains('hidden')) {
+            // 1. Maak het tweede scherm zichtbaar
+            hideAllScreens();
+            instruction2ScreenElement.classList.remove('hidden');
+
+        }
+    }, halfDurationMs);
 });
 
 socket.on('projector-update-question', (data) => {
-    // Show the quiz view and hide the inactive screen
-    mainElement.classList.remove('hidden');
-    inactiveScreenElement.classList.add('hidden');
-    
-    questionElement.innerHTML = data.question;
+    clearTimeout(instructionTimeout);
 
+    questionElement.innerHTML = data.question;
     answerTextElements.forEach((element, index) => {
         element.innerHTML = data.answers[index];
     });
 
-    // Use the cached elements and reusable options
-    textFit(questionElement, textFitOptions);
-    textFit(answerTextElements, textFitOptions);
+    // 1. Maak het quiz scherm zichtbaar
+    hideAllScreens();
+    quizScreenElement.classList.remove('hidden');
+
+    // 2. WACHT op de render
+    setTimeout(() => {
+        textFit(questionElement, textFitOptions);
+        textFit(answerTextElements, textFitOptions);
+    }, 50);
 });
 
 socket.on('projector-start-countdown', (data) => {
     const { answerTime } = data;
-    // Use a purely local countdown to avoid cross-device clock issues.
     startLocalCountdown(answerTime);
 });
 
 socket.on('projector-display-answers', (data) => {
-    // Use the cached elements
-    const correctAnswerId = `answer-${data.answer}`;
+    const correctAnswerId = `answer-${data.answer}-container`;
 
-    answerElements.forEach(el => {
+    answerContainers.forEach(el => {
         if (el.id === correctAnswerId) {
             el.classList.add('correct-answer');
         } else {
@@ -116,18 +147,16 @@ socket.on('projector-clear-answers', () => {
 });
 
 socket.on('projector-reset', () => {
-    // After a reset, hide the quiz and show the inactive screen
-    mainElement.classList.add('hidden');
+    hideAllScreens();
     inactiveScreenElement.classList.remove('hidden');
     
     clearAnswerClasses();
+    clearInterval(countdownInterval);
+    clearTimeout(instructionTimeout);
 
     questionElement.innerHTML = '';
     answerTextElements.forEach(e => e.innerHTML = '');
 
     timerSpanElement.textContent = '';
     timerProgressElement.value = 0;
-
-    // Stop the timer on reset
-    clearInterval(countdownInterval);
 });

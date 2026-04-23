@@ -33,9 +33,6 @@ function onLanguageChange() {
     document.querySelector('[data-lang-key=VISITED_EXPOO_MODAL_YES]').innerHTML = LanguageData.get("VISITED_EXPOO_MODAL_YES");
     document.querySelector('[data-lang-key=VISITED_EXPOO_MODAL_NO]').innerHTML = LanguageData.get("VISITED_EXPOO_MODAL_NO");
 
-    // Instructions
-    document.querySelector('[data-lang-key=INSTRUCTIONS_HEADER]').innerHTML = LanguageData.get("INSTRUCTIONS_HEADER");
-
     // Exploring
     document.querySelector('[data-lang-key=EXPLORING]').innerHTML = LanguageData.get("EXPLORING");
 }

@@ -256,19 +256,20 @@ class Quiz {
             // Reset the cancelled flag
             this.#cancelled = false;
 
-            // Show the instructions
-            await this.#showInstructions();
+            changeScreen('quiz-instructions-screen');
+
+            // Notify the Orin Nano to show the instructions on the projector
+            socket.emit('show-instructions', { duration: this.#instructionsScreenTime * 1000 });
 
             // Activate the lens of the projector
-            //await this.#sendProjectorCommand("wake")
+            //await this.#sendProjectorCommand("wake");
+
+            // Wait until the projector has shown the instructions
+            await wait(this.#instructionsScreenTime * 1000);
 
             // Change the screen to the quiz screen after the instructions
             changeScreen('quiz-screen');
             
-            document.querySelector('#instructions-header').classList.add('instruction-header-big');
-            document.querySelector('#instruction-container').classList.add('instruction-container-invisible');
-            document.querySelector('#instruction-text').textContent = '';
-            document.querySelector('#instruction-image').src = './assets/transparent.png';
             // Set the quiz as active for the language change callback
             this.#active = true;
 

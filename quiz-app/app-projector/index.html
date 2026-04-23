@@ -5,31 +5,48 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="UTF-8">
 
-        <script src="socket.io/socket.io.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
         <script defer src="./app.js"></script>
         <script src="assets/scripts/textFit.min.js"></script>
 
         <link rel="stylesheet" href="./projector.css">
     </head>
     <body>
-        <div id="inactive-screen">De quiz is momenteel niet actief</div>
+        <div id="inactive-screen" class="screen">
+            <h1>De quiz is momenteel niet actief</h1>
+        </div>
 
-        <main class="hidden" id="projector-quiz">
-            <div id="question">Vraag</div>
+        <div id="instruction-1-screen" class="screen hidden">
+            <h1 id="instruction-1-text">De robot stelt je een vraag en geeft drie mogelijke antwoorden.</h1>
+        </div>
+
+        <div id="instruction-2-screen" class="screen hidden">
+            <h1 id="instruction-2-text">Antwoord door in zone A, B of C te staan.</h1>
+            <div class="instruction-media-container">
+                <img src="./assets/Animatie.gif" alt="Instruction 2 Image">
+            </div>
+        </div>
+
+        <main class="screen hidden" id="projector-quiz">
+            <div class="question-container">
+                <div id="question">Vraag</div>
+            </div>
+            
             <div id="answers">
-                <div class="answer" id="answer-0">
+                <div class="answer-container" id="answer-0-container">
                     <div class="answer-label">A</div>
-                    <div class="answer-text">Antwoord A</div>
+                    <div class="answer-text" id="answer-0">Antwoord A</div>
                 </div>
-                <div class="answer" id="answer-1">
+                <div class="answer-container" id="answer-1-container">
                     <div class="answer-label">B</div>
-                    <div class="answer-text">Antwoord B</div>
+                    <div class="answer-text" id="answer-1">Antwoord B</div>
                 </div>
-                <div class="answer" id="answer-2">
+                <div class="answer-container" id="answer-2-container">
                     <div class="answer-label">C</div>
-                    <div class="answer-text">Antwoord C</div>
+                    <div class="answer-text" id="answer-2">Antwoord C</div>
                 </div>
             </div>
+
             <div id="timer">
                 <span>10s</span>
                 <progress value="100" max="100"></progress>

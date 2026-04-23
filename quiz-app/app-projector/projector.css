@@ -3,9 +3,6 @@
     src: url("../shared/assets/fonts/Co-Headline.woff2") format("woff2");
     font-weight: normal;
     font-style: normal;
-
-    ascent-override: 100%;
-    line-gap-override: 0%;
 }
 
 @font-face {
@@ -13,153 +10,203 @@
     src: url("../shared/assets/fonts/Co-Headline-Bold.woff2") format("woff2");
     font-weight: bold;
     font-style: normal;
-
-    ascent-override: 100%;
-    line-gap-override: 0%;
 }
 
 @font-face {
     font-family: 'Open Sans';
     src: url('../shared/assets/fonts/OpenSans-VariableFont_wdth,wght.ttf') format('truetype-variations');
     font-weight: 100 900;
-    font-stretch: 75% 100%;
     font-style: normal;
 }
 
-@font-face {
-    font-family: 'Open Sans';
-    src: url('../shared/assets/fonts/OpenSans-Italic-VariableFont_wdth,wght.ttf') format('truetype-variations');
-    font-weight: 100 900;
-    font-style: italic;
-}
-
 :root {
-  --light-color: #73b6b7;
-  --dark-color: #005144;
+    --green-bg-color-light: #DAF5F0;
+    --green-bg-color-dark: #005144;
+    --wrong-color: rgb(255, 83, 83);
+    --correct-color: rgb(153, 255, 0);
 }
 
 * {
-  margin: 0;
-  padding: 0;
-  font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+    font-family: 'Open Sans', sans-serif;
+    box-sizing: border-box;
 }
 
 body {
-  background-color: black;
+    background-color: var(--green-bg-color-light);
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
 }
 
-main {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  background-color: var(--light-color);
+.screen {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .hidden {
-  display: none !important
+    display: none !important;
 }
 
-#question {
-  height: 30vh;
-  color: white;
-  background-color: var(--dark-color);
-  box-shadow: 0 5px rgba(0, 0, 0, 0.25);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+h1 {
+    font-family: 'Co Headline', sans-serif;
+    color: var(--green-bg-color-dark);
+    text-align: center;
 }
 
-#answers {
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  gap: 5px;
-  margin-top: 10px;
-}
-
-.answer {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.answer-label {
-  background-color: var(--dark-color);
-  color: white;
-  font-size: 1.5em;
-  padding-left: 20px;
-  padding-right: 20px;
-  font-size: 4rem;
-  line-height: 1.1;
-  border-radius: 20px 20px 0 0;
-  text-shadow: 0 5px rgba(0, 0, 0, 0.25);
-  font-weight: bold;
-}
-
-
-.answer-text {
-  box-sizing: border-box;
-  background-color: var(--dark-color);
-  color: white;
-  flex: 1;
-  width: 100%;
-  padding: 10px;
-  border-radius: 10px;
-  box-shadow: 0 5px rgba(0, 0, 0, 0.25);
+/* --- INACTIVE & INSTRUCTION SCREENS --- */
+#inactive-screen, #instruction-1-screen, #instruction-2-screen {
+    justify-content: center;
+    align-items: center;
+    padding: 5vw;
 }
 
 #inactive-screen {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100vw;
-  background-color: rgb(255, 0, 0);
-  color: white;
-  font-size: 4rem;
-  text-align: center;
-  font-weight: bold;
+    background-color: var(--green-bg-color-light);
 }
 
+#inactive-screen h1 {
+    font-size: 15vh;
+}
+
+#instruction-1-screen h1, #instruction-2-screen h1 {
+    font-size: 12vh;
+    line-height: 1.2;
+}
+
+.instruction-media-container {
+    margin-top: 5vh;
+    height: 70vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.instruction-media {
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+/* --- QUIZ SCREEN --- */
+#projector-quiz {
+    background-color: var(--green-bg-color-light);
+    padding: 2vh 2vw;
+}
+
+.question-container {
+    height: 25vh;
+    background-color: var(--green-bg-color-dark);
+    border-radius: 3vh;
+    box-shadow: 0 1vh rgba(0, 0, 0, 0.25);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2vh 3vw;
+}
+
+#question {
+    color: white;
+    font-family: 'Co Headline', sans-serif;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#answers {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    gap: 2vw;
+    margin-top: 3vh;
+}
+
+.answer-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--green-bg-color-dark);
+    border-radius: 3vh;
+    box-shadow: 0 1vh rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    transition: background-color 0.3s;
+}
+
+.answer-label {
+    background-color: rgba(0, 0, 0, 0.2);
+    color: white;
+    font-family: 'Co Headline', sans-serif;
+    font-size: 6vh;
+    text-align: center;
+    padding: 1vh 0;
+    font-weight: bold;
+}
+
+.answer-text {
+    flex: 1;
+    color: white;
+    padding: 2vh 2vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* Correct/Wrong modifiers applied to the container */
+.correct-answer {
+    background-color: var(--correct-color);
+}
+.correct-answer .answer-label, .correct-answer .answer-text {
+    color: black;
+}
+
+.wrong-answer {
+    background-color: var(--wrong-color);
+}
+.wrong-answer .answer-label, .wrong-answer .answer-text {
+    color: black;
+}
+
+/* --- TIMER --- */
 #timer {
-  font-size: 2em;
-  margin-top: 10px;
+    margin-top: 3vh;
+    height: 8vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-#timer > span {
-  position: absolute;
-  display: inline-block;
-  width: 100%;
-  text-align: center;
-  text-shadow: 2px 0 white, -2px 0 white, 0 2px white, 0 -2px white, 1px 1px white, -1px -1px white, 1px -1px white, -1px 1px white;
+#timer span {
+    position: absolute;
+    font-family: 'Co Headline', sans-serif;
+    font-size: 5vh;
+    z-index: 2;
+    color: white;
+    text-shadow: 0 3px 5px rgba(0,0,0,0.5);
 }
 
 #timer progress {
-  appearance: none;
-  -webkit-appearance: none;
-  box-sizing: border-box;
-  width: 100%;
-  height: calc(100% - 3px);
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    height: 100%;
+    border-radius: 4vh;
+    overflow: hidden;
+    box-shadow: 0 1vh rgba(0, 0, 0, 0.2) inset;
 }
 
 #timer progress::-webkit-progress-bar {
-  background-color: var(--dark-color);
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2) inset;
+    background-color: var(--green-bg-color-dark);
 }
 
 #timer progress::-webkit-progress-value {
-  background-color: #4dcc33;
-  transition: width 0.3s ease-out;
-}
-
-.wrong-answer div {
-  background-color: rgb(255, 83, 83);
-  color: black;
-}
-
-.correct-answer div {
-  background-color: rgb(153, 255, 0);
-  color: black;
+    background-color: var(--correct-color);
+    transition: width 0.3s ease-out;
 }
