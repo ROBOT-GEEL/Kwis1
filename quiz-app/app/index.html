@@ -122,56 +122,32 @@
 
         <div id="quiz-screen" class="screen" style="display:none;">
             <div class="quiz-screen-container">
-                <div class="question-container" data-lang-key="QUIZ_SCREEN_QUESTION" id="quiz-question">
-                    QUIZ_SCREEN_QUESTION
+                
+                <div class="question-container">
+                    <div id="quiz-question" data-lang-key="QUIZ_SCREEN_QUESTION">QUIZ_SCREEN_QUESTION</div>
                 </div>
 
-                <div class="answers-container">
-                    <div class="answer-row" id="quiz-answerA-container">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="300" height="200" viewBox="0 0 150 100" class="answer-label">
-                            <circle fill="currentColor" r="50" cx="50" cy="50" />
-                            <line x1="50" y1="50" x2="150" y2="50" style="stroke:currentColor;stroke-width:10" />
-                            <text x="50" y="52" fill="white" font-size="65" dominant-baseline="middle" text-anchor="middle">A</text>
-                        </svg>
-                        <div class="answer-container">
-                            <div class="answer" id="quiz-answer-0">
-                                Tekst antwoord A
-                            </div>
-                        </div>
+                <div id="answers">
+                    <div class="answer-container" id="quiz-answerA-container">
+                        <div class="answer-label">A</div>
+                        <div class="answer-text" id="quiz-answer-0">Tekst antwoord A</div>
                     </div>
-                    <div class="answer-row" id="quiz-answerB-container">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="300" height="200" viewBox="0 0 150 100" class="answer-label">
-                            <circle fill="currentColor" r="50" cx="50" cy="50" />
-                            <line x1="50" y1="50" x2="150" y2="50" style="stroke:currentColor;stroke-width:10" />
-                            <text x="50" y="55" fill="white" font-size="65" dominant-baseline="middle" text-anchor="middle">B</text>
-                        </svg>
-                        <div class="answer-container">
-                            <div class="answer" id="quiz-answer-1">
-                                Tekst antwoord B
-                            </div>
-                        </div>
+                    <div class="answer-container" id="quiz-answerB-container">
+                        <div class="answer-label">B</div>
+                        <div class="answer-text" id="quiz-answer-1">Tekst antwoord B</div>
                     </div>
-                    <div class="answer-row" id="quiz-answerC-container">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="300" height="200" viewBox="0 0 150 100" class="answer-label">
-                            <circle fill="currentColor" r="50" cx="50" cy="50" />
-                            <line x1="50" y1="50" x2="150" y2="50" style="stroke:currentColor;stroke-width:10" />
-                            <text x="46" y="56" fill="white" font-size="65" dominant-baseline="middle" text-anchor="middle">C</text>
-                        </svg>
-                        <div class="answer-container">
-                            <div class="answer" id="quiz-answer-2">
-                                Tekst antwoord C
-                            </div>
-                        </div>
+                    <div class="answer-container" id="quiz-answerC-container">
+                        <div class="answer-label">C</div>
+                        <div class="answer-text" id="quiz-answer-2">Tekst antwoord C</div>
                     </div>
                 </div>
 
-                <div class="quiz-footer">
+                <div id="timer">
+                    <span id="quiz-timer" data-lang-key="QUIZ_SCREEN_TIMER">QUIZ_SCREEN_TIMER</span>
                     <progress id="timer-progress-bar" value="100" max="100"></progress>
-                    <div>
-                        <div id="quiz-timer" data-lang-key="QUIZ_SCREEN_TIMER">QUIZ_SCREEN_TIMER</div>
-                        <div id="quiz-remaining-questions" data-lang-key="QUIZ_REMAINING_QUESTIONS">QUIZ_REMAINING_QUESTIONS</div>
-                    </div>
+                    <div id="quiz-remaining-questions" data-lang-key="QUIZ_REMAINING_QUESTIONS">QUIZ_REMAINING_QUESTIONS</div>
                 </div>
+
             </div>
         </div>
 

@@ -22,6 +22,8 @@
 :root {
     --green-bg-color-light: #DAF5F0;
     --green-bg-color-dark: #005144;
+    --yellow-color: #f8b200;
+    --yellow-color-dark: #3e2c00;
     --wrong-color: rgb(255, 83, 83);
     --correct-color: rgb(153, 255, 0);
 }
@@ -188,25 +190,32 @@ h1 {
     font-family: 'Co Headline', sans-serif;
     font-size: 5vh;
     z-index: 2;
-    color: white;
-    text-shadow: 0 3px 5px rgba(0,0,0,0.5);
+    color: var(--yellow-color-dark);
 }
 
 #timer progress {
     appearance: none;
     -webkit-appearance: none;
+    -moz-appearance: none;
     width: 100%;
     height: 100%;
     border-radius: 4vh;
     overflow: hidden;
-    box-shadow: 0 1vh rgba(0, 0, 0, 0.2) inset;
+    border: 3px solid var(--yellow-color);
+    background-color: var(--green-bg-color-light); 
 }
 
 #timer progress::-webkit-progress-bar {
-    background-color: var(--green-bg-color-dark);
+    background-color: var(--green-bg-color-light);
 }
 
 #timer progress::-webkit-progress-value {
-    background-color: var(--correct-color);
+    background-color: var(--yellow-color);
     transition: width 0.3s ease-out;
+    border-radius: 4vh 0 0 4vh;
+}
+
+#timer progress::-moz-progress-bar {
+    background-color: var(--yellow-color);
+    border-radius: 4vh 0 0 4vh;
 }
