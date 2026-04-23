@@ -264,7 +264,7 @@ h1, h1 > *, h1 * {
     border-radius: 3vh;
     box-shadow: 0 1vh rgba(0, 0, 0, 0.25);
     overflow: hidden;
-    transition: background-color 0.3s;
+    transition: opacity 0.3s;
     margin: 0;
     height: auto;
 }
@@ -291,21 +291,8 @@ h1, h1 > *, h1 * {
     font-size: 4vh; 
 }
 
-/* Modifier classes used by existing Javascript logic */
-.correct-answer-container {
-    background-color: rgb(153, 255, 0) !important;
-}
-.correct-answer-container .answer-label, 
-.correct-answer-container .answer-text {
-    color: black !important;
-}
-
 .wrong-answer-container {
-    background-color: rgb(255, 83, 83) !important;
-}
-.wrong-answer-container .answer-label, 
-.wrong-answer-container .answer-text {
-    color: black !important;
+    opacity: 0;
 }
 
 /* Timer styles from projector */
@@ -338,21 +325,22 @@ h1, h1 > *, h1 * {
     background-color: var(--green-bg-color-light); 
 }
 
-/* Chrome, Safari, Edge - De 'goot' */
+/* Chrome, Safari, Edge */
 #timer-progress-bar::-webkit-progress-bar {
     background-color: var(--green-bg-color-light);
 }
 
-/* Chrome, Safari, Edge - De vullende balk */
+/* Chrome, Safari, Edge */
 #timer-progress-bar::-webkit-progress-value {
     background-color: var(--yellow-color);
     transition: width 0.3s ease-out;
     border-radius: 4vh 0 0 4vh;
 }
 
-/* FIREFOX - De vullende balk */
+/* FIREFOX */
 #timer-progress-bar::-moz-progress-bar {
     background-color: var(--yellow-color);
+    transition: width 0.3s ease-out;
     border-radius: 4vh 0 0 4vh;
 }
 
