@@ -22,13 +22,6 @@ const socket = io();
 let countdownInterval = null;
 let instructionTimeout = null;
 
-const textFitOptions = {
-    multiLine: true,
-    reProcess: true,
-    alignHoriz: true,
-    alignVert: true
-};
-
 /**
  * Helper function to hide all screens before showing a specific one.
  */
@@ -72,7 +65,10 @@ socket.on('projector-update-question', (data) => {
     clearTimeout(instructionTimeout);
 
     questionElement.innerHTML = data.question;
+    
+    // Reset the font size to a very small value before applying textFit
     answerTextElements.forEach((element, index) => {
+        element.style.fontSize = '1px';
         element.innerHTML = data.answers[index];
     });
 
@@ -80,11 +76,41 @@ socket.on('projector-update-question', (data) => {
     hideAllScreens();
     quizScreenElement.classList.remove('hidden');
 
-    // 2. WACHT op de render
-    setTimeout(() => {
-        textFit(questionElement, textFitOptions);
-        textFit(answerTextElements, textFitOptions);
-    }, 50);
+    // Fit the question
+    textFit(questionElement, {
+        minFontSize: 4,
+        maxFontSize: 200,
+        multiLine: true,
+        reProcess: true,
+        alignHoriz: true,
+        alignVert: true
+    });
+    
+    // Fit all teh answers
+    textFit(answerTextElements, {
+        minFontSize: 4,
+        maxFontSize: 200,
+        multiLine: true,
+        reProcess: true,
+        alignHoriz: true,
+        alignVert: false
+    });
+
+    // Search for the smallest calculated font size among the answers
+    let minCalculatedSize = 200;
+    const fittedTexts = document.querySelectorAll('.answer-text .textFitted');
+    
+    fittedTexts.forEach(fittedElement => {
+        const currentSize = parseFloat(fittedElement.style.fontSize);
+        if (currentSize && currentSize < minCalculatedSize) {
+            minCalculatedSize = currentSize;
+        }
+    });
+
+    // Apply the smallest calculated font size to all answers
+    fittedTexts.forEach(fittedElement => {
+        fittedElement.style.fontSize = minCalculatedSize + 'px';
+    });
 });
 
 socket.on('projector-update-countdown', (data) => {
