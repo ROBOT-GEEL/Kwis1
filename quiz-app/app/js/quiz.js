@@ -256,20 +256,7 @@ class Quiz {
             // Reset the cancelled flag
             this.#cancelled = false;
 
-            changeScreen('quiz-instructions-screen');
-
-            // Notify the Orin Nano to show the first instructions screen on the projector
-            socket.emit('projector-show-instructions-1');
-
-            // Activate the lens of the projector
-            //await this.#sendProjectorCommand("wake");
-
-            // Wait half the time for the instructions to be shown before showing the second instructions screen
-            await wait(this.#instructionsScreenTime / 2 * 1000);
-
-            socket.emit('projector-show-instructions-2');
-
-            await wait(this.#instructionsScreenTime / 2 * 1000);
+            await this.#showInstructions();
 
             // Change the screen to the quiz screen after the instructions
             changeScreen('quiz-screen');
@@ -338,26 +325,25 @@ class Quiz {
      * Show the instructions.
      */
     static async #showInstructions() {
-        changeScreen("quiz-instructions-screen");
+        
+        changeScreen('quiz-instructions-screen');
 
-        // Show that the instructions are starting in big before showing the instructions
-        await wait(this.#instructionsScreenTime * 1000);
-        document.querySelector('#instructions-header').classList.remove('instruction-header-big');
-        document.querySelector('#instruction-container').classList.remove('instruction-container-invisible');
-        await wait(1500);
+        // Notify the Orin Nano to show the first instructions screen on the projector
+        socket.emit('projector-show-instructions-1', {
+            instruction: this.#instructions['instruction_1'][LanguageData.selectedLanguage]
+        });
 
-        this.#showingInstructions = true;
-        for (this.#currentInstructionsIndex = 0; this.#currentInstructionsIndex < this.#instructions.length; this.#currentInstructionsIndex++) {
-            document.querySelector('#instruction-text').textContent = `${this.#currentInstructionsIndex + 1}) ${this.#instructions[this.#currentInstructionsIndex]['text'][LanguageData.selectedLanguage]}`;
-            textFit(document.querySelector('#instruction-text'), {
-                alignHoriz: true,
-                alignVert: true,
-                reprocess: true
-            });
-            document.querySelector('#instruction-image').src = `./assets/instructions/${this.#instructions[this.#currentInstructionsIndex].image}`;
-            await wait(this.#instructions[this.#currentInstructionsIndex].milliseconds);
-        }
-        this.#showingInstructions = false;
+        // Activate the lens of the projector
+        //await this.#sendProjectorCommand("wake");
+
+        // Wait half the time for the instructions to be shown before showing the second instructions screen
+        await wait(this.#instructionsScreenTime / 2 * 1000);
+
+        socket.emit('projector-show-instructions-2', {
+            instruction: this.#instructions['instruction_2'][LanguageData.selectedLanguage]
+        });
+
+        await wait(this.#instructionsScreenTime / 2 * 1000);
     }
 
     /**
@@ -443,7 +429,6 @@ class Quiz {
 
         // Emit the countdown data to the projector
         socket.emit('projector-update-countdown', {
-            startTimestamp: Date.now(),
             remainingTime: this.#remainingAnswerTime,
             answerTime: this.#answerTime
         });
@@ -458,7 +443,6 @@ class Quiz {
 
                 // Emit the updated countdown data to the projector
                 socket.emit('projector-update-countdown', {
-                    startTimestamp: Date.now(),
                     remainingTime: this.#remainingAnswerTime,
                     answerTime: this.#answerTime
                 });

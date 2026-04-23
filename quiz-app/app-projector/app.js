@@ -51,12 +51,21 @@ socket.on('disconnect', () => {
     clearTimeout(instructionTimeout);
 });
 
-socket.on('projector-show-instructions-1', () => {
+socket.on('projector-show-instructions-1', (data) => {
+    const instructionText = data.instruction;
+
+    instruction1Text.innerHTML = instructionText;
+
     hideAllScreens();
     instruction1ScreenElement.classList.remove('hidden');
+
 });
 
-socket.on('projector-show-instructions-2', () => {
+socket.on('projector-show-instructions-2', (data) => {
+    const instructionText = data.instruction;
+
+    instruction2Text.innerHTML = instructionText;
+
     hideAllScreens();
     instruction2ScreenElement.classList.remove('hidden');
 });
