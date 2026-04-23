@@ -390,15 +390,40 @@ class Quiz {
         });
 
         // Show the answers
-        document.querySelectorAll('.answer').forEach(e => e.style.fontSize = '1px');
+        const answerElements = document.querySelectorAll('.answer-text');
+        
+        // Reset the font size to a small value to allow textFit to calculate the correct size based on the content
+        answerElements.forEach(e => e.style.fontSize = '1px');
+        
         answers.forEach((answer, index) => {
-            document.querySelector(`#quiz-answer-${index}`).innerHTML = answer;
+            const el = document.querySelector(`#quiz-answer-${index}`);
+            if (el) el.innerHTML = answer;
         });
-        textFit(document.querySelectorAll('.answer'), {
+
+        // Calculate the font size for the answers using textFit
+        textFit(answerElements, {
             minFontSize: 4,
-            maxFontSize: 80,
+            maxFontSize: 200,
             multiLine: true,
-            reProcess: true
+            reProcess: true,
+            alignHoriz: false,
+            alignVert: false
+        });
+
+        // Search for the smallest calculated font size among the answers
+        let minCalculatedSize = 200;
+        const fittedTexts = document.querySelectorAll('.answer-text .textFitted');
+        
+        fittedTexts.forEach(fittedElement => {
+            const currentSize = parseFloat(fittedElement.style.fontSize);
+            if (currentSize && currentSize < minCalculatedSize) {
+                minCalculatedSize = currentSize;
+            }
+        });
+
+        // Apply the smallest calculated font size to all answer texts
+        fittedTexts.forEach(fittedElement => {
+            fittedElement.style.fontSize = minCalculatedSize + 'px';
         });
 
         // Update the remaining questions
