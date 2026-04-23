@@ -38,8 +38,8 @@ export function registerSocketHandlers(io) {
       socket.broadcast.emit("projector-update-question", data);
     });
 
-    socket.on("projector-start-countdown", (data) => {
-      socket.broadcast.emit("projector-start-countdown", data);
+    socket.on("projector-update-countdown", (data) => {
+      socket.broadcast.emit("projector-update-countdown", data);
     });
 
     socket.on("projector-display-answers", (data) => {
@@ -54,8 +54,12 @@ export function registerSocketHandlers(io) {
       socket.broadcast.emit("projector-clear-answers");
     });
 
-    socket.on("show-instructions", (data) => {
-      socket.broadcast.emit("show-instructions", data);
+    socket.on("projector-show-instructions-1", (data) => {
+      socket.broadcast.emit("projector-show-instructions-1", data);
+    });
+
+    socket.on("projector-show-instructions-2", (data) => {
+      socket.broadcast.emit("projector-show-instructions-2", data);
     });
 
 

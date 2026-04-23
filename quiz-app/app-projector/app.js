@@ -46,34 +46,6 @@ const clearAnswerClasses = () => {
     answerContainers.forEach(e => e.classList.remove('correct-answer', 'wrong-answer'));
 };
 
-/**
- * Starts a simple local countdown on the projector.
- */
-const startLocalCountdown = (answerTime) => {
-    clearInterval(countdownInterval);
-
-    let remainingTime = answerTime;
-
-    timerSpanElement.textContent = `${remainingTime}s`;
-    timerProgressElement.value = 100;
-
-    countdownInterval = setInterval(() => {
-        remainingTime -= 1;
-
-        if (remainingTime <= 0) {
-            remainingTime = 0;
-            clearInterval(countdownInterval);
-        }
-
-        timerSpanElement.textContent = `${remainingTime}s`;
-
-        const percentage = answerTime > 0
-            ? Math.max(0, Math.min(100, (remainingTime / answerTime) * 100))
-            : 0;
-        timerProgressElement.value = percentage;
-    }, 1000);
-};
-
 // --- Socket.io Event Listeners ---
 
 socket.on('connect', () => {
@@ -86,24 +58,14 @@ socket.on('disconnect', () => {
     clearTimeout(instructionTimeout);
 });
 
-socket.on('show-instructions', (data) => {
-    const totalDurationMs = (data && data.duration) ? data.duration : 10000;
-    const halfDurationMs = totalDurationMs / 2;
-
-    clearTimeout(instructionTimeout);
-
-    // 1. Maak het scherm zichtbaar
+socket.on('projector-show-instructions-1', () => {
     hideAllScreens();
     instruction1ScreenElement.classList.remove('hidden');
+});
 
-    instructionTimeout = setTimeout(() => {
-        if (!instruction1ScreenElement.classList.contains('hidden')) {
-            // 1. Maak het tweede scherm zichtbaar
-            hideAllScreens();
-            instruction2ScreenElement.classList.remove('hidden');
-
-        }
-    }, halfDurationMs);
+socket.on('projector-show-instructions-2', () => {
+    hideAllScreens();
+    instruction2ScreenElement.classList.remove('hidden');
 });
 
 socket.on('projector-update-question', (data) => {
@@ -125,9 +87,15 @@ socket.on('projector-update-question', (data) => {
     }, 50);
 });
 
-socket.on('projector-start-countdown', (data) => {
-    const { answerTime } = data;
-    startLocalCountdown(answerTime);
+socket.on('projector-update-countdown', (data) => {
+    const { remainingTime, answerTime } = data;
+
+    timerSpanElement.textContent = `${remainingTime}s`;
+
+    const percentage = answerTime > 0
+        ? Math.max(0, Math.min(100, (remainingTime / answerTime) * 100))
+        : 0;
+    timerProgressElement.value = percentage;
 });
 
 socket.on('projector-display-answers', (data) => {

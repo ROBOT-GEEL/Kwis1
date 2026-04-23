@@ -258,14 +258,18 @@ class Quiz {
 
             changeScreen('quiz-instructions-screen');
 
-            // Notify the Orin Nano to show the instructions on the projector
-            socket.emit('show-instructions', { duration: this.#instructionsScreenTime * 1000 });
+            // Notify the Orin Nano to show the first instructions screen on the projector
+            socket.emit('projector-show-instructions-1');
 
             // Activate the lens of the projector
             //await this.#sendProjectorCommand("wake");
 
-            // Wait until the projector has shown the instructions
-            await wait(this.#instructionsScreenTime * 1000);
+            // Wait half the time for the instructions to be shown before showing the second instructions screen
+            await wait(this.#instructionsScreenTime / 2 * 1000);
+
+            socket.emit('projector-show-instructions-2');
+
+            await wait(this.#instructionsScreenTime / 2 * 1000);
 
             // Change the screen to the quiz screen after the instructions
             changeScreen('quiz-screen');
@@ -405,18 +409,19 @@ class Quiz {
      * Start the answer countdown.
      *
      * This function does the following:
-     * - Emit the start countdown data to the projector
+     * - Emit the countdown data to the projector
      * - Update the timer on the quiz screen
      * - Wait for the answer countdown to finish
      */
     static async #answerCountdown() {
-        // Emit the start countdown data to the projector
-        socket.emit('projector-start-countdown', {
+        this.#remainingAnswerTime = this.#answerTime;
+
+        // Emit the countdown data to the projector
+        socket.emit('projector-update-countdown', {
             startTimestamp: Date.now(),
+            remainingTime: this.#remainingAnswerTime,
             answerTime: this.#answerTime
         });
-
-        this.#remainingAnswerTime = this.#answerTime;
 
         // Update the timer on the quiz screen
         document.querySelector('[data-lang-key=QUIZ_SCREEN_TIMER]').innerHTML = LanguageData.get("QUIZ_SCREEN_TIMER").replace('%time%', this.#remainingAnswerTime);
@@ -425,6 +430,14 @@ class Quiz {
         return new Promise((resolve, reject) => {
             const interval = setInterval(() => {
                 this.#remainingAnswerTime--;
+
+                // Emit the updated countdown data to the projector
+                socket.emit('projector-update-countdown', {
+                    startTimestamp: Date.now(),
+                    remainingTime: this.#remainingAnswerTime,
+                    answerTime: this.#answerTime
+                });
+
                 document.querySelector('[data-lang-key=QUIZ_SCREEN_TIMER]').innerHTML = LanguageData.get("QUIZ_SCREEN_TIMER").replace('%time%', this.#remainingAnswerTime);
                 document.querySelector('#timer-progress-bar').setAttribute('value', this.#remainingAnswerTime * 100 / this.#answerTime);
                 if (this.#remainingAnswerTime <= 0) {
