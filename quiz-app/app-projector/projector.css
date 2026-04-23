@@ -85,10 +85,12 @@ h1 {
     width: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .instruction-media {
     height: 100%;
+    max-width: 100%;
     object-fit: contain;
     pointer-events: none;
 }
@@ -217,5 +219,6 @@ h1 {
 
 #timer progress::-moz-progress-bar {
     background-color: var(--yellow-color);
+    transition: width 0.3s ease-out;
     border-radius: 4vh 0 0 4vh;
 }
