@@ -27,7 +27,7 @@ def handle_button_press():
 
 # Initialize GPIO
 try:
-    button = Button(21)
+    button = Button(21, bounce_time=0.1)
     button.when_pressed = handle_button_press
 except Exception:
     # Exit if the hardware pin is completely unavailable
