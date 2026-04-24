@@ -1,14 +1,18 @@
 import logger from "../config/logger.js";
 import { getDB } from "../config/db.js";
 import { getTargetProjectorState } from "../controllers/projectorController.js";
+import { exec } from "child_process";
 
 export function registerSocketHandlers(io) {
 
-    let currentAdminToken = null;
-    let currentAdminSocketId = null;
-    let disconnectTimer = null; // Used to track page navigation
+  let currentAdminToken = null;
+  let currentAdminSocketId = null;
+  let disconnectTimer = null; // Used to track page navigation
 
-    let orinNanoRobotId = null;
+  let orinNanoRobotId = null;
+
+  let screenBlankingTimeout = null; // Variable to store the timeout ID
+  let screenOn = false; // Track the current state of the screen
 
   io.on("connection", (socket) => {
     logger.info(`Client connected: ${socket.id}`);
@@ -112,15 +116,64 @@ export function registerSocketHandlers(io) {
       "robot-disconnected",
     ];
 
+    // Helper function to blank the screen
+    const blankScreen = () => {
+      exec("DISPLAY=:0 xset s activate", (error, stderr) => {
+        if (error) {
+          logger.error(`Error executing sleep command: ${error.message}`);
+          return;
+        }
+        if (stderr) {
+          logger.error(`Error output from sleep command: ${stderr}`);
+          return;
+        }
+      });
+      screenOn = false;
+    };
+
+    // Helper function to wake the screen
+    const wakeScreen = () => {
+      exec("DISPLAY=:0 xset s reset", (error, stderr) => {
+        if (error) {
+          logger.error(`Error executing wake command: ${error.message}`);
+          return;
+        }
+        if (stderr) {
+          logger.error(`Error output from wake command: ${stderr}`);
+          return;
+        }
+      });
+      screenOn = true;
+    };
+
     robotEvents.forEach((event) => {
       socket.on(event, (data) => {
         logger.info(event, data || "");
         socket.broadcast.emit(event, data);
-        // Special handling for Python-compatible socket
+
         if (event === "drive-to-quiz-location") {
           socket.broadcast.emit("drive_to_quiz_location");
         }
+
+        if (event === "robot-charging") {
+          if (screenOn) {
+            blankScreen();
+          }
+        } else {
+          if (!screenOn) {
+            wakeScreen();
+          }
+        }
       });
+    });
+
+    // Manual toggle triggered by the Python button script
+    socket.on("manual-screen-toggle", () => {
+      if (screenOn) {
+        blankScreen();
+      } else {
+        wakeScreen();
+      }
     });
 
     //
