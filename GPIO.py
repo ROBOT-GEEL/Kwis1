@@ -1,18 +1,29 @@
+import socketio
 from gpiozero import Button
-import subprocess
 from signal import pause
 
-# Use GPIO 17 (Physical pin 11)
-# The Button class automatically handles the pull-up resistor
-button = Button(17)
+# Setup Socket.IO client
+sio = socketio.Client()
 
-def wake_screen():
-    print("Button pressed! Turning off screen...")
-    # This command works for X11 sessions
-    subprocess.run("DISPLAY=:0 xset s activate", shell=True)
+SERVER_URL = "http://localhost:80" 
 
-# Link the function to the press event
-button.when_pressed = wake_screen
+def handle_button_press():
+    print("Button pressed!")
+    
+    # Tell the server to toggle the screen
+    if sio.connected:
+        sio.emit('manual-screen-toggle')
+    else:
+        print("Warning: Not connected to server, timer not reset.")
 
-print("Service started. Waiting for button press on GPIO 17...")
-pause()
+# GPIO Setup
+button = Button(21)
+button.when_pressed = handle_button_press
+
+try:
+    # Connect to the server
+    sio.connect(SERVER_URL)
+    print("Service started. Waiting for button press on GPIO 21...")
+    pause()
+except Exception as e:
+    print(f"Error: {e}")
