@@ -35,6 +35,9 @@ function onLanguageChange() {
 
     // Exploring
     document.querySelector('[data-lang-key=EXPLORING]').innerHTML = LanguageData.get("EXPLORING");
+
+    // Quiz instructions
+    document.querySelector('[data-lang-key=QUIZ_INSTRUCTIONS]').innerHTML = LanguageData.get("QUIZ_INSTRUCTIONS");
 }
 
 // Register the callback function for the language change
