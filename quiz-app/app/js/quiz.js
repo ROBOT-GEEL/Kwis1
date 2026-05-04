@@ -4,7 +4,7 @@
  * - app.js (socket)
  * - language.js (LanguageData)
  * - utils.js (wait, changeScreen)
- * - error.js (logError)
+ * - error.js (logError, error)
  * - textFit.js (external library)
  */
 class Quiz {
@@ -59,23 +59,15 @@ class Quiz {
                 return;
             }
 
-            // If the count went wrong, cancel the quiz and show an error
+            // If the count went wrong, cleanly abort the quiz
             if (data.status !== "success") {
-                this.#cancelled = true;
-                this.#currentQuestionIndex = this.#questions.length;
-                socket.emit('projector-reset');
-                changeScreen('quiz-finished-screen');
-
-                error(data.error_code);
+                await this.#abortQuiz(data.error_code);
                 return;
             }
         });
 
         socket.on("robot-disconnected", async () => {
-            // await this.#sendProjectorCommand("sleep");
-            this.#cancelled = true;
-            this.#currentQuestionIndex = this.#questions.length;
-            socket.emit('projector-reset');
+            await this.#abortQuiz("ROBOT_DISCONNECTED");
         });
     }
 
@@ -224,6 +216,33 @@ class Quiz {
     }
 
     /**
+     * Aborts the quiz due to an error, resets the projector, and shows an error message.
+     *
+     * @param {string} errorCode - The error code to display in the error message
+     */
+    static async #abortQuiz(errorCode) {
+        // Prevent multiple error triggers from running simultaneously
+
+        console.log("[Quiz Interface] Aborting quiz due to error: " + errorCode);
+        if (this.#cancelled) return; 
+        
+        this.#cancelled = true;
+        this.#currentQuestionIndex = this.#questions.length; // Break out of any running question loops
+
+        // Reset projector state
+        socket.emit('projector-reset');
+
+        // Turn off the projector lens
+        try {
+            await this.#sendProjectorCommand("sleep");
+        } catch (e) {
+            logError("[Quiz Interface] Could not turn off projector lens during error handling.");
+        }
+        
+        error(errorCode);
+    }
+
+    /**
      * Sends a command to toggle the projector state.
      * 
      * @param {string} action - The action to perform ("wake" or "sleep")
@@ -231,7 +250,7 @@ class Quiz {
     static async #sendProjectorCommand(action) {
         let response;
         try {
-            response = await fetch("http://localhost/projector-control/toggle", {
+            response = await fetch("/projector-control/toggle", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ projectorState: action })
@@ -310,31 +329,20 @@ class Quiz {
             // Clear the questions array
             this.#questions = [];
 
-            // Finish the quiz if it was not cancelled
+            // Finish the quiz if it was not cancelled (Normal completion)
             if (!this.#cancelled) {
-                //await this.#sendProjectorCommand("sleep");
-                socket.emit('projector-reset');
                 changeScreen('quiz-finished-screen');
+                await this.#sendProjectorCommand("sleep");
+                socket.emit('projector-reset');
                 await wait(this.#finishedScreenTime * 1000);
                 socket.emit('quiz-finished');
             }
-        } catch (error) { 
+        } catch (errorCode) { 
             logError("[Quiz Runtime Error] An error occurred during the quiz execution");
-
-            this.#cancelled = true;
-            this.#currentQuestionIndex = this.#questions.length;
-            socket.emit('projector-reset');
-            changeScreen('quiz-finished-screen');
-            
-            throw error;
+            await this.#abortQuiz(errorCode);
         };
-
-        
     }
 
-    /**
-     * Show the instructions.
-     */
     static async #showInstructions() {
         this.#showingInstructions = true;
         
