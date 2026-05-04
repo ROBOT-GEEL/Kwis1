@@ -7,7 +7,6 @@ pnpm-debug.log*
 
 # Milieuvariabelen
 .env
-.env.*
 
 # Editor-specifiek
 .vscode/
