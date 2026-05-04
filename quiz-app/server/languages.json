@@ -196,6 +196,16 @@
         "EN": "A communication error occurred with the projector. The device could not be identified correctly. Please report this to the information desk. We apologize for the inconvenience.",
         "FR": "Une erreur de communication s'est produite avec le projecteur. L'appareil n'a pas pu être identifié correctement. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
     },
+    "PJLINK_ERR1_UNDEFINED_COMMAND": {
+        "NL": "De projector herkent het verzonden commando niet. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "The projector does not recognize the sent command. Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "Le projecteur ne reconnaît pas la commande envoyée. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+    },
+    "PJLINK_ERR2_OUT_OF_PARAMETER": {
+        "NL": "Er is een ongeldige parameter verzonden naar de projector. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "An invalid parameter was sent to the projector. Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "Un paramètre invalide a été envoyé au projecteur. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+    },
     "PJLINK_ERR3_UNAVAILABLE_TIME": {
         "NL": "De projector is momenteel niet beschikbaar (mogelijk aan het opwarmen of afkoelen). Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
         "EN": "The projector is currently unavailable (possibly warming up or cooling down). Please report this to the information desk. We apologize for the inconvenience.",
@@ -205,6 +215,21 @@
         "NL": "Er is een kritieke hardwarefout opgetreden in de projector. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
         "EN": "A critical hardware error has occurred in the projector. Please report this to the information desk. We apologize for the inconvenience.",
         "FR": "Une erreur matérielle critique s'est produite dans le projecteur. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+    },
+    "PJLINK_ERRA_AUTHENTICATION_FAILURE": {
+        "NL": "Authenticatie mislukt: het wachtwoord voor de projector is onjuist. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "Authentication failed: the projector password is incorrect. Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "Échec de l'authentification: le mot de passe du projecteur est incorrect. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+    },
+    "AUTH_REQUIRED_BUT_NO_PASSWORD_SET": {
+        "NL": "De projector vereist een wachtwoord, maar dit is niet ingesteld. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "The projector requires a password, but none is set. Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "Le projecteur nécessite un mot de passe, mais aucun n'est configuré. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+    },
+    "UNKNOWN_COMMAND": {
+        "NL": "Het ontvangen commando wordt niet ondersteund door de projector. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "The received command is not supported by the projector. Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "La commande reçue n'est pas supportée. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
     },
     "NO_RESPONSE_FROM_PROJECTOR": {
         "NL": "De projector reageert niet op het verzonden commando. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
@@ -229,6 +254,6 @@
     "ERR_CONTROLLER_UNREACHABLE": {
         "NL": "Er kon geen verbinding worden gemaakt met de controller van de projector. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
         "EN": "Could not establish a connection with the projector controller. Please report this to the information desk. We apologize for the inconvenience.",
-        "FR": "Impossible d'établir une connexion met le contrôleur du projecteur. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+        "FR": "Impossible d'établir une connexion avec le contrôleur du projecteur. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
 }
 }
