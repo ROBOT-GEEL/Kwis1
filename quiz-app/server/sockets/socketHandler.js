@@ -248,7 +248,7 @@ export function registerSocketHandlers(io) {
 
             if (typeof callback === "function") callback();
         } catch (error) {
-            console.error("Error in admin-panel-open:", error);
+            logger.error("Error in admin-panel-open:", error);
         }
     });
 
@@ -267,7 +267,7 @@ export function registerSocketHandlers(io) {
             }
             if (typeof callback === "function") callback();
         } catch (error) {
-            console.error("Error in admin-panel-closed:", error);
+            logger.error("Error in admin-panel-closed:", error);
         }
     });
 
@@ -283,7 +283,7 @@ export function registerSocketHandlers(io) {
                 }, 5000); 
             }
         } catch (error) {
-            console.error("Error during disconnect:", error);
+            logger.error("Error during disconnect:", error);
         }
     });
 
@@ -327,17 +327,28 @@ export function registerSocketHandlers(io) {
   setInterval(() => syncProjectorState(), 60000); 
 }
 
+/**
+ * Synchronizes the projector state with the target state.
+ * If an error occurs, it will keep retrying until successful.
+ */
 async function syncProjectorState() {
     const newState = await getTargetProjectorState();
     
     if (newState === true) {
         await toggleProjector("1");
+        await toggleProjector("sleep");
     } else if (newState === false) {
         await toggleProjector("0");
     }
 }
 
+/**
+ * Sends a toggle command to the projector.
+ * Retries automatically on network or server errors.
+ */
 async function toggleProjector(action) {
+    const retryDelay = 10000;
+
     try {
         const response = await fetch("http://localhost/projector-control/toggle", {
             method: "POST",
@@ -345,16 +356,26 @@ async function toggleProjector(action) {
             body: JSON.stringify({ projectorState: action })
         });
 
-        // Eerst controleren of we een antwoord hebben gekregen
         if (response && response.ok) {
             const data = await response.json();
-            console.log("Projector command successful:", data);
+            logger.info("Projector command successful:", data);
         } else {
-            // Als de status niet 200 is (bijv. 502 of 404)
-            console.error("Server returned an error. Status:", response ? response.status : "No response");
+            // Server error
+            logger.error(`Server error (${response ? response.status : "No response"}). Retrying in ${retryDelay / 1000}s...`);
+            await wait(retryDelay);
+            return toggleProjector(action);
         }
     } catch (error) {
-        // Dit vangt de echte netwerkfouten op (EACCES, timeout, etc.)
-        console.error("Network error while toggling projector:", error.message);
+        // Network error
+        logger.error(`Network error: ${error.message}. Retrying in ${retryDelay / 1000}s...`);
+        await wait(retryDelay);
+        return toggleProjector(action);
     }
+}
+
+/**
+ * Helper function to create a delay.
+ */
+function wait(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
