@@ -24,7 +24,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const ROOT_DIR = "/home/robotoo/Documents/quiz-app";
+const ROOT_DIR = path.join(process.cwd(), "..");
 
 // Socket.IO Initialization
 const server = http.createServer(app);
