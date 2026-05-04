@@ -18,7 +18,6 @@ const canvas = document.getElementById('drawingCanvas');
 const ctx = canvas.getContext('2d');
 const img = document.getElementById('cameraImage');
 const CAMERA_ENDPOINT = "/take_picture";
-const CAMERA_PORT = ":5051";
 
 // Run the showImage function when the whole page is loaded in
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -29,7 +28,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 async function getJetsonIp() {
     let response;
     try {
-        response = await fetch('/cms/getJetsonIp');
+        response = await fetch('/config/getJetsonIp');
     } catch {
         console.error("Network error while fetching the Jetson IP address");
         return null;
@@ -42,13 +41,31 @@ async function getJetsonIp() {
     return data;
 }
 
+// Fetches the port for the zone config from the server
+async function getZoneConfigPort() {
+    let response;
+    try {
+        response = await fetch('/config/getZoneConfigPort');
+    } catch {
+        console.error("Network error while fetching the Zone Config Port");
+        return null;
+    }
+    if (!response.ok) {
+        console.error("Error fetching the Zone Config Port: " + response.status);
+        return null;
+    }
+    const data = await response.json();
+    return data;
+}
+
 // Shows the image taken by the Jetson
 async function showImage() {
     if (img) {
         const JETSON_IP = await getJetsonIp();
+        const ZONE_CONFIG_PORT = await getZoneConfigPort();
 
         if (JETSON_IP) {
-            img.src = `http://${JETSON_IP}${CAMERA_PORT}${CAMERA_ENDPOINT}`; // set the image source in the html
+            img.src = `http://${JETSON_IP}:${ZONE_CONFIG_PORT}${CAMERA_ENDPOINT}`; // set the image source in the html
         } else {
             console.error("Kon IP-adres niet ophalen. Afbeelding wordt niet geladen.");
         }

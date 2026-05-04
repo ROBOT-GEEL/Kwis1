@@ -2,14 +2,10 @@ import crypto from "crypto";
 import { ObjectId } from "mongodb";
 import { exec } from "child_process";
 
-export const getJetsonIp = async (req, res, next) => {
-  res.json(process.env.PROJECTOR_RECEIVER_IP || "192.168.137.101");
-}
-
 export const saveZones = async (req, res, next) => {
     let { coordinates } = req.body;
-    const RECEIVER_IP = process.env.PROJECTOR_RECEIVER_IP || "192.168.137.101";
-    const RECEIVER_PORT = process.env.ZONE_CONFIG_PORT || "5051";
+    const RECEIVER_IP = process.env.PROJECTOR_RECEIVER_IP;
+    const RECEIVER_PORT = process.env.ZONE_CONFIG_PORT;
 
     try {
         const response = await fetch(`http://${RECEIVER_IP}:${RECEIVER_PORT}/save_zones`, {

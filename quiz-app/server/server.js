@@ -13,6 +13,7 @@ import quizRoutes from "./routes/quiz.js";
 import cmsRoutes from "./routes/cms.js";
 import grafiekenRoutes from "./routes/grafieken.js";
 import projectorRoutes from "./routes/projector.js";
+import configRoutes from "./routes/config.js";
 
 dotenv.config();
 const app = express();
@@ -52,6 +53,7 @@ app.use("/quiz", quizRoutes);
 app.use("/cms", cmsRoutes);
 app.use("/grafieken", grafiekenRoutes);
 app.use("/projector-control", projectorRoutes);
+app.use("/config", configRoutes);
 
 // General Routes
 app.get("/", (req, res) => {
@@ -87,8 +89,6 @@ const PORT = process.env.PORT || 80;
 
 // Start only after DB connection
 connectDB().then(() => {
-  // Use 'server.listen' instead of 'app.listen' for Socket.io support
-  // Bind explicitly to localhost
   server.listen(PORT, () => {
     logger.info(`Server listening on port ${PORT}`);
   });
