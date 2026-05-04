@@ -24,8 +24,6 @@ class Quiz {
     static #active = false;
     static #isInitialized = false;
     static #instructions = [];
-    static #currentInstructionsIndex = 0;
-    static #showingInstructions = false;
     static timeToStartQuiz = 0;
 
     static {
@@ -343,9 +341,7 @@ class Quiz {
         };
     }
 
-    static async #showInstructions() {
-        this.#showingInstructions = true;
-        
+    static async #showInstructions() {        
         changeScreen('quiz-instructions-screen');
 
         // Notify the Orin Nano to show the first instructions screen on the projector
@@ -364,7 +360,6 @@ class Quiz {
         });
 
         await wait(this.#instructionsScreenTime / 2 * 1000);
-        this.#showingInstructions = false;
     }
 
     /**
@@ -523,15 +518,6 @@ class Quiz {
             if (this.#remainingAnswerTime > 0) {
                 document.querySelector('[data-lang-key=QUIZ_SCREEN_TIMER]').innerHTML = LanguageData.get("QUIZ_SCREEN_TIMER").replace('%time%', this.#remainingAnswerTime);
             }
-        }
-
-        if (this.#showingInstructions) {
-            document.querySelector('#instruction-text').textContent = `${this.#currentInstructionsIndex + 1}) ${this.#instructions[this.#currentInstructionsIndex]['text'][LanguageData.selectedLanguage]}`;
-            textFit(document.querySelector('#instruction-text'), {
-                alignHoriz: true,
-                alignVert: true,
-                reprocess: true
-            });
         }
     }
 
