@@ -82,14 +82,29 @@ function easy_numpad_cancel() {
     $('#easy-numpad-frame').remove();
     console.log("cancel output");
 }
-function easy_numpad_done() {
+async function easy_numpad_done() {
     event.preventDefault();
     var easy_numpad_output_val = $('#easy-numpad-output').text();
     $('.easy-put').val(easy_numpad_output_val);
-    if(easy_numpad_output_val === "1234"){
-        console.log("Correct code");
-        window.location.href = "../admin-panel";
+
+    try {
+        const response = await fetch('/auth/verifyPin', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ pin: easy_numpad_output_val }),
+        });
+
+        if (response.status === 200) {
+            console.log("PIN verified successfully");
+            easy_numpad_close();
+            window.location.href = "../admin-panel";
+        } else {
+            console.error("Incorrect PIN");
+        }
+
+    } catch (error) {
+        console.error('Fout:', error);
     }
-    easy_numpad_close();
-    console.log("done");
 }

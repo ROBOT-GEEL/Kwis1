@@ -14,6 +14,7 @@ import cmsRoutes from "./routes/cms.js";
 import grafiekenRoutes from "./routes/grafieken.js";
 import projectorRoutes from "./routes/projector.js";
 import configRoutes from "./routes/config.js";
+import authRoutes from "./routes/auth.js";
 
 dotenv.config();
 const app = express();
@@ -54,6 +55,7 @@ app.use("/cms", cmsRoutes);
 app.use("/grafieken", grafiekenRoutes);
 app.use("/projector-control", projectorRoutes);
 app.use("/config", configRoutes);
+app.use("/auth", authRoutes);
 
 // General Routes
 app.get("/", (req, res) => {
