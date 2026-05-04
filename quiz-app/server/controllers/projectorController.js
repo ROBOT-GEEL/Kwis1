@@ -73,8 +73,8 @@ export const toggleProjector = async (req, res, next) => {
 
     const client = new net.Socket();
 
-    const RECEIVER_IP = process.env.PROJECTOR_RECEIVER_IP || "192.168.137.101";
-    const RECEIVER_PORT = process.env.PROJECTOR_PORT || 5050;
+    const RECEIVER_IP = process.env.PROJECTOR_RECEIVER_IP;
+    const RECEIVER_PORT = process.env.PROJECTOR_PORT;
 
     // Track if a response has already been sent to prevent Express errors
     let responseSent = false;

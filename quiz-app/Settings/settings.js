@@ -1,4 +1,4 @@
-// Variable to keep track of the robot's active status
+// Variable to keep track of the active status
 let isRobotActive = false;
 
 // Variables for time management

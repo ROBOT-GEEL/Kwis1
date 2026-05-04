@@ -11,11 +11,10 @@ const answerContainers = document.querySelectorAll('.answer-container');
 const timerSpanElement = document.querySelector('#timer span');
 const timerProgressElement = document.querySelector('#timer progress');
 
-// Text elements for instructions (so we can apply textFit to them)
+// Text elements for instructions
 const instruction1Text = document.querySelector('#instruction-1-text');
 const instruction2Text = document.querySelector('#instruction-2-text');
 
-// Connect to localhost (server and website run on the same device)
 const socket = io(); 
 
 // Global variables for intervals and timeouts
@@ -81,7 +80,6 @@ socket.on('projector-update-question', (data) => {
         element.innerHTML = data.answers[index];
     });
 
-    // 1. Maak het quiz scherm zichtbaar
     hideAllScreens();
     quizScreenElement.classList.remove('hidden');
 
@@ -95,7 +93,7 @@ socket.on('projector-update-question', (data) => {
         alignVert: true
     });
     
-    // Fit all teh answers
+    // Fit all the answers
     textFit(answerTextElements, {
         minFontSize: 4,
         maxFontSize: 200,

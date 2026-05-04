@@ -11,7 +11,6 @@ export function registerSocketHandlers(io) {
 
   let orinNanoRobotId = null;
 
-  let screenBlankingTimeout = null; // Variable to store the timeout ID
   let screenOn = false; // Track the current state of the screen
 
   io.on("connection", (socket) => {
@@ -116,7 +115,6 @@ export function registerSocketHandlers(io) {
       "robot-disconnected",
     ];
 
-    // Helper function to blank the screen
     const blankScreen = () => {
       exec("DISPLAY=:0 xset s activate", (error, stderr) => {
         if (error) {
@@ -131,7 +129,6 @@ export function registerSocketHandlers(io) {
       screenOn = false;
     };
 
-    // Helper function to wake the screen
     const wakeScreen = () => {
       exec("DISPLAY=:0 xset s reset", (error, stderr) => {
         if (error) {
@@ -285,38 +282,6 @@ export function registerSocketHandlers(io) {
         } catch (error) {
             logger.error("Error during disconnect:", error);
         }
-    });
-
-    //
-    // Touchscreen display toggle (dummy implementation)
-    //
-    socket.on("set-display", (data) => {
-      logger.info(`Turning display ${data ? "on" : "off"}`);
-        // if (data) {
-        //     exec(`sh ${path.join(__dirname, 'display_on.sh')}`, (error, stdout, stderr) => {
-        //         if (error) {
-        //             logger.error(`Error turning display on: `, error);
-        //             return;
-        //         }
-        //         if (stderr) {
-        //             logger.error(`Error turning display on: `, stderr);
-        //             return;
-        //         }
-        //         logger.info('Display turned on: ', stdout);
-        //     });
-        // } else {
-        //     exec(`sh ${path.join(__dirname, 'display_off.sh')}`, (error, stdout, stderr) => {
-        //         if (error) {
-        //             logger.error(`Error turning display off: `, error);
-        //             return;
-        //         }
-        //         if (stderr) {
-        //             logger.error(`Error turning display off: `, stderr);
-        //             return;
-        //         }
-        //         logger.info('Display turned off: ', stdout);
-        //     });
-        // }
     });
   });
 
