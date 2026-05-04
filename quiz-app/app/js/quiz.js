@@ -231,20 +231,31 @@ class Quiz {
     static async #sendProjectorCommand(action) {
         let response;
         try {
-            response = await fetch("/projector-control/toggle", {
+            response = await fetch("http://localhost/projector-control/toggle", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ projectorState: action })
             });
         } catch (error) {
             logError("[Quiz Interface] Network error while toggling projector");
-            throw "ERROR_PARAMETERS_STATUS";
+            throw "ERR_CONTROLLER_UNREACHABLE";
         }
+
+        const data = await response.json();
 
         if (!response.ok) {
             logError("[Quiz Interface] Error toggling projector: " + response.status);
-            throw "ERROR_PARAMETERS_STATUS";
+
+            if (response.status === 502) {
+                const errorCode = data.details || "GENERAL_CONNECTION_ERROR";
+                const cleanCode = errorCode.replace("ERROR: ", "").trim();
+                throw cleanCode;
+            } else {
+                throw "ERR_CONTROLLER_UNREACHABLE"; 
+            }
         }
+
+        return data;
     }
 
     static async start() {
@@ -325,6 +336,7 @@ class Quiz {
      * Show the instructions.
      */
     static async #showInstructions() {
+        this.#showingInstructions = true;
         
         changeScreen('quiz-instructions-screen');
 
@@ -334,7 +346,7 @@ class Quiz {
         });
 
         // Activate the lens of the projector
-        //await this.#sendProjectorCommand("wake");
+        await this.#sendProjectorCommand("wake");
 
         // Wait half the time for the instructions to be shown before showing the second instructions screen
         await wait(this.#instructionsScreenTime / 2 * 1000);
@@ -344,6 +356,7 @@ class Quiz {
         });
 
         await wait(this.#instructionsScreenTime / 2 * 1000);
+        this.#showingInstructions = false;
     }
 
     /**

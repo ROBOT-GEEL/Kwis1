@@ -178,5 +178,57 @@
         "NL": "Er is een systeemfout opgetreden tijdens de netwerkcommunicatie. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
         "EN": "A system error occurred during network communication. Please report this to the information desk. We apologize for the inconvenience.",
         "FR": "Une erreur système s'est produite lors de la communication réseau. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
-    }
+    },
+
+    
+    "CONNECTION_TIMEOUT": {
+        "NL": "De projector reageert niet. Er is een probleem met de verbinding naar het toestel. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "The projector is not responding. There is an issue with the connection to the device. Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "Le projecteur ne répond pas. Il y a un problème de connexion avec l'appareil. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+    },
+    "CONNECTION_REFUSED_OFFLINE_OR_BUSY": {
+        "NL": "De verbinding met de projector is geweigerd. Het toestel is mogelijk offline of bezet. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "Connection to the projector was refused. The device may be offline or busy. Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "La connexion au projecteur a été refusée. L'appareil est peut-être hors ligne ou occupé. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+    },
+    "NO_BANNER_RECEIVED": {
+        "NL": "Er is een communicatiefout opgetreden met de projector. Het toestel kon niet correct worden geïdentificeerd. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "A communication error occurred with the projector. The device could not be identified correctly. Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "Une erreur de communication s'est produite avec le projecteur. L'appareil n'a pas pu être identifié correctement. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+    },
+    "PJLINK_ERR3_UNAVAILABLE_TIME": {
+        "NL": "De projector is momenteel niet beschikbaar (mogelijk aan het opwarmen of afkoelen). Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "The projector is currently unavailable (possibly warming up or cooling down). Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "Le projecteur n'est pas disponible pour le moment (peut-être en phase de préchauffage ou de refroidissement). Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+    },
+    "PJLINK_ERR4_PROJECTOR_FAILURE": {
+        "NL": "Er is een kritieke hardwarefout opgetreden in de projector. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "A critical hardware error has occurred in the projector. Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "Une erreur matérielle critique s'est produite dans le projecteur. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+    },
+    "NO_RESPONSE_FROM_PROJECTOR": {
+        "NL": "De projector reageert niet op het verzonden commando. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "The projector is not responding to the sent command. Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "Le projecteur ne répond pas à la commande envoyée. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+    },
+    "RESPONSE_TIMEOUT": {
+        "NL": "De responstijd van de projector is verstreken. Het toestel reageert te traag. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "The projector response time has elapsed. The device is responding too slowly. Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "Le délai de réponse du projecteur a expiré. L'appareil répond trop lentement. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+    },
+    "READ_RESPONSE_FAILED": {
+        "NL": "Het antwoord van de projector kon niet worden uitgelezen door een systeemfout. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "The projector's response could not be read due to a system error. Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "La réponse du projecteur n'a pas pu être lue en raison d'une erreur système. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+    },
+    "GENERAL_CONNECTION_ERROR": {
+        "NL": "Er is een algemene verbindingsfout opgetreden met de projector. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "A general connection error occurred with the projector. Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "Une erreur de connexion générale s'est produite avec le projecteur. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+    },
+    "ERR_CONTROLLER_UNREACHABLE": {
+        "NL": "Er kon geen verbinding worden gemaakt met de controller van de projector. Gelieve dit te melden aan de infobalie. Onze excuses voor het ongemak.",
+        "EN": "Could not establish a connection with the projector controller. Please report this to the information desk. We apologize for the inconvenience.",
+        "FR": "Impossible d'établir une connexion met le contrôleur du projecteur. Veuillez signaler ceci au bureau d'information. Nous nous excusons pour le désagrément."
+}
 }
