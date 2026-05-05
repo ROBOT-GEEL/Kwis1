@@ -65,9 +65,6 @@ function displayQuestions() {
                 <div class="editframe" onclick="enableEditing(this.parentElement)">
                     <img class="editIcon" src="icons/edit.svg"/>
                 </div>
-                <div class="deleteframe" onclick="deleteQuestion(this.parentElement)">
-                    <img class="deleteIcon" src="icons/delete.svg"/>
-                </div>
                 <div class="language">nl</div>
                 <div class="previousLanguage" onclick="previousLanguage(this.parentElement)">
                     <img class="editIcon" src="icons/arrowLeft.svg"/>
@@ -126,9 +123,6 @@ function buttonAddQuestion(questionsFrame) {
     <div class="editframe" onclick="enableEditing(this.parentElement)">
         <img class="editIcon" src="icons/edit.svg"/>
     </div>
-    <div class="deleteframe" onclick="deleteQuestion(this.parentElement)">
-        <img class="deleteIcon" src="icons/delete.svg"/>
-    </div>
     <div class="language">nl</div>
     <div class="previousLanguage" onclick="previousLanguage(this.parentElement)">
         <img class="editIcon" src="icons/arrowLeft.svg"/>
@@ -140,46 +134,6 @@ function buttonAddQuestion(questionsFrame) {
     questionsFrame.appendChild(questionFrame);
     // Automatically enable editing for the new question
     enableEditing(questionFrame);
-}
-
-/**
- * Handles the deletion of a question.
- * @param {HTMLElement} questionFrame - The .questionFrame element to delete.
- */
-function deleteQuestion(questionFrame) {
-    const questionId = questionFrame.getAttribute("id");
-    
-    // Safety check to prevent accidental deletions
-    if (!confirm("Weet je zeker dat je deze vraag wilt verwijderen?")) {
-        return;
-    }
-
-    // New questions that haven't been saved yet can just be removed from the DOM
-    if (questionId === "new" || !questionId) {
-        questionFrame.remove();
-        return;
-    }
-
-    // Call the backend API to delete the question
-    fetch(`/cms/deleteQuestion`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ questionId: questionId })
-    })
-    .then(response => {
-        if (response.ok) {
-            questionFrame.remove();
-            console.log(`Successfully deleted question: ${questionId}`);
-        } else {
-            throw new Error('Failed to delete question');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert("Fout bij het verwijderen van de vraag.");
-    });
 }
 
 /**

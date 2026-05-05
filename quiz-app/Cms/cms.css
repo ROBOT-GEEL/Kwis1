@@ -204,7 +204,7 @@ body {
     flex-wrap: wrap;
     box-sizing: border-box;
     align-items: flex-start;
-    min-height: 3.2rem; /* Ruimte voor de vaste hoogte knoppen */
+    min-height: 3.2rem; /* Space for fixed-height buttons */
 }
 
 .questionLanguageBundle {
@@ -237,8 +237,8 @@ body {
     line-height: 1.2125;
     position: relative;
     top: 0;
-    /* Meer ruimte voor de bredere knoppen op desktop */
-    width: calc(100% - 17.5rem); 
+    /* Adjusted width since delete button is removed */
+    width: calc(100% - 13.9rem); 
     box-sizing: border-box; 
     padding: 0.8rem 0 0.8rem 0.6rem;
     min-height: 3.2rem;
@@ -251,7 +251,8 @@ body {
 .answers {
     left: 1.3rem;
     position: relative;
-    width: calc(100% - 18rem); 
+    /* Adjusted width since delete button is removed */
+    width: calc(100% - 14.4rem); 
     box-sizing: content-box;
     z-index: 1;
     padding-bottom: 0.8rem;
@@ -277,12 +278,12 @@ body {
 .answerA:focus, .answerB:focus, .answerC:focus { outline: none; }
 
 /* ==========================================================================
-   Right-side icons and actions (Edit, Delete, Languages)
+   Right-side icons and actions (Edit, Languages)
    ========================================================================== */
-/* Alle knoppen op desktop hebben een vaste hoogte en hangen aan de bovenkant */
-.deleteframe, .editframe, .language, .previousLanguage, .nextLanguage {
+/* All desktop buttons have a fixed height and anchor to the top */
+.editframe, .language, .previousLanguage, .nextLanguage {
     position: absolute;
-    top: 0.3rem; /* Vaste anker aan de bovenkant i.p.v calc(100%) */
+    top: 0.3rem; /* Fixed anchor at the top instead of calc(100%) */
     height: 2.6rem;
     display: flex;
     align-items: center;
@@ -293,35 +294,27 @@ body {
     background-color: #ffffff;
 }
 
-.deleteIcon, .editIcon {
-    height: 1.3rem; /* Iets grotere iconen */
+.editIcon {
+    height: 1.3rem; /* Slightly larger icons */
     width: 1.3rem;
 }
 
-/* Verbrede knoppen en logische volgorde: < nl > Edit Delete */
-.deleteframe {
-    border: solid 0.1rem #ff4d4d;
-    right: 0.4rem;
-    width: 3.2rem;
-    transition: border 0.3s ease, background-color 0.2s;
-}
-.deleteframe:hover { border: solid 0.2rem #ff4d4d; background-color: #fff0f0; }
-
+/* Widened buttons and logical order: < nl > Edit */
 .editframe {
     border: solid 0.1rem #d9d9d9;
-    right: 4rem; 
+    right: 0.4rem; 
     width: 3.2rem;
     transition: border 0.3s ease, background-color 0.2s;
 }
 .editframe:hover { border: solid 0.2rem #d9d9d9; background-color: #f9f9f9; }
 
 .nextLanguage {
-    right: 7.6rem; 
+    right: 4.0rem; 
     width: 2.6rem;
     transition: transform 0.2s ease, background-color 0.2s;
 }
 .language {
-    right: 10.6rem; 
+    right: 7.0rem; 
     width: 2.6rem;
     font-family: 'Open Sans', sans-serif;
     font-size: 1.1rem;
@@ -329,7 +322,7 @@ body {
     cursor: default;
 }
 .previousLanguage {
-    right: 13.6rem; 
+    right: 10.0rem; 
     width: 2.6rem;
     transition: transform 0.2s ease, background-color 0.2s;
 }
@@ -348,7 +341,7 @@ body {
     width: 3.2rem;
     height: 1.4rem;
     right: 0.8rem;
-    top: 0.9rem; /* Uitgelijnd met de vaste hoogte knoppen */
+    top: 0.9rem; /* Aligned with fixed-height buttons */
     z-index: 2;
 }
 
@@ -421,7 +414,7 @@ input:checked + .slider:before { transform: translateX(26px); }
         height: 3.5rem;
     }
 
-    /* Voldoende padding onderaan toevoegen zodat tekst nooit knoppen raakt */
+    /* Add enough bottom padding so text never touches buttons */
     .questionFrame {
         padding-bottom: 3.6rem; 
     }
@@ -431,16 +424,15 @@ input:checked + .slider:before { transform: translateX(26px); }
         padding-right: 0.5rem; 
     }
 
-    /* Verplaats knoppen naar de vaste onderste rand van de kader */
-    .deleteframe, .editframe, .language, .previousLanguage, .nextLanguage {
+    /* Move buttons to the fixed bottom edge of the frame */
+    .editframe, .language, .previousLanguage, .nextLanguage {
         top: auto;
-        bottom: 0.5rem; /* Anker op de bodem */
+        bottom: 0.5rem; /* Anchor at the bottom */
     }
     
-    .deleteframe { right: 0.5rem; }
-    .editframe { right: 4.1rem; }
+    .editframe { right: 0.5rem; }
     
-    /* Vaste links-uitlijning voor de taalknoppen op mobiel */
+    /* Fixed left alignment for language buttons on mobile */
     .nextLanguage { left: 6.5rem; right: auto; }
     .language { left: 3.5rem; right: auto; }
     .previousLanguage { left: 0.5rem; right: auto; }
