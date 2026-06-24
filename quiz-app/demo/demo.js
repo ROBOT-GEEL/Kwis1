@@ -39,3 +39,7 @@ function errorCharge() {
 function disconnect() {
     socket.emit("robot-disconnected");
 }
+
+function docking() {
+    socket.emit("robot-docking");
+}

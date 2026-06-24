@@ -109,12 +109,14 @@ export function registerSocketHandlers(io) {
       "drive-to-quiz-location",
       "robot-arrived-at-quiz-location",
       "robot-go-charge",
+      "robot-docking",
       "robot-charging",
       "robot-error-drive",
       "robot-error-charge",
       "robot-disconnected",
     ];
 
+/* Quinten zijn code:
     const blankScreen = () => {
       exec("DISPLAY=:0 xset s activate", (error, stderr) => {
         if (error) {
@@ -142,6 +144,35 @@ export function registerSocketHandlers(io) {
       });
       screenOn = true;
     };
+*/
+
+//Oplossing Matthijs voor het nieuwe scherm
+  const blankScreen = () => {
+    const seconds = 1*60;
+    exec(`DISPLAY=:0 xset +dpms`, () => {
+      exec(`DISPLAY=:0 xset dpms ${seconds} ${seconds} ${seconds}`, (error, stderr) => {
+        if (error) {
+          logger.error(`Error setting DPMS timeout: ${error.message}`);
+          return;
+        }
+        logger.info(`Screen power saviour: ${seconds} seconds.`);
+      });
+    });
+  };
+
+  const wakeScreen = () => {
+    exec('xset dpms force on;');
+    const seconds = 12*60;
+    exec(`DISPLAY=:0 xset +dpms`, () => {
+      exec(`DISPLAY=:0 xset dpms ${seconds} ${seconds} ${seconds}`, (error, stderr) => {
+        if (error) {
+          logger.error(`Error setting DPMS timeout: ${error.message}`);
+          return;
+        }
+        logger.info(`Screen power saviour: ${seconds} seconds.`);
+      });
+    });
+  };
 
     robotEvents.forEach((event) => {
       socket.on(event, (data) => {

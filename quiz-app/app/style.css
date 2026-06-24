@@ -99,6 +99,7 @@ h1, h1 > *, h1 * {
 #quiz-finished-screen-container,
 #robot-go-charge-container,
 #robot-charging-container,
+#robot-docking-container,
 #error-container {
     display: flex;
     flex-direction: column;
@@ -146,6 +147,7 @@ h1, h1 > *, h1 * {
 
 #robot-go-charge-screen,
 #robot-charging-screen,
+#robot-docking-screen,
 #error-screen {
     font-size: 2.5em;
 }
@@ -161,6 +163,7 @@ h1, h1 > *, h1 * {
     max-width: 60vw;
     font-weight: 100;
 }
+
 
 /* ==========================================================================
    4. START SCREEN & BUTTON

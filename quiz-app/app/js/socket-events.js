@@ -6,6 +6,17 @@
  * - quiz.js (Quiz)
  */
 
+/**
+ * Disable the admin panel button when the robot is docking, enable when a different event is sent
+ */
+socket.onAny((eventName, ...args) => {
+    const adminButton = document.querySelector('#admin-panel-button');
+
+    if (adminButton) {
+        adminButton.disabled = (eventName === 'robot-docking');
+    }
+});
+
 socket.on('robot-startup', () => {
     changeScreen('robot-startup-screen');
 });
@@ -75,6 +86,11 @@ socket.on('robot-arrived-at-quiz-location', async () => {
 
 socket.on('robot-go-charge', () => {
     changeScreen('robot-go-charge-screen');
+});
+
+socket.on('robot-docking', () => {
+    console.log('Docking ontvangen');
+    changeScreen('robot-docking-screen');
 });
 
 socket.on('robot-charging', () => {

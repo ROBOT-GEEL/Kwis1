@@ -3,7 +3,7 @@
  * Depends on: app.js (socket), utils.js (changeScreen), error.js (error)
  */
 class Debug {
-    static ENABLED = false;
+    static ENABLED = true;
 
     static {
         // Debug overlay functionality
@@ -20,6 +20,7 @@ class Debug {
             document.querySelector('#debug-quiz-btn').addEventListener('click', () => changeScreen('quiz-screen'));
             document.querySelector('#debug-quiz-results-btn').addEventListener('click', () => changeScreen('quiz-finished-screen'));
             document.querySelector('#debug-robot-startup-screen').addEventListener('click', () => changeScreen('robot-startup-screen'));
+            document.querySelector('#debug-robot-docking-screen').addEventListener('click', () => changeScreen('robot-docking-screen'));
             document.querySelector('#debug-robot-explore-screen').addEventListener('click', () => changeScreen('robot-explore-screen'));
             document.querySelector('#debug-robot-visitor-screen').addEventListener('click', () => changeScreen('robot-go-to-visitors-screen'));
             document.querySelector('#debug-count').addEventListener('click', () => {
