@@ -43,3 +43,7 @@ function disconnect() {
 function docking() {
     socket.emit("robot-docking");
 }
+
+function projectorEndScreen() {
+    socket.emit("projector-show-end-screen");
+}

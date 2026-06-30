@@ -65,6 +65,14 @@ export function registerSocketHandlers(io) {
       socket.broadcast.emit("projector-show-instructions-2", data);
     });
 
+    socket.on("projector-show-start-screen", (data) => {
+      socket.broadcast.emit("projector-show-start-screen", data);
+    });
+
+    socket.on("projector-show-end-screen", (data) => {
+      socket.broadcast.emit("projector-show-end-screen", data);
+    });
+
 
     //
     // Pi / people counting events

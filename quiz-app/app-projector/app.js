@@ -1,7 +1,9 @@
-// Store references to the 4 main screens
+// Store references to the main screens
 const inactiveScreenElement = document.querySelector('#inactive-screen');
 const instruction1ScreenElement = document.querySelector('#instruction-1-screen');
 const instruction2ScreenElement = document.querySelector('#instruction-2-screen');
+const endScreenElement = document.querySelector('#end-screen');
+const startScreenElement = document.querySelector('#start-screen');
 const quizScreenElement = document.querySelector('#projector-quiz');
 
 // Store references to dynamic quiz elements
@@ -11,9 +13,11 @@ const answerContainers = document.querySelectorAll('.answer-container');
 const timerSpanElement = document.querySelector('#timer span');
 const timerProgressElement = document.querySelector('#timer progress');
 
-// Text elements for instructions
+// Text elements for instructions and endscreen
 const instruction1Text = document.querySelector('#instruction-1-text');
 const instruction2Text = document.querySelector('#instruction-2-text');
+const endText = document.querySelector('#end-text');
+const startText = document.querySelector('#start-text');
 
 const socket = io(); 
 
@@ -29,6 +33,8 @@ const hideAllScreens = () => {
     instruction1ScreenElement.classList.add('hidden');
     instruction2ScreenElement.classList.add('hidden');
     quizScreenElement.classList.add('hidden');
+    endScreenElement.classList.add('hidden');
+    startScreenElement.classList.add('hidden');
 };
 
 /**
@@ -67,6 +73,24 @@ socket.on('projector-show-instructions-2', (data) => {
 
     hideAllScreens();
     instruction2ScreenElement.classList.remove('hidden');
+});
+
+socket.on('projector-show-start-screen', (data) => {
+    const instructionText = data.instruction;
+
+    startText.innerHTML = instructionText;
+
+    hideAllScreens();
+    startScreenElement.classList.remove('hidden');
+});
+
+socket.on('projector-show-end-screen', (data) => {
+    const instructionText = data.instruction;
+
+    endText.innerHTML = instructionText;
+
+    hideAllScreens();
+    endScreenElement.classList.remove('hidden');
 });
 
 socket.on('projector-update-question', (data) => {

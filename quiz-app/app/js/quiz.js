@@ -77,6 +77,7 @@ class Quiz {
      * - Update the quiz parameters from the server
      * - Get the questions from the server
      * - Get the instructions from the server
+     * - Shows start screen on projector
      */
     static async initializeNewQuiz() {
         this.#isInitialized = false;
@@ -86,6 +87,8 @@ class Quiz {
         this.#instructions = await this.#getInstructions();
         await this.updateTimeToStartQuiz();
         this.#isInitialized = true;
+
+        this.#prepareProjectorForQuiz();
     }
 
     /**
@@ -275,6 +278,11 @@ class Quiz {
         return data;
     }
 
+    static async #prepareProjectorForQuiz() {
+        await this.#sendProjectorCommand("wake");
+        this.#showProjectorStartScreen();
+    }
+
     static async start() {
         try {
             // If the quiz is not initialized, wait for it to be initialized
@@ -330,9 +338,10 @@ class Quiz {
             // Finish the quiz if it was not cancelled (Normal completion)
             if (!this.#cancelled) {
                 changeScreen('quiz-finished-screen');
+                this.#showProjectorEndScreen();
+                await wait(this.#finishedScreenTime * 1000);
                 await this.#sendProjectorCommand("sleep");
                 socket.emit('projector-reset');
-                await wait(this.#finishedScreenTime * 1000);
                 socket.emit('quiz-finished');
             }
         } catch (errorCode) { 
@@ -349,9 +358,6 @@ class Quiz {
             instruction: this.#instructions['instruction_1'][LanguageData.selectedLanguage]
         });
 
-        // Activate the lens of the projector
-        await this.#sendProjectorCommand("wake");
-
         // Wait half the time for the instructions to be shown before showing the second instructions screen
         await wait(this.#instructionsScreenTime / 2 * 1000);
 
@@ -360,6 +366,18 @@ class Quiz {
         });
 
         await wait(this.#instructionsScreenTime / 2 * 1000);
+    }
+
+    static async #showProjectorStartScreen(){
+        socket.emit('projector-show-start-screen', {
+            instruction: this.#instructions['startScreen'][LanguageData.selectedLanguage]
+        });
+    }
+
+    static async #showProjectorEndScreen(){
+        socket.emit('projector-show-end-screen', {
+            instruction: this.#instructions['endScreen'][LanguageData.selectedLanguage]
+        });
     }
 
     /**

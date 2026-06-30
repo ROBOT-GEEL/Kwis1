@@ -51,14 +51,14 @@ body {
     display: none !important;
 }
 
-h1 {
+h1, h2, h3{
     font-family: 'Co Headline', sans-serif;
     color: var(--green-bg-color-dark);
     text-align: center;
 }
 
 /* --- INACTIVE & INSTRUCTION SCREENS --- */
-#inactive-screen, #instruction-1-screen, #instruction-2-screen {
+#inactive-screen, #instruction-1-screen, #instruction-2-screen, #start-screen, #end-screen {
     justify-content: center;
     align-items: center;
     padding: 5vw;
@@ -74,6 +74,24 @@ h1 {
 
 #instruction-1-screen h1, #instruction-2-screen h1 {
     font-size: 12vh;
+    line-height: 1.2;
+}
+
+#end-screen h1, #start-screen h1 {
+    font-size: 16vh;
+    line-height: 1.2;    
+}
+
+#end-screen h2, #start-screen h2 {
+    margin-top: 2vh;
+    font-size: 8vh;
+    line-height: 1.2;
+}
+
+#end-screen h3 {
+    margin-top: 15vh;
+    margin-bottom: 2vh;
+    font-size: 6vh;
     line-height: 1.2;
 }
 
@@ -172,6 +190,23 @@ h1 {
 
 .wrong-answer {
     opacity: 0;
+}
+
+/* --- KULEUVEN CONTAINER --- */
+.KULEUVEN-container {
+  position: fixed; 
+  bottom: 2vh;
+  right: 2vh;
+  
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2vh;
+}
+
+.KULeuven-logo {
+  max-height: 15vh; 
+  height: auto;
 }
 
 /* --- TIMER --- */

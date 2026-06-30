@@ -8,5 +8,15 @@
         "NL": "Antwoord door in zone A, B of C te staan.",
         "EN": "Answer by standing in zone A, B, or C.",
         "FR": "Répondez en vous tenant dans la zone A, B ou C."
+    },
+    "endScreen": {
+        "NL": "<h1>Bedankt om mee te spelen! </h1><h2>Er valt nog veel meer te ondekken</h2>",
+        "EN": "<h1>Thank you for playing with us! </h1><h2>There is a lot more to explore in our expo!</h2>",
+        "FR": "<h1>Merci d'avoir joué avec nous! </h1><h2>Il y'a plus a decouvrir!</h2>"
+    },
+    "startScreen": {
+        "NL": "<h1>De quiz gaat zodadelijk beginnen! </h1><h2>Neem plaats in de antwoordvakken</h2>",
+        "EN": "<h1>The quiz is starting soon! </h1><h2>Take place in the anwserzones</h2>",
+        "FR": "<h1>Le quiz va commencer tout à l'heure! </h1><h2>Prenez place dans les zones de réponse!</h2>"
     }
 }
