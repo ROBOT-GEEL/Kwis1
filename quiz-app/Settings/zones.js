@@ -65,6 +65,13 @@ async function showImage() {
         const ZONE_CONFIG_PORT = await getZoneConfigPort();
 
         if (JETSON_IP) {
+
+            //Toevoeging Matthijs
+            img.onload = () => {
+                resizeCanvas();
+                loadExistingZones();
+            };
+
             img.src = `http://${JETSON_IP}:${ZONE_CONFIG_PORT}${CAMERA_ENDPOINT}`; // set the image source in the html
         } else {
             console.error("Kon IP-adres niet ophalen. Afbeelding wordt niet geladen.");
@@ -223,4 +230,47 @@ async function saveZones() {
         console.error('Error:', error);
         alert('Er ging iets mis bij het opslaan.');
     });
+}
+
+// Haalt de bestaande zones op van de server en tekent ze op het canvas
+// Toevoeging Matthijs
+async function loadExistingZones() {
+    try {
+        // Pas deze URL aan naar het juiste endpoint op jouw server
+        const response = await fetch('/cms/getZones'); 
+        
+        if (!response.ok) {
+            console.log("Geen bestaande zones gevonden of nog niet ingesteld.");
+            return;
+        }
+
+        const data = await response.json();
+        const savedCoordinates = data.coordinates; // Verwacht { A: [...], B: [...], C: [...] }
+
+        if (!savedCoordinates) return;
+
+        // Bereken de schaal (omgekeerd van wat we doen bij het opslaan)
+        const scaleX = img.clientWidth / img.naturalWidth;
+        const scaleY = img.clientHeight / img.naturalHeight;
+
+        // Koppel de letters uit de database terug aan je interne zone-nummers
+        const zoneKeys = { "A": 1, "B": 2, "C": 3 };
+
+        for (let key in savedCoordinates) {
+            const zoneNumber = zoneKeys[key];
+            if (zoneNumber && savedCoordinates[key].length > 0) {
+                // Schaal elk punt terug naar de schermgrootte
+                zones[zoneNumber] = savedCoordinates[key].map(p => ({
+                    x: p.x * scaleX,
+                    y: p.y * scaleY
+                }));
+            }
+        }
+
+        // Teken de zojuist ingeladen zones
+        drawAllZones();
+
+    } catch (error) {
+        console.error("Fout bij het ophalen van de zones:", error);
+    }
 }

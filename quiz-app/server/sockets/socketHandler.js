@@ -215,21 +215,9 @@ export function registerSocketHandlers(io) {
     //
     // Manual drive control events
     //
-    const driveEvents = [
-      "drive-forward",
-      "drive-backward",
-      "drive-left",
-      "drive-right",
-      "drive-stop",
-      "drive-cw",
-      "drive-ccw",
-    ];
 
-    driveEvents.forEach((event) => {
-      socket.on(event, () => {
-        logger.info(`manual control ${event}`);
-        socket.broadcast.emit(event);
-      });
+    socket.on('drive', (data) => {
+      socket.broadcast.emit('drive', data);
     });
 
     //

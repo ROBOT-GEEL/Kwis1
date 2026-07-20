@@ -44,7 +44,99 @@ window.addEventListener('load', function () {
     
     // Fetch data using the filter parameters
     fetchResults({ "bezocht": bezocht, "enable": enable });
+
+    // Haal data op voor de globale statistieken (Matthijs)
+    fetchGlobalStats();
 });
+
+// ============================================================================
+// Global Dashboard (Donut Chart)
+// ============================================================================
+
+/*
+ * Fetches the global overview data (Visited vs Not Visited)
+ */
+async function fetchGlobalStats() {
+    try {
+        // 1. Doe het verzoek naar jouw backend endpoint
+        const response = await fetch("/grafieken/get-global-stats", {
+            method: "GET",
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        });
+
+        // 2. Controleer of de serverstatus in orde is (status 200-299)
+        if (!response.ok) {
+            throw new Error(`Fout bij het ophalen van globale statistieken: ${response.status}`);
+        }
+
+        // 3. Converteer de ruwe response naar een bruikbaar JavaScript-object
+        const data = await response.json();
+        console.log("Globale statistieken succesvol opgehaald: ", data);
+        
+        // 4. Stuur de dynamische data door naar de grafiekfunctie
+        // Dit gaat ervan uit dat je backend een object stuurt zoals: { bezocht: 120, nietBezocht: 45 }
+        renderGlobalDonutChart(data.bezocht, data.nietBezocht);
+        
+    } catch (error) {
+        console.error("Mislukt om globale statistieken op te halen:", error);
+        
+        // Optioneel: toon een foutmelding op de plek van de donutchart als het laden mislukt
+        const canvas = document.getElementById('globalDonutChart');
+        if (canvas) {
+            canvas.style.display = 'none';
+            const errorMsg = document.createElement('p');
+            errorMsg.style.color = 'var(--dangerColor, #dc3545)';
+            errorMsg.textContent = 'Kon de globale statistieken niet laden.';
+            canvas.parentNode.appendChild(errorMsg);
+        }
+    }
+}
+
+/*
+ * Renders the Donut Chart using Chart.js in the global dashboard canvas
+ */
+function renderGlobalDonutChart(bezochtCount, nietBezochtCount) {
+    const canvas = document.getElementById('globalDonutChart');
+    if (!canvas) return; // Stop als het canvas niet in de HTML staat
+
+    const ctx = canvas.getContext('2d');
+
+    // Mocht er al een chart bestaan (bijv. bij herladen), vernietig deze dan eerst
+    if (window.globalDonutInstance) {
+        window.globalDonutInstance.destroy();
+    }
+
+    // Chart aanmaken
+    window.globalDonutInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Expo Bezocht', 'Niet Bezocht'],
+            datasets: [{
+                data: [bezochtCount, nietBezochtCount],
+                backgroundColor: [
+                    "#417b44", // Donkergroen (of gebruik je bestaande barColors)
+                    "#5A9BD5"  // Lichtblauw
+                ],
+                borderWidth: 0,
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 20
+                    }
+                }
+            }
+        }
+    });
+}
 
 /*
  * Fetches the overall quiz results from the backend for the pie charts.

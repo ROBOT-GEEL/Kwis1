@@ -3,59 +3,57 @@
  */
 
 let driveInterval = null;
-let currentEvent = null;
+let currentDirection = null;
+let speed = 1;
 
-/**
- * Starts the driving interval and emits the initial socket event.
- * @param {string} direction - The direction name (e.g., 'forward', 'left').
- * @param {Event} event - The original UI event (optional).
- */
+
+function toggleSpeed() {
+    speed = speed + 1;
+    if (speed >= 4) {
+        speed = 1;
+    }
+
+    const icon = document.getElementById('speed-icon');
+    if (speed === 1) {
+        icon.src = "assets/icons/slow.svg";
+    } else if (speed === 2) {
+        icon.src = "assets/icons/medium.svg";
+    } else if (speed === 3) {
+        icon.src = "assets/icons/fast.svg";
+    }
+}
+
 function startDriving(direction, event) {
-    // Prevent double triggering on touch devices (prevents ghost clicks)
     if (event && event.type === 'touchstart') {
         event.preventDefault();
     }
 
-    const eventName = `drive-${direction}`;
-    
-    // If we are already sending this specific event, do nothing (prevents log spam)
-    if (currentEvent === eventName) return;
+    // Als we al deze kant op rijden, stop dan
+    if (currentDirection === direction) return;
 
-    // Log only the start of the action
-    console.log("START:", eventName);
-
-    // Clear any existing interval before starting a new one
     if (driveInterval !== null) {
         clearInterval(driveInterval);
     }
 
-    currentEvent = eventName;
+    currentDirection = direction;
 
-    // Send the first event immediately
-    socket.emit(currentEvent);
+    // 2. Stuur het event 'drive' zoals je Python-code verwacht
+    socket.emit('drive', { direction: currentDirection, speed: speed });
 
-    // Background interval: sends the event every 100ms without logging
     driveInterval = setInterval(() => {
-        if (currentEvent) {
-            socket.emit(currentEvent);
-        }
+        socket.emit('drive', { direction: currentDirection, speed: speed });
     }, 100);
 }
 
-/**
- * Stops the driving interval and sends the stop signal to the server.
- */
 function stopDriving() {
-    // Only trigger stop logic if we were actually moving
-    if (driveInterval !== null || currentEvent !== null) {
-        console.log("STOP");
-
+    if (driveInterval !== null || currentDirection !== null) {
         if (driveInterval !== null) {
             clearInterval(driveInterval);
             driveInterval = null;
         }
+        currentDirection = null;
 
-        currentEvent = null;
-        socket.emit('drive-stop');
+        // 3. Stuur de stop-opdracht via het 'drive' kanaal
+        socket.emit('drive', { direction: 'stop', speed: 0 });
     }
 }

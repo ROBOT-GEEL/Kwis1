@@ -25,6 +25,12 @@
             <section class="selection-card">
                 
                 <div class="dpad-grid">
+
+                    <button class="dpad-btn btn-middle"
+                            onclick="toggleSpeed()">
+                        <img id="speed-icon" src="assets/icons/slow.svg" alt="Speed">
+                    </button>
+
                     <button class="dpad-btn btn-up"
                             ontouchstart="startDriving('backward', event)"
                             ontouchend="stopDriving()"

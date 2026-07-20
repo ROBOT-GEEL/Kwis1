@@ -279,8 +279,8 @@ class Quiz {
     }
 
     static async #prepareProjectorForQuiz() {
-        await this.#sendProjectorCommand("wake");
         this.#showProjectorStartScreen();
+        await this.#sendProjectorCommand("wake");
     }
 
     static async start() {

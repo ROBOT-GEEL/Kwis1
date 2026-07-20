@@ -1,6 +1,6 @@
 import express from "express";
 import { delQuestion, editQuestion, getQuestions, saveEnabledCheckBoxes, saveVisitedCheckBoxes,
-    saveSettings, getSettings, saveZones } from "../controllers/cmsController.js";
+    saveSettings, getSettings, saveZones, getZones } from "../controllers/cmsController.js";
 const router = express.Router();
 
 router.post("/delQuestion", delQuestion);
@@ -11,5 +11,6 @@ router.post("/saveVisitedCheckBoxes", saveVisitedCheckBoxes);
 router.post("/saveSettings", saveSettings);
 router.get("/getSettings", getSettings);
 router.post("/saveZones", saveZones);
+router.get('/getZones', getZones);
 
 export default router;

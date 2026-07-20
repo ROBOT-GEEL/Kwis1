@@ -30,6 +30,35 @@ export const saveZones = async (req, res, next) => {
     }
 };
 
+//Haal de zones op om ze te laten zien bij het openen van het scherm
+//Toevoeging Matthijs
+export const getZones = async (req, res, next) => {
+    const RECEIVER_IP = process.env.PROJECTOR_RECEIVER_IP;
+    const RECEIVER_PORT = process.env.ZONE_CONFIG_PORT;
+
+    try {
+        // We vragen de huidige zones op bij de Jetson
+        const response = await fetch(`http://${RECEIVER_IP}:${RECEIVER_PORT}/get_zones`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Jetson error: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        
+        res.status(200).json({ coordinates: data });
+
+    } catch (error) {
+        console.error('Fout bij ophalen zones:', error);
+        res.status(500).json({ error: 'Kon de opgeslagen zones niet ophalen van de Jetson' });
+    }
+};
+
 export const delQuestion = async (req, res, next) => {
   try {
     const collection = global.db.collection("questions");
