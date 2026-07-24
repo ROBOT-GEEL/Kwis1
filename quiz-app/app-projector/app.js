@@ -5,6 +5,8 @@ const instruction2ScreenElement = document.querySelector('#instruction-2-screen'
 const endScreenElement = document.querySelector('#end-screen');
 const startScreenElement = document.querySelector('#start-screen');
 const quizScreenElement = document.querySelector('#projector-quiz');
+const statsScreenElement = document.querySelector('#stats-screen');
+const countingScreenElement = document.querySelector('#counting-screen');
 
 // Store references to dynamic quiz elements
 const questionElement = document.querySelector('#question');
@@ -18,6 +20,11 @@ const instruction1Text = document.querySelector('#instruction-1-text');
 const instruction2Text = document.querySelector('#instruction-2-text');
 const endText = document.querySelector('#end-text');
 const startText = document.querySelector('#start-text');
+
+// Text elements for stats&counting screen
+const statsText = document.querySelector('#stats-text');
+const statsGetal = document.querySelector('#stats-getal');
+const countingText = document.querySelector('#counting-text');
 
 const socket = io(); 
 
@@ -35,6 +42,8 @@ const hideAllScreens = () => {
     quizScreenElement.classList.add('hidden');
     endScreenElement.classList.add('hidden');
     startScreenElement.classList.add('hidden');
+    statsScreenElement.classList.add('hidden');
+    countingScreenElement.classList.add('hidden');
 };
 
 /**
@@ -184,4 +193,38 @@ socket.on('projector-reset', () => {
 
     timerSpanElement.textContent = '';
     timerProgressElement.value = 0;
+});
+
+socket.on('projector-show-counting-screen', (data) => {
+    const instructionText = data.instruction;
+
+    countingText.innerHTML = instructionText;
+
+    hideAllScreens();
+    countingScreenElement.classList.remove('hidden');
+});
+
+socket.on('projector-show-stats-screen', (data) => {
+    const stats = data.stats;
+    console.log(stats);
+    
+    let procent = 0; 
+    if (stats.total > 0) {
+        procent = Math.round((stats.totalCorrect / stats.total) * 100);
+    }
+
+    statsGetal.innerHTML = `${procent}%`; // Voeg meteen een procentteken toe
+
+    if (procent >= 90){
+        statsText.innerHTML = data.instruction_Superb;    
+    } else if (procent >= 50){
+        statsText.innerHTML = data.instruction_Good;    
+    } else if (procent >= 25){
+        statsText.innerHTML = data.instruction_Moderate;    
+    } else if (procent >= 0){
+        statsText.innerHTML = data.instruction_Bad;    
+    }  
+
+    hideAllScreens();
+    statsScreenElement.classList.remove('hidden');
 });

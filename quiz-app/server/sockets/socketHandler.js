@@ -73,6 +73,14 @@ export function registerSocketHandlers(io) {
       socket.broadcast.emit("projector-show-end-screen", data);
     });
 
+    socket.on("projector-show-stats-screen", (data) => {
+      socket.broadcast.emit("projector-show-stats-screen", data);
+    });
+
+    socket.on("projector-show-counting-screen", (data) => {
+      socket.broadcast.emit("projector-show-counting-screen", data);
+    });
+
 
     //
     // Pi / people counting events
@@ -95,6 +103,7 @@ export function registerSocketHandlers(io) {
               quizId: msg.quizId,
               questionId: msg.questionId,
               results: msg.results,
+              hasVisited: msg.hasVisited,
               timestamp: new Date()
           };
           await collection.insertOne(dataToSave);

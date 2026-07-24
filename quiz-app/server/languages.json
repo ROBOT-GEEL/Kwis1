@@ -62,15 +62,41 @@
         "EN": "Thanks for playing! There's more to experience in Tabloo. Have fun!",
         "FR": "Merci d'avoir joué! Il y a plus à découvrir à Tabloo. Amusez-vous bien!"
     },
-    "QUIZ_INSTRUCTIONS": {
-        "NL": "Volg de instructies op het balkon.",
-        "EN": "Follow the instructions on the balcony.",
-        "FR": "Suivez les instructions sur le balcon."
+    "QUIZ_INSTRUCTIONS_HEADER": {
+        "NL": "Kijk naar de instructies op het balkon",
+        "EN": "Look at the instructions on the balcony",
+        "FR": "Regarder aux instructions sur le balcon"
     },
+    "QUIZ_INSTRUCTIONS_DESCRIPTION": {
+        "NL": "Antwoord door in de antwoordzones te gaan staan",
+        "EN": "Answer by standing in the answer zones.",
+        "FR": "Répondez en vous plaçant dans les zones de réponse."
+    },
+    "NO_ANSWER_VIA_SCREEN_MESSAGE": {
+        "NL": "Je kunt niet antwoorden via dit scherm. <br> Ga in de antwoordzones achter je staan.",
+        "EN": "You cannot answer via this screen. <br> Go stand in the answer zones behind you.",
+        "FR": "Vous ne pouvez pas répondre via cet écran. Allez vous placer dans les zones de réponse derrière vous."
+    },
+    "EASY_QUESTIONS_MODAL_HEADER": {
+        "NL": "Kies jouw <span class=\"highlight-modal\">Niveau</span>",
+        "EN": "Choose your <span class=\"highlight-modal\">Level</span>",
+        "FR": "Choisissez votre <span class=\"highlight-modal\">Niveau</span>"
+    },
+    "EASY_QUESTIONS_MODAL_YES": {
+        "NL": "Makkelijk",
+        "EN": "Easy",
+        "FR": "Facile"
+    },
+    "EASY_QUESTIONS_MODAL_NO": {
+        "NL": "Moeilijk",
+        "EN": "Difficult",
+        "FR": "Difficile"
+    },
+
     "VISITED_EXPOO_MODAL_HEADER": {
-        "NL": "Heb je de <span class=\"highlight-modal\">Expoo</span> al bezocht?",
-        "EN": "Have you visited the <span class=\"highlight-modal\">Expoo</span> yet?",
-        "FR": "Avez-vous déjà visité l'<span class=\"highlight-modal\">Expoo</span>?"
+        "NL": "Heb je onze <span class=\"highlight-modal\">EXPOO</span> al bezocht?",
+        "EN": "Have you visited our <span class=\"highlight-modal\">EXPOO</span> yet?",
+        "FR": "Avez-vous déjà visité notre <span class=\"highlight-modal\">EXPOO</span> ?"
     },
     "VISITED_EXPOO_MODAL_YES": {
         "NL": "Ja",

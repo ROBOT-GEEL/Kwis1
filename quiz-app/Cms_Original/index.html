@@ -10,17 +10,24 @@
 <body>
 
     <div class="page-container">
+        
+        <nav class="left-nav">
+            <button id="questionsButtonFrame" class="nav-button active" onclick="displayQuestions()">Vragen</button>
+            <button id="visitedFrame" class="nav-button" onclick="buttonVisited()">Bezocht</button>
+            <button id="enabledFrame" class="nav-button" onclick="buttonEnable()">Actief</button>
+            <button class="nav-button back-admin" onclick="window.location.href='../admin-panel'">Terug naar admin panel</button>
+        </nav>
 
         <main class="main-content">
             
             <div class="header-section">
                 <h1 id="title" class="vragen">Vragen</h1>
                 <p id="pageExplanation" class="explanation-text"></p>
-                             
+                
                 <div class="action-buttons" id="actionButtonsContainer">
+                    <button id="btnSave" class="btn-primary" style="display: none;">Opslaan</button>
+                    <button id="btnCancel" class="btn-secondary" style="display: none;">Annuleren</button>
                     <button id="buttonAddQuestion" class="btn-primary" onclick="buttonAddQuestion(document.getElementById('questionsFrame'))">Vraag Toevoegen</button>
-                    <button class="btn-primary" style="margin-left:auto" onclick="window.location.href='../admin-panel'">Terug naar admin panel</button>
-
                 </div>
             </div>
 
@@ -35,8 +42,8 @@
     <script src="../shared/scripts/admin-session.js"></script>
     <script src="js/common.js"></script>
     <script src="js/questions.js"></script>
-    <!-- <script src="js/enable.js"></script> -->
-    <!-- <script src="js/visited.js"></script> -->
+    <script src="js/enable.js"></script>
+    <script src="js/visited.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

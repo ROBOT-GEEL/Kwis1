@@ -67,9 +67,23 @@ body {
     gap: 2rem;
 }
 
+/* Left Navigation styles */
+.left-nav {
+    display: flex;
+    flex-direction: column;
+    width: 260px;
+    flex-shrink: 0;
+    gap: 0.8rem;
+    justify-content: center;
+    align-items: center;
+    position: sticky;
+    top: 2rem; 
+    height: calc(100vh - 4rem); 
+}
+
 /* Base navigation button styles (Desktop) */
 .nav-button {
-    width: 20%; 
+    width: 100%; 
     box-sizing: border-box;
     background-color: var(--lightBlue);
     color: var(--darkGreen);
@@ -166,25 +180,6 @@ body {
 /* ==========================================================================
    Questions Content Area
    ========================================================================== */
-
-.content-wrapper {
-    flex: 1; /* Neemt automatisch alle resterende ruimte in */
-    min-width: 0; /* Voorkomt dat de div uit de pagina schuift */
-    z-index: 1;
-    padding-right: 1rem;
-}
-
-.action-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem; /* De automatische ruimte tussen ALLE knoppen */
-    padding-top: 0.3rem;
-    padding-right: 0.4rem;
-    z-index: 2;
-    flex-wrap: wrap; /* Zorgt dat ze op mobiel netjes naar een 2e regel gaan */
-    justify-content: flex-end; /* Duwt alles naar rechts */
-}
-
 .questionsBody {
     background-color: #ffffff;
     border-radius: 0.5rem;
@@ -203,14 +198,13 @@ body {
 
 .questionFrame {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
     margin-bottom: 1.2rem;
     position: relative;
     width: 100%;
+    flex-wrap: wrap;
     box-sizing: border-box;
     align-items: flex-start;
-    min-height: 3.2rem;
+    min-height: 3.2rem; /* Space for fixed-height buttons */
 }
 
 .questionLanguageBundle {
@@ -243,7 +237,8 @@ body {
     line-height: 1.2125;
     position: relative;
     top: 0;
-    width: 100%;
+    /* Adjusted width since delete button is removed */
+    width: calc(100% - 13.9rem); 
     box-sizing: border-box; 
     padding: 0.8rem 0 0.8rem 0.6rem;
     min-height: 3.2rem;
@@ -256,7 +251,8 @@ body {
 .answers {
     left: 1.3rem;
     position: relative;
-    width: 100%;
+    /* Adjusted width since delete button is removed */
+    width: calc(100% - 14.4rem); 
     box-sizing: content-box;
     z-index: 1;
     padding-bottom: 0.8rem;
@@ -284,53 +280,51 @@ body {
 /* ==========================================================================
    Right-side icons and actions (Edit, Languages)
    ========================================================================== */
-
-/* 1. Basis styling voor alle knoppen (GEEN position: absolute meer!) */
-.editframe, .easyQuestion, .deleteQuestion,
-.language, .previousLanguage, .nextLanguage {
+/* All desktop buttons have a fixed height and anchor to the top */
+.editframe, .language, .previousLanguage, .nextLanguage {
+    position: absolute;
+    top: 0.3rem; /* Fixed anchor at the top instead of calc(100%) */
     height: 2.6rem;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 0.5rem;
     cursor: pointer;
+    z-index: 2;
     background-color: #ffffff;
 }
 
-.editIcon, .easyQuestionIcon {
-    height: 1.3rem;
+.editIcon {
+    height: 1.3rem; /* Slightly larger icons */
     width: 1.3rem;
 }
 
-.deleteQuestionIcon {
-    height: 1.3rem;
-    width: 1rem;
-}
-
-/* 2. Styling specifiek voor de actieknoppen (potloodje en extra's) */
-.editframe, .easyQuestion, .deleteQuestion {
+/* Widened buttons and logical order: < nl > Edit */
+.editframe {
     border: solid 0.1rem #d9d9d9;
+    right: 0.4rem; 
     width: 3.2rem;
-    box-sizing: border-box;
     transition: border 0.3s ease, background-color 0.2s;
 }
+.editframe:hover { border: solid 0.2rem #d9d9d9; background-color: #f9f9f9; }
 
-.editframe:hover, .easyQuestion:hover, .deleteQuestion:hover { 
-    border: solid 0.2rem #d9d9d9; 
-    background-color: #f9f9f9; 
-}
-
-/* 3. Styling specifiek voor de taalknoppen */
-.nextLanguage, .previousLanguage, .language {
+.nextLanguage {
+    right: 4.0rem; 
     width: 2.6rem;
     transition: transform 0.2s ease, background-color 0.2s;
 }
-
 .language {
+    right: 7.0rem; 
+    width: 2.6rem;
     font-family: 'Open Sans', sans-serif;
     font-size: 1.1rem;
     font-weight: 600;
     cursor: default;
+}
+.previousLanguage {
+    right: 10.0rem; 
+    width: 2.6rem;
+    transition: transform 0.2s ease, background-color 0.2s;
 }
 
 .nextLanguage:hover, .previousLanguage:hover {
@@ -341,13 +335,14 @@ body {
 /* ==========================================================================
    Toggle Switches for Active/Visited pages
    ========================================================================== */
-
 .enableSwitch {
+    position: absolute;
     display: inline-block;
-    width: 3.2rem;  /* Cruciaal: behoud de breedte en hoogte! */
+    width: 3.2rem;
     height: 1.4rem;
-    position: relative; /* Opgelost voor flexbox */
-    margin: 0 0.5rem; /* Een klein beetje ruimte links en rechts in de flexbox */
+    right: 0.8rem;
+    top: 0.9rem; /* Aligned with fixed-height buttons */
+    z-index: 2;
 }
 
 .enableSwitch input { opacity: 0; width: 0; height: 0; }
@@ -419,16 +414,9 @@ input:checked + .slider:before { transform: translateX(26px); }
         height: 3.5rem;
     }
 
-    /* --- NIEUWE MOBIELE FLEXBOX LAYOUT VOOR DE VRAGEN --- */
-    
+    /* Add enough bottom padding so text never touches buttons */
     .questionFrame {
-        flex-direction: column; /* Zet knoppen ONDER de tekst op mobiel */
-        padding-bottom: 1rem; 
-    }
-
-    .content-wrapper {
-        padding-right: 0;
-        width: 100%;
+        padding-bottom: 3.6rem; 
     }
 
     .question, .answers {
@@ -436,9 +424,22 @@ input:checked + .slider:before { transform: translateX(26px); }
         padding-right: 0.5rem; 
     }
 
-    .action-wrapper {
-        width: 100%;
-        padding-top: 1rem;
-        justify-content: flex-end; /* Houdt de knoppen rechts uitgelijnd op de nieuwe regel */
+    /* Move buttons to the fixed bottom edge of the frame */
+    .editframe, .language, .previousLanguage, .nextLanguage {
+        top: auto;
+        bottom: 0.5rem; /* Anchor at the bottom */
+    }
+    
+    .editframe { right: 0.5rem; }
+    
+    /* Fixed left alignment for language buttons on mobile */
+    .nextLanguage { left: 6.5rem; right: auto; }
+    .language { left: 3.5rem; right: auto; }
+    .previousLanguage { left: 0.5rem; right: auto; }
+
+    .enableSwitch {
+        top: auto;
+        bottom: 1rem;
+        right: 0.5rem;
     }
 }

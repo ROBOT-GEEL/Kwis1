@@ -57,8 +57,18 @@ h1, h2, h3{
     text-align: center;
 }
 
+#stats-screen #stats-getal{
+    font-size: 40vh;
+}
+
 /* --- INACTIVE & INSTRUCTION SCREENS --- */
-#inactive-screen, #instruction-1-screen, #instruction-2-screen, #start-screen, #end-screen {
+#inactive-screen, 
+#instruction-1-screen, 
+#instruction-2-screen, 
+#start-screen, 
+#end-screen, 
+#counting-screen,
+#stats-screen {
     justify-content: center;
     align-items: center;
     padding: 5vw;
@@ -77,7 +87,7 @@ h1, h2, h3{
     line-height: 1.2;
 }
 
-#end-screen h1, #start-screen h1 {
+#end-screen h1, #start-screen h1, #counting-screen h1, #stats-screen h1{
     font-size: 16vh;
     line-height: 1.2;    
 }

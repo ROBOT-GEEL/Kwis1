@@ -1,6 +1,7 @@
 import express from "express";
 import {
     getQuestions,
+    getStatisticsForProjector,
     getNewId,
     getParameters,
     getInstructions,
@@ -10,6 +11,7 @@ import {
 const router = express.Router();
 
 router.post("/questions", getQuestions);
+router.post("/getstatisticsforprojector", getStatisticsForProjector);
 router.get("/new-id", getNewId);
 router.get("/parameters", getParameters);
 router.get("/instructions", getInstructions);

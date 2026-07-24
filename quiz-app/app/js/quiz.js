@@ -14,12 +14,13 @@ class Quiz {
     static #currentQuestionIndex = 0;
     static #remainingAnswerTime;
     static #quizId = null;
-    static visited = false;     // Whether the participants have visited the Expoo
-    static #nextQuestionDelay = 3;   // The delay between the end of the answer and the start of the next question
+    static easyQuestion = true;        // Whether the participants chose to have easy questions
+    static visited = false;             // Whether the participants have visited the expoo or not
+    static #nextQuestionDelay = 3;      // The delay between the end of the answer and the start of the next question
     static #cancelInactiveQuiz = true;  // Whether to cancel the quiz if there are no people in the answer zones
     static #inactiveQuizCounter = 0;
     static #instructionsScreenTime = 5; // The time to show the instructions screen
-    static #finishedScreenTime = 5; // The time to show the finished screen
+    static #finishedScreenTime = 5;     // The time to show the finished screen
     static #cancelled = false;
     static #active = false;
     static #isInitialized = false;
@@ -157,7 +158,7 @@ class Quiz {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    visited: this.visited,
+                    easyQuestion: this.easyQuestion,
                     amount: this.#maxQuestions
                 })
             });
@@ -295,6 +296,7 @@ class Quiz {
             await this.#showInstructions();
 
             // Change the screen to the quiz screen after the instructions
+            // Dit gebruiken we niet meer zodat mensen niet op het scherm van de robot willen drukken om te antwoorden
             changeScreen('quiz-screen');
             
             // Set the quiz as active for the language change callback
@@ -313,7 +315,7 @@ class Quiz {
                 if (this.#cancelled) break;
 
                 // Notify the Pi to count the people in the answer zones
-                socket.emit('pi-count-people', { quizId: this.#quizId, questionId: this.#questions[this.#currentQuestionIndex].questionId });
+                socket.emit('pi-count-people', { quizId: this.#quizId, questionId: this.#questions[this.#currentQuestionIndex].questionId, hasVisited: this.visited });
                 this.#showCorrectAnswer();
 
                 // Wait until showing the next question
@@ -338,6 +340,10 @@ class Quiz {
             // Finish the quiz if it was not cancelled (Normal completion)
             if (!this.#cancelled) {
                 changeScreen('quiz-finished-screen');
+                this.#showProjectorCounting();
+                await wait(3000);
+                this.#showProjectorStats();
+                await wait(this.#finishedScreenTime * 1000);
                 this.#showProjectorEndScreen();
                 await wait(this.#finishedScreenTime * 1000);
                 await this.#sendProjectorCommand("sleep");
@@ -378,6 +384,52 @@ class Quiz {
         socket.emit('projector-show-end-screen', {
             instruction: this.#instructions['endScreen'][LanguageData.selectedLanguage]
         });
+    }
+
+    static async #showProjectorStats(){
+        const statsData = await this.#getProjectorStats();
+        socket.emit('projector-show-stats-screen', {
+            instruction_Superb: this.#instructions['statsScreen_Superb'][LanguageData.selectedLanguage],
+            instruction_Good: this.#instructions['statsScreen_Good'][LanguageData.selectedLanguage],
+            instruction_Moderate: this.#instructions['statsScreen_Moderate'][LanguageData.selectedLanguage],
+            instruction_Bad: this.#instructions['statsScreen_Bad'][LanguageData.selectedLanguage],
+            stats: statsData
+        });
+    }
+
+    static async #showProjectorCounting(){       
+        socket.emit('projector-show-counting-screen', {
+            instruction: this.#instructions['countingScreen'][LanguageData.selectedLanguage],
+        });
+    }
+
+    /**
+     * Get statistics for the current quiz from the server.
+     *
+     * @returns {Object} An object containing { total, totalCorrect }
+     */
+    static async #getProjectorStats() {
+        let response;
+        try {
+            response = await fetch('/quiz/getstatisticsforprojector', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    quizId: this.#quizId
+                })
+            });
+        } catch {
+            logError("[Quiz Interface] Network error while fetching quiz statistics");
+            throw "ERROR_STATISTICS_FETCH";
+        }
+        if (!response.ok) {
+            logError("[Quiz Interface] Error fetching quiz statistics: " + response.status);
+            throw "ERROR_STATISTICS_STATUS";
+        }
+        const data = await response.json();
+        return data;
     }
 
     /**
@@ -547,3 +599,20 @@ class Quiz {
         return this.#answerTime;
     }
 }
+
+// Eventlistener die de melding laat zien dat er niet via het scherm geantwoord kan worden als er toch geklikt wordt
+document.addEventListener('DOMContentLoaded', function() {
+    
+    const quizScreen = document.getElementById('quiz-screen');
+    const overlay = document.querySelector('.no-answer-via-screen-overlay');
+    let timeoutId; // Om de timer bij te houden
+
+    quizScreen.addEventListener('click', function() { // Luister naar ELKE klik binnen het quiz-scherm      
+        overlay.style.display = 'flex'; // Toon de overlay (maak er weer een flexbox van om te centreren)
+        clearTimeout(timeoutId); // Reset een eventuele vorige timer, zodat de melding niet te vroeg verdwijnt 
+        timeoutId = setTimeout(function() { // Verberg de overlay weer automatisch na 10 seconden
+            overlay.style.display = 'none';
+        }, 10000);
+        
+    });
+});

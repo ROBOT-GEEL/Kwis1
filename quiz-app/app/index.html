@@ -67,7 +67,7 @@
             <button data-lang-key="ERROR_CLOSE" id="error-close">Terug naar het startscherm</button>
         </dialog>
 
-        <div id="robot-startup-screen" class="screen" style="display:block;">
+        <div id="robot-startup-screen" class="screen" style="display:none;">
             <div id="robot-startup-screen-content">
                 <h1>Halloo!</h1>
                 <br>
@@ -75,7 +75,7 @@
             </div>
         </div>
 
-        <div id="robot-explore-screen" class="screen" style="display:none;">
+        <div id="robot-explore-screen" class="screen" style="display:block;">
             <div id="robot-explore-screen-content">
                 <h1 data-lang-key="EXPLORING">EXPLORING</h1>
                 <img src="./assets/exploring.gif" />
@@ -96,17 +96,27 @@
             </div>
         </div>
 
-        <div id="visited-expoo-modal" class="modal" style="display:none;">
+        <div id="easyvisited-questions-modal" class="modal" style="display:none;">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 data-lang-key="VISITED_EXPOO_MODAL_HEADER">VISITED_EXPOO_MODAL_HEADER</h2>
+                    <h2 data-lang-key="EASY_QUESTIONS_MODAL_HEADER">EASY_QUESTIONS_MODAL_HEADER</h2>
                     <button class="close" id="close-modal-btn">&times;</button>
+                </div>
+                <div class="modal-buttons">
+                    <button data-lang-key="EASY_QUESTIONS_MODAL_YES" id="easy-questions-yes">EASY_QUESTIONS_MODAL_YES</button>
+                    <button data-lang-key="EASY_QUESTIONS_MODAL_NO" id="easy-questions-no">EASY_QUESTIONS_MODAL_NO</button>
+                </div>
+
+                <div class="modal-header modal-header-bottom">
+                    <h2 data-lang-key="VISITED_EXPOO_MODAL_HEADER">VISITED_EXPOO_MODAL_HEADER</h2>
                 </div>
                 <div class="modal-buttons">
                     <button data-lang-key="VISITED_EXPOO_MODAL_YES" id="visited-expoo-yes">VISITED_EXPOO_MODAL_YES</button>
                     <button data-lang-key="VISITED_EXPOO_MODAL_NO" id="visited-expoo-no">VISITED_EXPOO_MODAL_NO</button>
                 </div>
+                
             </div>
+
         </div>
 
         <div id="follow-robot-screen" class="screen" style="display:none;">
@@ -117,12 +127,19 @@
 
         <div id="quiz-instructions-screen" class="screen" style="display:none;">
             <div class="instructions-container">
-                <h1 data-lang-key="QUIZ_INSTRUCTIONS">QUIZ_INSTRUCTIONS</h1>
+                <h1 data-lang-key="QUIZ_INSTRUCTIONS_HEADER">QUIZ_INSTRUCTIONS</h1>
+                <p data-lang-key="QUIZ_INSTRUCTIONS_DESCRIPTION">QUIZ_INSTRUCTIONS</p>
             </div>
         </div>
 
         <div id="quiz-screen" class="screen" style="display:none;">
             <div class="quiz-screen-container">
+
+                <div class="no-answer-via-screen-overlay" style="display:none">
+                    <div class="no-answer-via-screen-message" data-lang-key="NO_ANSWER_VIA_SCREEN_MESSAGE">
+                        Je kunt niet antwoorden via dit scherm. <br> Ga in de antwoordzones achter je staan.
+                    </div>
+                </div>
                 
                 <div class="question-container">
                     <div id="quiz-question" data-lang-key="QUIZ_SCREEN_QUESTION">QUIZ_SCREEN_QUESTION</div>

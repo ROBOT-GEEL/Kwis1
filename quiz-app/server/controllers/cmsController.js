@@ -118,7 +118,7 @@ export const editQuestion = async (req, res, next) => {
         fr: { question, answers },
         nl: { question, answers },
         enabled: true,
-        bezocht: false,
+        easyQuestion: false,
         questionId: newId,
       };
 
@@ -169,7 +169,7 @@ export const saveEnabledCheckBoxes = async (req, res, next) => {
   }
 };
 
-export const saveVisitedCheckBoxes = async (req, res, next) => {
+export const saveEasyCheckBoxes = async (req, res, next) => {
   const collection = global.db.collection("questions");
   const { questionDict } = req.body;
 
@@ -178,20 +178,20 @@ export const saveVisitedCheckBoxes = async (req, res, next) => {
 
     for (const questionId in questionDict) {
       const questionIdObject = new ObjectId(questionId);
-      const { visitedSwitch } = questionDict[questionId];
+      const { easySwitch } = questionDict[questionId];
       bulkOperations.push({
         updateOne: {
           filter: { _id: questionIdObject },
-          update: { $set: { bezocht: visitedSwitch } },
+          update: { $set: { easyQuestion: easySwitch } },
         },
       });
     }
 
     const result = await collection.bulkWrite(bulkOperations);
-    console.log(`${result.modifiedCount} visited flags changed successfully`);
-    res.status(200).send(`${result.modifiedCount} visited flags changed successfully`);
+    console.log(`${result.modifiedCount} easy flags changed successfully`);
+    res.status(200).send(`${result.modifiedCount} easy flags changed successfully`);
   } catch (error) {
-    console.error("Error saving visited flags:", error);
+    console.error("Error saving easy flags:", error);
     res.status(500).send("Internal Server Error");
   }
 };

@@ -18,5 +18,35 @@
         "NL": "<h1>De quiz gaat zodadelijk beginnen! </h1><h2>Neem plaats in de antwoordvakken</h2>",
         "EN": "<h1>The quiz is starting soon! </h1><h2>Take place in the anwserzones</h2>",
         "FR": "<h1>Le quiz va commencer tout à l'heure! </h1><h2>Prenez place dans les zones de réponse!</h2>"
+    },
+    "statsScreen": {
+        "NL": "<h1>Dit is het stats scherm in het nederlands </h1><h2>dit ook maar in h2</h2>",
+        "EN": "<h1>Dit is het stats scherm in het engels </h1><h2>dit ook maar in h2</h2>",
+        "FR": "<h1>Dit is het stats scherm in het frans </h1><h2>dit ook maar in h2</h2>"
+    },
+    "countingScreen": {
+        "NL": "Hugoo is aan het tellen...",
+        "EN": "Hugoo is counting...",
+        "FR": "Hugoo est en train de compter..."
+    },
+    "statsScreen_Superb": {
+        "NL": "Waaw wat een score!!",
+        "EN": "Wow, what a score!!",
+        "FR": "Waouh, quel score !!"
+    },
+    "statsScreen_Good": {
+        "NL": "Super goed gedaan!!",
+        "EN": "Great job!!",
+        "FR": "Super bien joué !!"
+    },
+    "statsScreen_Moderate": {
+        "NL": "Lang niet slecht!",
+        "EN": "Not bad at all!",
+        "FR": "Pas mal du tout !"
+    },
+    "statsScreen_Bad": {
+        "NL": "Oei, blijven oefenen!",
+        "EN": "Oops, keep practicing!",
+        "FR": "Oups, continuez à vous entraîner !"
     }
 }

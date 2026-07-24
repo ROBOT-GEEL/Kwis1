@@ -79,7 +79,8 @@ h1, h1 > *, h1 * {
     color: var(--green-bg-color-dark);
 }
 
-.highlight {
+.highlight-modal {
+    font-family: 'Co Headline', 'Open Sans', sans-serif;
     color: var(--green-bg-color-dark);
     font-size: 1.3em;
 }
@@ -139,7 +140,8 @@ h1, h1 > *, h1 * {
     font-size: 8em;
 }
 
-#quiz-finished-screen-container > p {
+#quiz-finished-screen-container > p,
+.instructions-container > p {
     font-size: 4em;
     margin: 40px;
     padding: 20px;
@@ -308,6 +310,38 @@ h1, h1 > *, h1 * {
     opacity: 0;
 }
 
+/* De transparante laag die alles bedekt en kliks opvangt */
+.no-answer-via-screen-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* Licht donkere waas over het scherm */
+    z-index: 100; /* Zorgt dat dit over de antwoorden heen ligt */
+    
+    /* Flexbox om het witte kader in het midden te zetten */
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+}
+
+/* Het kader met de tekst zelf */
+.no-answer-via-screen-message {
+    font-family: 'Co Headline', sans-serif;
+    font-weight: bold;
+    font-size: 4rem;
+    color: white;
+    text-align: center;
+    background-color: var(--start-button-bg-color); 
+    padding: 30px 60px; 
+    border-radius: 0 40px; 
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
+    border: none;
+    max-width: 80%; 
+    line-height: 1.2;
+}
+
 /* Timer styles from projector */
 #timer {
     margin-top: 3vh;
@@ -445,8 +479,12 @@ h1, h1 > *, h1 * {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 30px;
+    padding-bottom: 15px;
     font-size: 1.5em;
+}
+
+.modal-header-bottom {
+    padding-top: 30px;
 }
 
 .modal-header > button {
@@ -472,6 +510,10 @@ h1, h1 > *, h1 * {
     background-color: var(--green-bg-color-dark);
     color: white;
     font-size: 2em;
+}
+
+.modal-buttons > button.modal-buttons-clicked {
+    border: 5px solid var(--yellow-color);
 }
 
 .close {

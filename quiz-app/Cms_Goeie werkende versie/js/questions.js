@@ -28,9 +28,9 @@ function displayQuestions() {
                 
                 <div class="content-wrapper">
                     <div class="questionLanguageBundle" contenteditable="false">
-                        <div onclick="showAnswers(this.parentElement)" onmouseenter="showAnswers(this.parentElement, true)" class="question" style="display: none;">${question.en.question}</div>
-                        <div onclick="showAnswers(this.parentElement)" onmouseenter="showAnswers(this.parentElement, true)" class="question" style="display: flex;">${question.nl.question}</div>
-                        <div onclick="showAnswers(this.parentElement)" onmouseenter="showAnswers(this.parentElement, true)" class="question" style="display: none;">${question.fr.question}</div>
+                        <div onclick="showAnswers(this.parentElement)" class="question" style="display: none;">${question.en.question}</div>
+                        <div onclick="showAnswers(this.parentElement)" class="question" style="display: flex;">${question.nl.question}</div>
+                        <div onclick="showAnswers(this.parentElement)" class="question" style="display: none;">${question.fr.question}</div>
                     </div>
                     <div class="answers" toggleEnable="true" correctAnswer="${question.correctAnswer}" style="display: none;" language="nl">
                         <div class="answerEN" style="display: none;">
@@ -185,17 +185,11 @@ function buttonAddQuestion(questionsFrame) {
 /**
  * Toggles the visibility of the answer block for a question.
  * @param {HTMLElement} element - The question element that was clicked.
- * @param {boolean} forceOpen - If true, it will only open the answers (prevents flickering on hover).
  */
-function showAnswers(element, forceOpen = false) {
+function showAnswers(element) {
     // Only toggle if not in edit mode
     if (element.getAttribute("contenteditable") === "false") {
         let answerBlock = element.nextElementSibling;
-
-        // Als we hoveren en hij staat al open, doe dan niets om flikkeren te voorkomen.
-        if (forceOpen && answerBlock.style.display === 'block') {
-            return;
-        }
 
         // Toggle visibility for the current question
         const isHidden = answerBlock.style.display === 'none';
@@ -235,7 +229,6 @@ function enableEditing(questionFrame) {
     };
 
     questions[languageIndex].onclick = null;
-    questions[languageIndex].onmouseenter = null;
     answersBundle.setAttribute("toggleEnable", false);
     if (answersBundle.style.display === 'none') {
         answersBundle.style.display = 'block'; 
@@ -316,10 +309,6 @@ function saveChanges(questionFrame) {
     // Robuuste koppeling voor het openklappen van de antwoorden
     questions[languageIndex].onclick = function() {
         showAnswers(questionBundle);
-    };
-    
-    questions[languageIndex].onmouseenter = function() {
-    showAnswers(questionBundle, true);
     };
 
     answersBundle.style.display = 'none';

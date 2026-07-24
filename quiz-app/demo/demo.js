@@ -47,3 +47,7 @@ function docking() {
 function projectorEndScreen() {
     socket.emit("projector-show-end-screen");
 }
+
+function projectorStatsScreen() {
+    socket.emit("projector-show-stats-screen");
+}
