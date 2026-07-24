@@ -443,11 +443,15 @@ class Quiz {
     static #showQuestion() {
         const question = this.#questions[this.#currentQuestionIndex][LanguageData.selectedLanguage.toLowerCase()].question;
         const answers = this.#questions[this.#currentQuestionIndex][LanguageData.selectedLanguage.toLowerCase()].answers;
+        const remainingQuestionsText = this.#instructions['remainingQuestions'][LanguageData.selectedLanguage];
 
         // Emit the question data to the projector
         socket.emit('projector-update-question', {
             question: question,
-            answers: answers
+            answers: answers, 
+            remainingQuestionsText: remainingQuestionsText,
+            currentQuestion: this.#currentQuestionIndex + 1,
+            totalQuestions: this.#maxQuestions
         });
 
         // Show the question
@@ -516,7 +520,8 @@ class Quiz {
         // Emit the countdown data to the projector
         socket.emit('projector-update-countdown', {
             remainingTime: this.#remainingAnswerTime,
-            answerTime: this.#answerTime
+            answerTime: this.#answerTime,
+            remainingTimeText: this.#instructions['remainingTime'][LanguageData.selectedLanguage]
         });
 
         // Update the timer on the quiz screen
@@ -530,7 +535,8 @@ class Quiz {
                 // Emit the updated countdown data to the projector
                 socket.emit('projector-update-countdown', {
                     remainingTime: this.#remainingAnswerTime,
-                    answerTime: this.#answerTime
+                    answerTime: this.#answerTime,
+                    remainingTimeText: this.#instructions['remainingTime'][LanguageData.selectedLanguage]
                 });
 
                 document.querySelector('[data-lang-key=QUIZ_SCREEN_TIMER]').innerHTML = LanguageData.get("QUIZ_SCREEN_TIMER").replace('%time%', this.#remainingAnswerTime);

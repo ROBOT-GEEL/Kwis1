@@ -21,6 +21,10 @@ socket.on('robot-startup', () => {
     changeScreen('robot-startup-screen');
 });
 
+socket.on('robot-lost-charging', () => {
+    changeScreen('robot-lost-charging');
+});
+
 socket.on('robot-explore', () => {
     changeScreen('robot-explore-screen');
 
@@ -109,7 +113,7 @@ socket.on('robot-error-charge', () => {
 
 socket.on('robot-disconnected', () => {
     changeScreen('error-screen');
-    document.querySelector('#error-container').innerHTML = `<h1>De verbinding met het besturingssysteem is verloren gegaan.</h1><p>Gelieve dit aan het onthaal te melden.</p>`;
+    document.querySelector('#error-container').innerHTML = `<h1>De verbinding met het besturingssysteem is verloren gegaan.</h1><p>Even geduld aub...</p>`;
 });
 
 socket.on('robot-connected', () => {

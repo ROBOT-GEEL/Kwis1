@@ -51,3 +51,7 @@ function projectorEndScreen() {
 function projectorStatsScreen() {
     socket.emit("projector-show-stats-screen");
 }
+
+function robotLostCharging() {
+    socket.emit("robot-lost-charging");
+}

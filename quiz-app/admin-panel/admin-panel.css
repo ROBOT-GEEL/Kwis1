@@ -33,6 +33,8 @@
     --bgColor: #DAF5F0;
     --yellow: #F8B200;
     --darkYellow: #3e2c00;
+    --red: #cc0000;
+    --green: #28a745;
 }
 
 body {
@@ -48,7 +50,7 @@ body {
 
 .overview-container {
     width: 100%;
-    max-width: 900px;
+    max-width: 1100px;
     padding: 2rem;
     display: flex;
     flex-direction: column;
@@ -65,43 +67,46 @@ body {
     text-align: center;
 }
 
-/* 2x2 Grid for buttons */
+/* 3x2 Grid for buttons */
 .main-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 18rem;
     gap: 2rem;
     width: 100%;
     margin-bottom: 1rem;
 }
 
-/* Updated grid buttons: dark green background, white content */
+/* Updated grid buttons */
 .grid-btn {
     background-color: var(--darkGreen);
     border: 2px solid var(--darkGreen);
     border-radius: 1rem;
-    padding: 2rem;
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    aspect-ratio: 4/3; /* Keeps buttons nice and rectangular */
-    box-shadow: 0 4px 6px rgba(0,0,0,0.15); /* Slightly stronger shadow for dark buttons */
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
 }
 
 .grid-btn .btn-icon {
     height: 5.5rem;
     margin-bottom: 1rem;
-    /* This filter forces the SVG to become pure white */
     filter: brightness(0) invert(1); 
 }
 
 .grid-btn span {
     font-family: "CO Headline", sans-serif;
     color: #ffffff; 
-    font-size: 2rem;
+    font-size: 1.4rem;
     display: inline-block;
+    text-align: center;
 }
 
 /* Hardware controls at the bottom */
@@ -217,4 +222,156 @@ body {
     .overview-title {
         font-size: 2rem;
     }
+}
+
+/* ==========================================================================
+   Nieuwe Power Toggle Button Styling
+   ========================================================================== */
+
+.power-toggle-btn #powerToggleText {
+    font-weight: bold;
+    font-size: 1.5rem;
+    transition: color 0.3s ease; 
+}
+
+.power-text-shutdown {
+    color: var(--red) !important;
+}
+.power-text-activate {
+    color: var(--green) !important;
+}
+
+#powerToggleSubText {
+    font-weight: bold;
+    font-size: 1rem;
+    transition: color 0.3s ease; 
+    color: #565656
+}
+
+.power-toggle-btn {
+    background-color: #ffffff !important; /* Forceer witte achtergrond */
+    color: #333333 !important; /* Donkere tekst voor leesbaarheid */
+    border: 2px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.power-toggle-btn:hover {
+    background-color: #f8f9fa !important;
+    border-color: #d0d0d0;
+}
+
+.power-icons-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 1rem; 
+    width: 100%; 
+    padding: 0 1.5rem; 
+    box-sizing: border-box;
+    margin-bottom: 1rem;
+}
+
+/* Het onzichtbare 'vakje' waar het icoon in zit */
+.icon-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100px; /* Vaste hoogte houdt alles netjes in verhouding */
+}
+
+/* Basis styling voor de iconen */
+.power-icon {
+    width: 80px; 
+    height: 80px;
+    object-fit: contain;
+    transition: all 0.3s ease;
+}
+
+.icon-active-wake {
+    filter: invert(52%) sepia(45%) saturate(718%) hue-rotate(86deg) brightness(97%) contrast(89%);
+    transform: scale(1.1);
+}
+
+.icon-active-sleep {
+    filter: invert(14%) sepia(80%) saturate(5412%) hue-rotate(353deg) brightness(92%) contrast(113%);
+    transform: scale(1.1);
+}
+
+.icon-inactive {
+    filter: invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(90%) contrast(90%);
+    opacity: 0.4;
+}
+
+/* ==========================================================================
+   Nieuwe Power Toggle Button Styling
+   ========================================================================== */
+.power-toggle-btn {
+    background-color: #ffffff !important; 
+    color: #005144 !important; /* Aangepast naar jouw donkergroen */
+    font-weight: bold; /* Optioneel: maakt de donkergroene tekst wat beter leesbaar */
+    border: 2px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.power-toggle-btn:hover {
+    background-color: #f8f9fa !important;
+    border-color: #d0d0d0;
+}
+
+/* Basis styling voor de iconen (Flink groter gemaakt) */
+.power-icon {
+    height: 6rem;
+    width: auto;
+    object-fit: contain;
+    transition: all 0.3s ease;
+}
+
+/* Dynamische linker randen voor de knop */
+.power-border-shutdown {
+    border-left: 6px solid var(--red) !important;
+}
+
+.power-border-activate {
+    border-left: 6px solid var(--green) !important;
+}
+
+/* ==========================================================================
+   Batterij Status Linksboven
+   ========================================================================== */
+.battery-status-container {
+    position: fixed; /* Blijft staan, ook als je scrollt. Gebruik 'absolute' als hij mee moet scrollen */
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Ruimte tussen het icoon en de tekst */
+    
+    /* Achtergrond styling (optioneel, maar goed voor leesbaarheid) */
+    background-color: #ffffff;
+    padding: 8px 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+    
+    z-index: 1000; /* Zorgt ervoor dat hij altijd over de andere blokken heen ligt */
+}
+
+/* Formaat van het batterij icoon */
+.battery-icon {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+}
+
+/* Styling van het percentage */
+#batteryPercentage {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: var(--darkGreen, #005144); /* Maakt gebruik van je eerdere kleuren */
 }

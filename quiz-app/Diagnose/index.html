@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Acties</title>
+    <link rel="icon" type="image/x-icon" href="../shared/assets/icons/favicon.ico">
+    <link rel="stylesheet" href="diagnose.css">
+</head>
+<body>
+
+    <div class="settings-page-wrapper">
+        
+        <header class="settings-header">
+            <h1 class="settings-title">Diagnose</h1>
+            <p class="settings-description">Hier kan je Hugoo en zijn programma's heropstarten</p>
+            
+            <div class="settings-button-row right-aligned">
+                <button class="settings-back-btn" onclick="window.location.href='../admin-panel'"">
+                    <span class="btn-text">Terug naar het adminpaneel</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="settings-content">
+            
+            <section class="settings-card">
+                <h2 class="settings-card-title">Rebootacties</h2>
+                
+                <div class="action-row">
+                    <button class="settings-btn-primary" onclick="rebootRobot('robot-hard')">
+                        <span class="btn-text">Reboot robot</span>
+                    </button>
+                    <p class="action-description">Herstart hier de volledige Orin Nano die verantwoordelijk is voor het rij-gedrag van de robot.</p>
+                </div>
+
+                <div class="action-row">
+                    <button class="settings-btn-primary" onclick="rebootRobot('robot-soft')">
+                        <span class="btn-text">Herstart robot</span>
+                    </button>
+                    <p class="action-description">Start alle programma's op de Orin Nano die verantwoordelijk is voor het rij-gedrag van de robot opnieuw op.</p>
+                </div>
+
+                <div class="action-row">
+                    <button class="settings-btn-primary onclick="rebootRobot('pi-hard')"">
+                        <span class="btn-text">Reboot Pi</span>
+                    </button>
+                    <p class="action-description">Herstart de Raspberry Pi 5 die verantwoordelijk is voor het tonen van alle schermen opnieuw op.</p>
+                </div>
+
+            </section>
+
+        </main>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="../shared/scripts/admin-session.js"></script>
+    <script src="diagnose.js"></script>
+
+</body>
+</html>

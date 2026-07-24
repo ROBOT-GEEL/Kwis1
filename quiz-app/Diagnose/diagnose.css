@@ -1,0 +1,177 @@
+/* ==========================================================================
+   Global Variables & Base
+   ========================================================================== */
+:root {
+    --darkGreen: #005144;
+    --darkGreen-hover: #026151;
+    --bgColor: #DAF5F0;
+    --cardBg: #ffffff;
+    --textColor: #000000;
+    --subTextColor: #555555;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bgColor);
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* ==========================================================================
+   Layout & Header
+   ========================================================================== */
+.settings-page-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.settings-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.settings-title {
+    color: var(--darkGreen);
+    font-family: "CO Headline", sans-serif;
+    font-size: 2.5rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.settings-description {
+    color: var(--subTextColor);
+    font-size: 1rem;
+    margin: 0;
+}
+
+.settings-button-row {
+    display: flex;
+    width: 100%;
+    margin-top: 1.5rem;
+}
+
+.settings-button-row.right-aligned {
+    justify-content: flex-end;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+.settings-btn-primary, 
+.settings-back-btn {
+    font-family: "CO Headline", sans-serif;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 3rem;
+    padding: 0 1.5rem;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-text {
+    margin: 0;
+    line-height: 1;
+}
+
+.settings-btn-primary { 
+    background-color: var(--darkGreen); 
+    color: #ffffff; 
+}
+
+.settings-btn-primary:hover { 
+    background-color: var(--darkGreen-hover); 
+}
+
+.settings-back-btn { 
+    background-color: var(--darkGreen); 
+    color: #ffffff; 
+    font-size: 1.1rem; 
+}
+
+.settings-back-btn:hover { 
+    background-color: var(--darkGreen-hover); 
+    transform: translateY(-2px); 
+}
+
+/* ==========================================================================
+   Cards & Content
+   ========================================================================== */
+.settings-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.settings-card {
+    background-color: var(--cardBg);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.settings-card-title {
+    font-family: "CO Headline", sans-serif;
+    color: var(--darkGreen);
+    font-size: 1.5rem;
+    margin: 0 0 1.5rem 0;
+    border-bottom: 2px solid var(--bgColor);
+    padding-bottom: 0.5rem;
+}
+
+/* ==========================================================================
+   Action Rows (Knop + Uitleg layout)
+   ========================================================================== */
+.action-row {
+    display: grid;
+    grid-template-columns: 200px 1fr; /* Knop krijgt vaste breedte, tekst vult de rest */
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--bgColor);
+}
+
+.action-row:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.action-description {
+    color: var(--subTextColor);
+    font-size: 1rem;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ==========================================================================
+   Mobile Responsiveness
+   ========================================================================== */
+@media (max-width: 850px) {
+    .settings-page-wrapper {
+        padding: 1rem;
+    }
+    
+    .settings-back-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .action-row {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+    
+    .settings-btn-primary {
+        width: 100%;
+    }
+}

@@ -96,6 +96,7 @@ h1, h1 > *, h1 * {
 #robot-explore-screen-content,
 #robot-start-screen-content,
 .follow-robot-screen-container,
+.robot-lost-charging-container,
 .instructions-container,
 #quiz-finished-screen-container,
 #robot-go-charge-container,
@@ -131,6 +132,7 @@ h1, h1 > *, h1 * {
     object-fit: contain;
 }
 
+.robot-lost-charging-container > h1,
 .follow-robot-screen-container > h1,
 .instructions-container > h1 {
     font-size: 6em;

@@ -48,5 +48,15 @@
         "NL": "Oei, blijven oefenen!",
         "EN": "Oops, keep practicing!",
         "FR": "Oups, continuez à vous entraîner !"
+    },
+    "remainingQuestions": {
+        "NL": "Vraag",
+        "EN": "Question",
+        "FR": "Question"
+    },
+    "remainingTime": {
+        "NL": "seconden om te antwoorden",
+        "EN": "seconds to answer",
+        "FR": "secondes pour répondre"
     }
 }

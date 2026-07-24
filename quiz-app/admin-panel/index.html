@@ -12,7 +12,25 @@
         
         <div class="overview-title">Robotoo Admin Panel</div>
 
+        <div class="battery-status-container">
+            <img src="assets/icons/battery.svg" alt="Batterij" class="battery-icon">
+            <span id="batteryPercentage">100%</span>
+        </div>
+
         <div class="main-grid">
+            <button id="powerToggleBtn" class="grid-btn power-toggle-btn" onclick="toggleRobotPower()">
+                <div class="power-icons-wrapper">
+                    <div class="icon-box">
+                        <img src="assets/icons/robot-wake.svg" id="iconWake" alt="Wake" class="power-icon">
+                    </div>
+                    <div class="icon-box">
+                        <img src="assets/icons/robot-sleep.svg" id="iconSleep" alt="Sleep" class="power-icon">
+                    </div>
+                </div>
+                <span id="powerToggleText">Laden...</span>
+                <span id="powerToggleSubText">Laden...</span>
+            </button>
+
             <button class="grid-btn" onclick="location.href='../cms'">
                 <img src="assets/icons/questions.svg" alt="figuur vragen" class="btn-icon">
                 <span>Vragen</span>
@@ -29,6 +47,11 @@
                 <img src="assets/icons/controller.svg" alt="figuur manueel rijden" class="btn-icon">
                 <span>Manueel Rijden</span>
             </button>
+            <button class="grid-btn" onclick="location.href='../diagnose'">
+                <img src="assets/icons/diagnose.svg" alt="figuur diagnose" class="btn-icon">
+                <span>Diagnose</span>
+            </button>
+            
         </div>
 
         <div class="hardware-controls">

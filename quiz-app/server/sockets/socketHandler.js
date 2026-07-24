@@ -28,7 +28,7 @@ export function registerSocketHandlers(io) {
       if (data === "orin-nano-robot") {
         orinNanoRobotId = socket.id;
         logger.info(`Orin Nano Robot connected with socket ID: ${socket.id}`);
-        io.emit("time-updated", new Date().toISOString());
+        //io.emit("time-updated", new Date().toISOString());
         socket.broadcast.emit("robot-connected");
       }
     });
@@ -115,24 +115,6 @@ export function registerSocketHandlers(io) {
       }
     });
 
-    //
-    // Robot platform events
-    //
-    const robotEvents = [
-      "robot-startup",
-      "robot-explore",
-      "robot-go-to-visitors",
-      "robot-arrived-at-visitors",
-      "drive-to-quiz-location",
-      "robot-arrived-at-quiz-location",
-      "robot-go-charge",
-      "robot-docking",
-      "robot-charging",
-      "robot-error-drive",
-      "robot-error-charge",
-      "robot-disconnected",
-    ];
-
 /* Quinten zijn code:
     const blankScreen = () => {
       exec("DISPLAY=:0 xset s activate", (error, stderr) => {
@@ -190,6 +172,28 @@ export function registerSocketHandlers(io) {
       });
     });
   };
+
+    //
+    // Robot platform events
+    //
+    const robotEvents = [
+      "robot-startup",
+      "robot-explore",
+      "robot-go-to-visitors",
+      "robot-arrived-at-visitors",
+      "drive-to-quiz-location",
+      "robot-arrived-at-quiz-location",
+      "robot-go-charge",
+      "robot-docking",
+      "robot-charging",
+      "robot-error-drive",
+      "robot-error-charge",
+      "robot-disconnected",
+      "robot-reboot",
+      "robot-lost-charging",
+      "robot-get-battery-percentage",
+      "robot-update-battery-percentage"
+    ];
 
     robotEvents.forEach((event) => {
       socket.on(event, (data) => {
@@ -291,12 +295,12 @@ export function registerSocketHandlers(io) {
                 currentAdminToken = null; 
                 currentAdminSocketId = null;
 
-                io.emit("time-updated", new Date().toISOString());
+                //io.emit("time-updated", new Date().toISOString());
 
                 socket.broadcast.emit("admin-panel-closed");
                 logger.info("Admin panel closed");
 
-                await syncProjectorState();
+                syncProjectorState();
             }
             if (typeof callback === "function") callback();
         } catch (error) {
@@ -319,10 +323,29 @@ export function registerSocketHandlers(io) {
             logger.error("Error during disconnect:", error);
         }
     });
+
+    socket.on("screen-reboot", (data) => {
+    
+      if (data.type === 'hard') {
+          console.log("Reboot command voor de Pi ontvangen. Herstarten...");
+          
+          exec("sudo reboot", (error, stdout, stderr) => {
+              if (error) {
+                  console.error(`Fout bij het rebooten van de Pi: ${error.message}`);
+                  return;
+              }
+              if (stderr) {
+                  console.error(`Reboot waarschuwing/fout: ${stderr}`);
+                  return;
+              }
+              console.log(`Reboot succesvol gestart: ${stdout}`);
+          });
+      }
+    });
   });
 
   // Send the time to all the clients
-  setInterval(() => {io.emit("time-updated", new Date().toISOString());}, 3600000);
+  //setInterval(() => {io.emit("time-updated", new Date().toISOString());}, 3600000);
 
   // Check if the projector needs to be turned on
   setInterval(() => syncProjectorState(), 60000); 
@@ -337,7 +360,8 @@ async function syncProjectorState() {
     
     if (newState === true) {
         await toggleProjector("1");
-        await toggleProjector("sleep");
+        //await toggleProjector("sleep"); Veroorzaker van de uitval??
+        console.log("syncProjectorState() with newState === true")
     } else if (newState === false) {
         await toggleProjector("0");
     }
@@ -380,3 +404,6 @@ async function toggleProjector(action) {
 function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+
+

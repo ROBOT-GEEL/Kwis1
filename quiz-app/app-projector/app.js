@@ -12,6 +12,7 @@ const countingScreenElement = document.querySelector('#counting-screen');
 const questionElement = document.querySelector('#question');
 const answerTextElements = document.querySelectorAll('.answer-text');
 const answerContainers = document.querySelectorAll('.answer-container');
+const quizRemainingQuestionsElement = document.querySelector('#quiz-remaining-questions');
 const timerSpanElement = document.querySelector('#timer span');
 const timerProgressElement = document.querySelector('#timer progress');
 
@@ -106,6 +107,7 @@ socket.on('projector-update-question', (data) => {
     clearTimeout(instructionTimeout);
 
     questionElement.innerHTML = data.question;
+    quizRemainingQuestionsElement.innerHTML = `${data.remainingQuestionsText} ${data.currentQuestion}/${data.totalQuestions}`;
     
     // Reset the font size to a very small value before applying textFit
     answerTextElements.forEach((element, index) => {
@@ -116,47 +118,56 @@ socket.on('projector-update-question', (data) => {
     hideAllScreens();
     quizScreenElement.classList.remove('hidden');
 
-    // Fit the question
-    textFit(questionElement, {
-        minFontSize: 4,
-        maxFontSize: 200,
-        multiLine: true,
-        reProcess: true,
-        alignHoriz: true,
-        alignVert: true
-    });
-    
-    // Fit all the answers
-    textFit(answerTextElements, {
-        minFontSize: 4,
-        maxFontSize: 200,
-        multiLine: true,
-        reProcess: true,
-        alignHoriz: true,
-        alignVert: false
-    });
+    //Wacht tot lettertypes geladen zijn en geef de browser tijd om te renderen
+    document.fonts.ready.then(() => {
+        // requestAnimationFrame vertelt de browser: doe dit pas bij de volgende frame-update
+        requestAnimationFrame(() => {
+            // Fit the question
+            textFit(questionElement, {
+                minFontSize: 4,
+                maxFontSize: 200,
+                multiLine: true,
+                reProcess: true,
+                alignHoriz: true,
+                alignVert: true
+            });
+            
+            // Fit all the answers
+            textFit(answerTextElements, {
+                minFontSize: 4,
+                maxFontSize: 200,
+                multiLine: true,
+                reProcess: true,
+                alignHoriz: true,
+                alignVert: false
+            });
 
-    // Search for the smallest calculated font size among the answers
-    let minCalculatedSize = 200;
-    const fittedTexts = document.querySelectorAll('.answer-text .textFitted');
-    
-    fittedTexts.forEach(fittedElement => {
-        const currentSize = parseFloat(fittedElement.style.fontSize);
-        if (currentSize && currentSize < minCalculatedSize) {
-            minCalculatedSize = currentSize;
-        }
-    });
+            // Search for the smallest calculated font size among the answers
+            let minCalculatedSize = 200;
+            const fittedTexts = document.querySelectorAll('.answer-text .textFitted');
+            
+            fittedTexts.forEach(fittedElement => {
+                const currentSize = parseFloat(fittedElement.style.fontSize);
+                if (currentSize && currentSize < minCalculatedSize) {
+                    minCalculatedSize = currentSize;
+                }
+            });
 
-    // Apply the smallest calculated font size to all answers
-    fittedTexts.forEach(fittedElement => {
-        fittedElement.style.fontSize = minCalculatedSize + 'px';
+            // Apply the smallest calculated font size to all answers
+            fittedTexts.forEach(fittedElement => {
+                fittedElement.style.fontSize = minCalculatedSize + 'px';
+            });
+        });
     });
 });
 
 socket.on('projector-update-countdown', (data) => {
-    const { remainingTime, answerTime } = data;
+    const { remainingTime, answerTime, remainingTimeText } = data;
 
-    timerSpanElement.textContent = `${remainingTime}s`;
+    // Als remainingTimeText 'undefined' is, maken we er een lege string van, anders gebruiken we de tekst.
+    const text = remainingTimeText || '';
+
+    timerSpanElement.textContent = `${remainingTime} ${text}`;
 
     const percentage = answerTime > 0
         ? Math.max(0, Math.min(100, (remainingTime / answerTime) * 100))

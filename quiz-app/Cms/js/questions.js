@@ -536,3 +536,47 @@ function easyQuestion(param) {
         alert("Kon de moeilijkheid niet op de server opslaan.");
     });
 }
+
+/**
+ * Toggles de in-/uitgeschakeld status van een vraag.
+ * Past zich aan de saveEnabledCheckBoxes structuur van de backend aan.
+ * @param {string} questionId - Het unieke ID van de vraag.
+ * @param {boolean} isEnabled - De nieuwe status (true = aan, false = uit).
+ */
+function toggleQuestionStatus(questionId, isEnabled) {
+    if (!questionId || questionId === "new" || questionId.trim() === "") {
+        return;
+    }
+
+    const payload = {
+        questionDict: {
+            [questionId]: { enableSwitch: isEnabled }
+        }
+    };
+
+    fetch("/cms/saveEnabledCheckBoxes", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Fout bij het opslaan in de database.');
+        }
+        console.log(`Status van vraag ${questionId} succesvol aangepast naar ${isEnabled}.`);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert("Kon de status niet opslaan. De instelling springt terug.");
+        
+        const questionFrame = document.getElementById(questionId);
+        if (questionFrame) {
+            const checkbox = questionFrame.querySelector('.enableSwitch input');
+            if (checkbox) {
+                checkbox.checked = !isEnabled; // Draai de visuele verandering terug
+            }
+        }
+    });
+}

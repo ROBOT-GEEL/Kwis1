@@ -45,6 +45,7 @@ app.use(express.static(path.join(ROOT_DIR, "navigatie_page")));
 app.use("/admin-panel", express.static(path.join(ROOT_DIR, "admin-panel")));
 app.use("/shared", express.static(path.join(ROOT_DIR, "shared")));
 app.use("/cms", express.static(path.join(ROOT_DIR, "Cms")));
+app.use("/diagnose", express.static(path.join(ROOT_DIR, "Diagnose")));
 app.use("/grafieken", express.static(path.join(ROOT_DIR, "Grafieken")));
 app.use("/settings", express.static(path.join(ROOT_DIR, "Settings")));
 app.use("/manual-driving", express.static(path.join(ROOT_DIR, "manual-driving")));

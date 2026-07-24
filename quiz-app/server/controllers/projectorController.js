@@ -1,7 +1,7 @@
 import net from "net";
 import { fetchSettingsFromDB } from "./cmsController.js";
 
-let lastProjectorStatus = null;
+//let lastProjectorStatus = null;
 
 /**
  * Business logic to determine if the projector should be active.
@@ -10,31 +10,33 @@ let lastProjectorStatus = null;
 export async function getTargetProjectorState() {
     try {
         const settings = await fetchSettingsFromDB();
-        const now = new Date();
+        return settings?.robotActive
 
-        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        const currentDay = days[now.getDay()];
-        const dayConfig = settings?.schedule?.[currentDay];
+        // const now = new Date();
 
-        let shouldBeOn = false;
+        // const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        // const currentDay = days[now.getDay()];
+        // const dayConfig = settings?.schedule?.[currentDay];
 
-        if (dayConfig?.active && dayConfig.start && dayConfig.end && settings?.robotActive) {
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const currentTime = `${hours}:${minutes}`;
+        // let shouldBeOn = false;
 
-            if (currentTime >= dayConfig.start && currentTime < dayConfig.end && settings.robotActive) {
-                shouldBeOn = true;
-            }
-        }
+        // if (dayConfig?.active && dayConfig.start && dayConfig.end && settings?.robotActive) {
+        //     const hours = String(now.getHours()).padStart(2, '0');
+        //     const minutes = String(now.getMinutes()).padStart(2, '0');
+        //     const currentTime = `${hours}:${minutes}`;
 
-        // Only return a boolean if the state actually changes, otherwise return null
-        if (shouldBeOn !== lastProjectorStatus) {
-            lastProjectorStatus = shouldBeOn;
-            return shouldBeOn;
-        }
+        //     if (currentTime >= dayConfig.start && currentTime < dayConfig.end && settings.robotActive) {
+        //         shouldBeOn = true;
+        //     }
+        // }
 
-        return null; // No change needed
+        // // Only return a boolean if the state actually changes, otherwise return null
+        // if (shouldBeOn !== lastProjectorStatus) {
+        //     lastProjectorStatus = shouldBeOn;
+        //     return shouldBeOn;
+        // }
+
+        // return null; // No change needed
     } catch (error) {
         return null;
     }
@@ -44,6 +46,9 @@ export const toggleProjector = async (req, res, next) => {
     // Extract state from the request body
     const { projectorState } = req.body;
     console.log("Projector toggle requested, state:", projectorState);
+    
+    const state = await getTargetProjectorState();
+    console.log("Current state should be:", state);
 
     // Validate input: Check if projectorState is provided
     if (!projectorState) {
