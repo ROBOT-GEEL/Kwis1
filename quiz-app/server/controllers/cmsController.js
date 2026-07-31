@@ -134,7 +134,10 @@ export const editQuestion = async (req, res, next) => {
 export const getQuestions = async (req, res, next) => {
   try {
     const collection = global.db.collection("questions");
-    const questions = await collection.find({}).toArray();
+    const questions = await collection.find({}).sort({
+      enabled: -1,
+      easyQuestion: -1
+    }).toArray();
     res.json(questions);
   } catch (error) {
     console.error("Error fetching questions:", error);
@@ -206,24 +209,6 @@ export const saveSettings = async (req, res, next) => {
       { $set: settingsDict },
       { upsert: true }
     );
-
-    const newDate = settingsDict.currentDate; // e.g., "2026-03-25"
-    const newTime = settingsDict.currentTime; // e.g., "15:30"
-
-    if (newDate && newTime) {
-        // Construct the command to set the date and time on Linux
-        // Format required by 'date' command: "YYYY-MM-DD HH:MM:SS"
-        const command = `sudo date -s "${newDate} ${newTime}:00"`;
-
-        // Execute the terminal command
-        exec(command, (error, stdout, stderr) => {
-            if (error) {
-                console.error(`Failed to update system time: ${error.message}`);
-                return;
-            }
-            console.log(`System time successfully updated to: ${newDate} ${newTime}`);
-        });
-    }
 
     console.log("Settings saved successfully");
     res.status(200).send("Settings saved successfully");

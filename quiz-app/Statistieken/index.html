@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miniatuur Quiz Resultaat</title>
+    <link rel="stylesheet" href="statistieken.css">
+</head>
+<body>
+
+    <div class="header-wrapper">
+        <header class="settings-header">
+            <h1 class="settings-title">Statistieken</h1>
+            <p class="settings-description">Bekijk hier de resultaten van de quiz.</p>
+            
+            <div class="settings-button-row">               
+                <button id="btnBack" class="settings-back-btn" onclick="window.location.href='../admin-panel'">
+                    <span class="btn-text">Terug naar admin panel</span>
+                </button>
+            </div>
+        </header>
+    </div>
+
+    <div class="page-wrapper" id="chartsContainer">
+        <!-- Hier worden de grafieken dynamisch ingeladen door JavaScript -->
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="../shared/scripts/admin-session.js"></script>
+    <script src="assets/chart/chart.js"></script>
+    <script src="statistieken.js"></script>
+</body>
+</html>

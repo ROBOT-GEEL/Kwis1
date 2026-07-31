@@ -7,6 +7,12 @@ $(document).ready(function () {
     $('.easy-get').on('click', (event) => {
         console.log("easy-get onclick");
         show_easy_numpad();
+        
+        try {
+            socket.emit("robot-stop-for-x-time", { time: 4000 });
+        } catch (error) {
+            console.error("Fout bij het versturen van socket event:", error);
+        }
     });
 });
 

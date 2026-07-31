@@ -65,6 +65,8 @@ LanguageData.addLanguageChangeCallback(() => onLanguageChange());
  * - Change the screen to the start screen
  */
 document.addEventListener('DOMContentLoaded', async () => {
+    updateCurrentScreenFromDB();
+
     await LanguageData.update();
     onLanguageChange();
 
@@ -74,57 +76,59 @@ document.addEventListener('DOMContentLoaded', async () => {
         error(e);
         return;
     }
-
-    changeScreen('robot-startup-screen');
-    // if (Debug.ENABLED) {
-    //     changeScreen('start-screen');
-    //     socket.off('robot-explore');
-    //     socket.off('robot-go-to-visitors');
-    //     socket.off('robot-arrived-at-visitors');
-    // } else {
-    //     changeScreen('robot-startup-screen');
-    // }
 });
 
 /**
- * Event listener for the start button on the start screen.
- *
- * This event listener shows the modal to ask if the participants want easy questions.
+ * Event listener for the start button en menu on the start screen.
  */
+
+let wantEasyQuestion = null;
+let hasVisited = null; 
+
+// This event listener shows the modal to ask if the participants want easy questions.
 document.querySelector('#play-quiz-button').addEventListener('click', async () => {
-    document.querySelector('#easyvisited-questions-modal').style.display = 'block';
+    toggleEasyVisitedOpened();
+    setTimeout(async () => {
+        toggleEasyVisitedButtonsReset();
+        }, 30000);
 });
 
-/**
- * Event listener for the close button on the easy questions modal.
- *
- * This event listener closes the modal.
- */
+// This event listener closes the modal.
 document.querySelector('#close-modal-btn').addEventListener('click', () => {
-    document.querySelector('#easyvisited-questions-modal').style.display = 'none';
+    toggleEasyVisitedButtonsReset();
 });
 
-/**
- * Event listener for easy questions and visited
- */
+// Luister naar de keuzeknoppen
 document.querySelector('#easy-questions-yes').addEventListener('click', () => {
     toggleEasyVisitedButtons("easy", true);
 });
-
 document.querySelector('#easy-questions-no').addEventListener('click', () => {
     toggleEasyVisitedButtons("easy", false);
 });
-
 document.querySelector('#visited-expoo-yes').addEventListener('click', () => {
     toggleEasyVisitedButtons("visited", true); 
 });
-
 document.querySelector('#visited-expoo-no').addEventListener('click', () => {
     toggleEasyVisitedButtons("visited", false); 
 });
 
-let wantEasyQuestion = null;
-let hasVisited = null; 
+async function toggleEasyVisitedOpened() {
+    document.querySelector('#easyvisited-questions-modal').style.display = 'block';
+    console.log("send stop");
+    socket.emit("robot-stop-for-x-time", { time: 30000 });
+}
+
+async function toggleEasyVisitedButtonsReset() {
+    const easyQuestionYes = document.querySelector('#easy-questions-yes');
+    const easyQuestionNo = document.querySelector('#easy-questions-no');
+    const visitedYes = document.querySelector('#visited-expoo-yes');
+    const visitedNo = document.querySelector('#visited-expoo-no');
+    easyQuestionNo.classList.remove('modal-buttons-clicked');
+    easyQuestionYes.classList.remove('modal-buttons-clicked');
+    visitedNo.classList.remove('modal-buttons-clicked');
+    visitedYes.classList.remove('modal-buttons-clicked');
+    document.querySelector('#easyvisited-questions-modal').style.display = 'none';
+}
 
 async function toggleEasyVisitedButtons(easyVisited, state) {
     const easyQuestionYes = document.querySelector('#easy-questions-yes');
@@ -153,7 +157,7 @@ async function toggleEasyVisitedButtons(easyVisited, state) {
             visitedNo.classList.add('modal-buttons-clicked');
             hasVisited = false;
         }
-    }
+    } 
 
     if ((wantEasyQuestion !== null) && (hasVisited !== null)) {
 
@@ -184,40 +188,6 @@ async function toggleEasyVisitedButtons(easyVisited, state) {
 }
 
 /**
- * Event listener for the easy questions modal buttons.
- * (YES)
-
-document.querySelector('#easy-questions-yes').addEventListener('click', async () => {
-    document.querySelector('#easy-questions-modal').style.display = 'none';
-    Quiz.easyQuestion = true;
-    changeScreen('follow-robot-screen');
-    socket.emit('drive-to-quiz-location');
-    try {
-        await Quiz.initializeNewQuiz();
-    } catch (e) {
-        error(e);
-        return;
-    }
-});
-
-/**
- * Event listener for the easy questions modal buttons.
- * (NO)
-
-document.querySelector('#easy-questions-no').addEventListener('click', async () => {
-    document.querySelector('#easy-questions-modal').style.display = 'none';
-    Quiz.easyQuestion = false;
-    changeScreen('follow-robot-screen');
-    socket.emit('drive-to-quiz-location');
-    try {
-        await Quiz.initializeNewQuiz();
-    } catch (e) {
-        error(e);
-        return;
-    }
-});*/
-
-/**
  * Event listener for the error close button.
  */
 document.querySelector('#error-close').addEventListener('click', () => {
@@ -225,3 +195,73 @@ document.querySelector('#error-close').addEventListener('click', () => {
     changeScreen('start-screen');
     document.querySelector('#error').close();
 });
+
+function updateCurrentScreenFromDB() {
+    console.log("updateCurrentScreenFromDB getriggered")
+    fetch('/robot-status/get-robot-status')
+        .then(response => response.json())
+        .then(responseObj => {
+            if (responseObj.succes && responseObj.data) {
+                const data = responseObj.data;
+                console.log(data);
+
+                if (data.currentScreen !== undefined && data.currentScreen !== null) {
+                    const command = data.currentScreen;
+                    console.log(`Commando uit database geladen: ${command}`);
+
+                    switch (command) {
+                        case 'robot-startup':
+                            robotStartup();
+                            break;
+                        case 'robot-lost-charging':
+                            robotLostCharging();
+                            break;
+                        case 'robot-explore':
+                            robotExplore();
+                            break;
+                        case 'robot-go-to-visitors':
+                            robotGoToVisitors();
+                            break;
+                        case 'robot-arrived-at-visitors':
+                            robotArrivedAtVisitors();
+                            break;
+                        case 'robot-arrived-at-quiz-location':
+                            robotArrivedAtQuizLocation(); 
+                            break;
+                        case 'robot-go-charge':
+                            robotGoCharge();
+                            break;
+                        case 'robot-docking':
+                            robotDocking();
+                            break;
+                        case 'robot-charging':
+                            robotCharging();
+                            break;
+                        case 'robot-error-drive':
+                            robotErrorDrive();
+                            break;
+                        case 'robot-error-charge':
+                            robotErrorCharge();
+                            break;
+                        case 'robot-disconnected':
+                            robotDisconnected();
+                            break;
+                        case 'robot-connected':
+                            robotConnected();
+                            break;
+                        default:
+                            // Veiligheidscheck: als er een onbekend commando in de DB staat
+                            console.warn(`[Waarschuwing] Onbekend commando uit DB: '${command}'. Val terug op basis scherm.`);
+                            changeScreen('robot-basis-screen');
+                            break;
+                    }
+                } else {
+                    changeScreen('robot-basis-screen');
+                }
+            }
+        })
+        .catch(error => {
+            console.error(`Fout bij het ophalen van instellingen: ${error}`);
+            changeScreen('robot-basis-screen');
+        });
+}

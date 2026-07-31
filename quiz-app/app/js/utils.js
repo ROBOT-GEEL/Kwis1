@@ -11,6 +11,12 @@ const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
  * @param {string} screen The ID of the screen to show
  */
 function changeScreen(screen) {
+    const targetScreen = document.getElementById(screen);
+    if (!targetScreen) {
+        console.warn(`[Waarschuwing] Scherm '${screen}' bestaat niet in HTML. Val terug op 'robot-basis-screen'.`);
+        screen = 'robot-basis-screen';
+    }
+
     document.querySelectorAll('.screen').forEach(s => {
         s.style.display = (s.id === screen) ? 'block' : 'none';
     });

@@ -13,8 +13,8 @@
         <div class="overview-title">Robotoo Admin Panel</div>
 
         <div class="battery-status-container">
-            <img src="assets/icons/battery.svg" alt="Batterij" class="battery-icon">
-            <span id="batteryPercentage">100%</span>
+            <div id="batteryIcon" class="battery-icon"></div>
+            <span id="batteryPercentage">Loading...</span>
         </div>
 
         <div class="main-grid">
@@ -39,7 +39,7 @@
                 <img src="assets/icons/settings.svg" alt="figuur instellingen" class="btn-icon">
                 <span>Instellingen</span>
             </button>
-            <button class="grid-btn" onclick="location.href='../grafieken'">
+            <button class="grid-btn" onclick="location.href='../statistieken'">
                 <img src="assets/icons/bar-chart.svg" alt="figuur bar-chart" class="btn-icon">
                 <span>Statistieken</span>
             </button>
@@ -52,28 +52,6 @@
                 <span>Diagnose</span>
             </button>
             
-        </div>
-
-        <div class="hardware-controls">
-            <div class="control-group">
-                <span class="control-label">Projector</span>
-                <div class="control-buttons">
-                    <button class="action-btn on" onclick="toggleProjector('1')">On</button>
-                    <button class="action-btn off" onclick="toggleProjector('0')">Off</button>
-                </div>
-            </div>
-            
-            <div class="control-group">
-                <span class="control-label">Lens</span>
-                <div class="control-buttons">
-                    <button class="action-btn on" onclick="toggleProjector('wake')">Wake</button>
-                    <button class="action-btn off" onclick="toggleProjector('sleep')">Sleep</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="hardwareErrorContainer" class="hardware-error" style="display: none;">
-            <p id="errorText">Error</p>
         </div>
 
        <button id="backToQuizBtn" class="back-to-quiz-btn" style="display: block;" onclick="backToQuiz()">

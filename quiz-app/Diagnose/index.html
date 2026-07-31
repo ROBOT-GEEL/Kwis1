@@ -13,7 +13,7 @@
         
         <header class="settings-header">
             <h1 class="settings-title">Diagnose</h1>
-            <p class="settings-description">Hier kan je Hugoo en zijn programma's heropstarten</p>
+            <p class="settings-description">Hier kan de projector bedienen en Hugoo met of zonder zijn programma's heropstarten</p>
             
             <div class="settings-button-row right-aligned">
                 <button class="settings-back-btn" onclick="window.location.href='../admin-panel'"">
@@ -23,31 +23,137 @@
         </header>
 
         <main class="settings-content">
-            
             <section class="settings-card">
-                <h2 class="settings-card-title">Rebootacties</h2>
+                <h2 class="settings-card-title">Bumper</h2>
+                <div class="action-row full-width-row">
+                    <p class="action-description" id="noErrorTextBumper" style="display: block;">Status nog niet ontvangen...</p>
+                    <div id="hardwareErrorContainerBumper" class="hardware-error" style="display: none;">
+                        <p id="errorTextBumper">Error</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="settings-card">
+                <h2 class="settings-card-title">Projector Bediening</h2>
                 
                 <div class="action-row">
-                    <button class="settings-btn-primary" onclick="rebootRobot('robot-hard')">
+                    <button class="settings-btn-primary" onclick="toggleProjector('1'); greyOut(this)">
+                        <span class="btn-text">Aan</span>
+                    </button>
+                    <p class="action-description">Start hier de projector op. <br> De projector staat altijd aan als Hugoo aan het werk is.</p>
+                </div>
+
+                <div class="action-row">
+                    <button class="settings-btn-primary" onclick="toggleProjector('0'); greyOut(this)">
+                        <span class="btn-text">Uit</span>
+                    </button>
+                    <p class="action-description">Zet hier de projector uit <br> De projector staat altijd uit als Hugoo slaapt.</p>
+                </div>
+
+                <div class="action-row">
+                    <button class="settings-btn-primary" onclick="toggleProjector('wake'); greyOut(this)">
+                        <span class="btn-text">Wake</span>
+                    </button>
+                    <p class="action-description">Haal hier de projector uit zijn slaapstand. <br>De projector wordt wakker als de quiz wordt gestart.</p>
+                </div>
+
+                <div class="action-row">
+                    <button class="settings-btn-primary" onclick="toggleProjector('sleep'); greyOut(this)">
+                        <span class="btn-text">Sleep</span>
+                    </button>
+                    <p class="action-description">Zet de projector in slaapstand. <br>De projector gaat in slaapstand als de quiz wordt beëindigd.</p>
+                </div>
+
+                <div id="hardwareErrorContainerProjector" class="hardware-error" style="display: none;">
+                    <p id="errorTextProjector">Error</p>
+                </div>
+
+            </section>
+
+            <section class="settings-card">
+                <h2 class="settings-card-title">Rebootprocedure</h2>
+                
+                <div class="action-row">
+                    <button class="settings-btn-primary" onclick="rebootRobot('robot-hard'); greyOut(this)">
+                        <span class="btn-text">Reboot robot</span>
+                    </button>
+                    <p class="action-description">
+                        Klik hier om de robot volledig herop te starten. Dit reset het rij-gedrag. 
+                        Nadat de robot is heropgestart moet je met manual drive de robot tegen het laadstation rijden 
+                        of de robot voor de QR-code in de werkzone zetten zodat de camera deze kan zien.
+                        Hierna zou de robot zijn normale werking moeten hervatten.
+                    </p>
+                </div>
+            </section>           
+            
+            <section class="settings-card">
+                <h2 class="settings-card-title">Overige rebootacties</h2>
+                
+                <div class="action-row">
+                    <button class="settings-btn-primary" onclick="rebootRobot('robot-hard'); greyOut(this)">
                         <span class="btn-text">Reboot robot</span>
                     </button>
                     <p class="action-description">Herstart hier de volledige Orin Nano die verantwoordelijk is voor het rij-gedrag van de robot.</p>
                 </div>
 
                 <div class="action-row">
-                    <button class="settings-btn-primary" onclick="rebootRobot('robot-soft')">
-                        <span class="btn-text">Herstart robot</span>
+                    <button class="settings-btn-primary" onclick="rebootRobot('shutdown-robot'); greyOut(this)">
+                        <span class="btn-text">Robot afsluiten</span>
                     </button>
-                    <p class="action-description">Start alle programma's op de Orin Nano die verantwoordelijk is voor het rij-gedrag van de robot opnieuw op.</p>
+                    <p class="action-description">
+                        Dit sluit de hele robot af. Opstart is enkel mogelijk door de stroom uit en aan te zetten met de blauwe knop in de body.
+                        Vergeet daarna niet op het knopje van de PI te klikken om ook deze herop te starten.
+                    </p>
                 </div>
 
                 <div class="action-row">
-                    <button class="settings-btn-primary onclick="rebootRobot('pi-hard')"">
-                        <span class="btn-text">Reboot Pi</span>
+                    <button class="settings-btn-primary" onclick="rebootRobot('pi-hard'); greyOut(this)">
+                        <span class="btn-text">Reboot Scherm</span>
                     </button>
                     <p class="action-description">Herstart de Raspberry Pi 5 die verantwoordelijk is voor het tonen van alle schermen opnieuw op.</p>
                 </div>
 
+            </section>     
+            
+            <section class="settings-card">
+                <h2 class="settings-card-title">Handleiding</h2>
+                
+                <div class="action-row">
+                    <button class="settings-btn-primary" onclick="window.location.href='../diagnose/gebruikershandleiding.html'">
+                        <span class="btn-text">Gebruikershandleiding</span>
+                    </button>
+                    <p class="action-description">Raadpleeg hier de gebruikershandleiding van Hugoo</p>
+                </div>
+
+                <div class="action-row">
+                    <button class="settings-btn-primary" onclick="window.location.href='../diagnose/technischehandleiding.html'">
+                        <span class="btn-text">Technische handleiding</span>
+                    </button>
+                    <p class="action-description">Raadpleeg hier de technische handleiding van Hugoo</p>
+                </div>
+
+            </section>
+            
+            <section class="settings-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid var(--bgColor); padding-bottom: 0.5rem;">
+                    
+                    <h2 class="settings-card-title" style="border: none; padding: 0; margin: 0;">Robot Diagnose</h2>
+                    
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="settings-btn-primary" id="refresh-diagnose-button" onclick="makeDiagnose()">
+                            <span class="btn-text" id="refresh-diagnose-text">Refresh diagnose</span>
+                        </button>
+                        
+                        <button class="settings-btn-primary" onclick="toggleAllDiagnose()">
+                            <span class="btn-text" id="toggleAllBtnText">Alles inklappen</span>
+                        </button>
+                    </div>
+
+                </div>
+                
+                <div class="diagnose-container" id="diagnoseBox">
+                    Maak een diagnose door op de knop te klikken...
+                </div>
             </section>
 
         </main>

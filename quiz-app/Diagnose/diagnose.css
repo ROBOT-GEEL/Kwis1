@@ -1,9 +1,40 @@
+/* Import existing fonts */
+@font-face {
+    font-family: "CO Headline";
+    src: url("../shared/assets/fonts/Co-Headline.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+
+    ascent-override: 100%;
+    line-gap-override: 0%;
+}
+
+@font-face {
+    font-family: "CO Headline";
+    src: url("../shared/assets/fonts/Co-Headline-Bold.woff2") format("woff2");
+    font-weight: bold;
+    font-style: normal;
+
+    ascent-override: 100%;
+    line-gap-override: 0%;
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    src: url('../shared/assets/fonts/OpenSans-VariableFont_wdth,wght.ttf') format('truetype-variations');
+    font-weight: 100 900;
+    font-stretch: 75% 100%;
+    font-style: normal;
+}
+
+
 /* ==========================================================================
    Global Variables & Base
    ========================================================================== */
 :root {
     --darkGreen: #005144;
     --darkGreen-hover: #026151;
+    --grey: #cbcbcb;
     --bgColor: #DAF5F0;
     --cardBg: #ffffff;
     --textColor: #000000;
@@ -91,6 +122,12 @@ body {
     background-color: var(--darkGreen-hover); 
 }
 
+.settings-btn-nonActive,
+.settings-btn-nonActive:hover { 
+    background-color: var(--grey); 
+    color: #ffffff; 
+}
+
 .settings-back-btn { 
     background-color: var(--darkGreen); 
     color: #ffffff; 
@@ -108,6 +145,7 @@ body {
 .settings-content {
     display: flex;
     flex-direction: column;
+    gap:2rem;
 }
 
 .settings-card {
@@ -129,6 +167,10 @@ body {
 /* ==========================================================================
    Action Rows (Knop + Uitleg layout)
    ========================================================================== */
+.action-row.full-width-row {
+    grid-template-columns: 1fr;
+}
+
 .action-row {
     display: grid;
     grid-template-columns: 200px 1fr; /* Knop krijgt vaste breedte, tekst vult de rest */
@@ -150,6 +192,125 @@ body {
     font-size: 1rem;
     margin: 0;
     line-height: 1.5;
+}
+
+/* ==========================================================================
+   Layout voor errors van de projector
+   ========================================================================== */
+
+.hardware-error {
+    background-color: #ffcccc;
+    color: #cc0000;
+    padding: 1rem; 
+    border: 1px solid #cc0000;
+    border-radius: 5px;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box; 
+    word-wrap: break-word;
+}
+
+.hardware-error p {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Clean & Expandable Diagnose Weergave
+   ========================================================================== */
+.diagnose-container {
+    font-size: 1rem;
+    color: var(--textColor);
+    line-height: 1.6;
+}
+
+/* De structuur per niveau */
+.clean-row {
+    margin-bottom: 0.5rem;
+}
+
+/* De 12 grote niveaus - exact dezelfde stijl als action-row */
+.top-level-row {
+    border-bottom: 1px solid var(--bgColor);
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.top-level-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+/* Inspringing voor sub-items */
+.clean-children {
+    margin-left: 1rem;
+    padding-left: 1rem;
+    border-left: 2px solid var(--bgColor);
+    margin-top: 0.5rem;
+}
+
+/* Inklapbare details styling */
+details.clean-details {
+    cursor: pointer;
+}
+
+details.clean-details > summary {
+    list-style: none; /* Standaard driehoekje verbergen */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    outline: none;
+}
+
+/* Eigen pijl icoon voor open/dicht */
+details.clean-details > summary::-webkit-details-marker {
+    display: none;
+}
+
+details.clean-details > summary::before {
+    content: "▶";
+    font-size: 0.75rem;
+    color: var(--subTextColor);
+    transition: transform 0.2s ease;
+    display: inline-block;
+}
+
+details.clean-details[open] > summary::before {
+    transform: rotate(90deg);
+}
+
+/* Tekstopmaak */
+.clean-key {
+    font-weight: bold;
+    color: var(--darkGreen);
+}
+
+.clean-val {
+    color: var(--subTextColor);
+}
+
+/* Dynamische kleuren op basis van status */
+.text-green {
+    color: #198754 !important; /* Groen */
+}
+
+.text-red {
+    color: #dc3545 !important; /* Rood */
+}
+
+/* Rood uitroepteken voor fouten in subniveau */
+.error-badge {
+    color: #dc3545;
+    font-weight: bold;
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.clean-leaf-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-left: 1.25rem; /* Zelfde inspringing als de breedte van het pijltje */
 }
 
 /* ==========================================================================

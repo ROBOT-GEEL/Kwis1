@@ -6,26 +6,37 @@
  * - quiz.js (Quiz)
  */
 
-/**
- * Disable the admin panel button when the robot is docking, enable when a different event is sent
- */
-socket.onAny((eventName, ...args) => {
-    const adminButton = document.querySelector('#admin-panel-button');
+// ==========================================
+// SOCKET LISTENERS
+// ==========================================
+socket.on('robot-startup', () => { robotStartup(); });
+socket.on('robot-lost-charging', () => { robotLostCharging(); });
+socket.on('robot-explore', () => { robotExplore(); });
+socket.on('robot-go-to-visitors', () => { robotGoToVisitors(); });
+socket.on('robot-arrived-at-visitors', () => { robotArrivedAtVisitors(); });
+socket.on('robot-arrived-at-quiz-location', async () => { await robotArrivedAtQuizLocation(); });
+socket.on('robot-go-charge', () => { robotGoCharge(); });
+socket.on('robot-docking', () => { robotDocking(); });
+socket.on('robot-charging', () => { robotCharging(); });
+socket.on('robot-error-drive', () => { robotErrorDrive(); });
+socket.on('robot-error-charge', () => { robotErrorCharge(); });
+socket.on('robot-disconnected', () => { robotDisconnected(); });
+socket.on('robot-connected', () => { robotConnected(); });
 
-    if (adminButton) {
-        adminButton.disabled = (eventName === 'robot-docking');
-    }
-});
 
-socket.on('robot-startup', () => {
+// ==========================================
+// FUNCTIE DEFINITIES
+// ==========================================
+
+function robotStartup() {
     changeScreen('robot-startup-screen');
-});
+}
 
-socket.on('robot-lost-charging', () => {
+function robotLostCharging() {
     changeScreen('robot-lost-charging');
-});
+}
 
-socket.on('robot-explore', () => {
+function robotExplore() {
     changeScreen('robot-explore-screen');
 
     const interval = setInterval(() => {
@@ -41,9 +52,9 @@ socket.on('robot-explore', () => {
         });
         document.querySelectorAll('.language-selector')[(selectedLanguageIndex + 1) % 3].click();
     }, 2100);
-});
+}
 
-socket.on('robot-go-to-visitors', () => {
+function robotGoToVisitors() {
     changeScreen('robot-go-to-visitors-screen');
 
     const interval = setInterval(() => {
@@ -59,12 +70,11 @@ socket.on('robot-go-to-visitors', () => {
         });
         document.querySelectorAll('.language-selector')[(selectedLanguageIndex + 1) % 3].click();
     }, 2100);
-});
+}
 
-socket.on('robot-arrived-at-visitors', () => {
+function robotArrivedAtVisitors() {
     document.querySelector('#NL-selector').click();
     changeScreen('start-screen');
-
 
     if (Quiz.timeToStartQuiz > 0) {
         console.log('Waiting for quiz to start...');
@@ -75,9 +85,9 @@ socket.on('robot-arrived-at-visitors', () => {
             }
         }, Quiz.timeToStartQuiz * 1000);
     }
-});
+}
 
-socket.on('robot-arrived-at-quiz-location', async () => {
+async function robotArrivedAtQuizLocation() {
     console.log('Robot has arrived at the quiz location!');
     try {
         await Quiz.start();
@@ -85,37 +95,36 @@ socket.on('robot-arrived-at-quiz-location', async () => {
         error(e);
         return;
     }
-   
-});
+}
 
-socket.on('robot-go-charge', () => {
+function robotGoCharge() {
     changeScreen('robot-go-charge-screen');
-});
+}
 
-socket.on('robot-docking', () => {
+function robotDocking() {
     console.log('Docking ontvangen');
     changeScreen('robot-docking-screen');
-});
+}
 
-socket.on('robot-charging', () => {
+function robotCharging() {
     changeScreen('robot-charging-screen');
-});
+}
 
-socket.on('robot-error-drive', () => {
+function robotErrorDrive() {
     changeScreen('error-screen');
     document.querySelector('#error-container').innerHTML = `<h1>Hugoo is verdwaald...</h1><p>Gelieve dit aan het onthaal te melden.</p>`;
-});
+}
 
-socket.on('robot-error-charge', () => {
+function robotErrorCharge() {
     changeScreen('error-screen');
-    document.querySelector('#error-container').innerHTML = `<h1>Hugoo kan het laadstation niet vinden.</h1><p>Gelieve dit aan het onthaal te melden.</p>`;
-});
+    document.querySelector('#error-container').innerHTML = `<h1>Hugoo kan het laadstation niet vinden.</h1><p>Open het admin-paneel, ga naar diagnose en volg daar de rebootprocedure.</p>`;
+}
 
-socket.on('robot-disconnected', () => {
+function robotDisconnected() {
     changeScreen('error-screen');
     document.querySelector('#error-container').innerHTML = `<h1>De verbinding met het besturingssysteem is verloren gegaan.</h1><p>Even geduld aub...</p>`;
-});
+}
 
-socket.on('robot-connected', () => {
+function robotConnected() {
     changeScreen('robot-startup-screen');
-});
+}

@@ -45,10 +45,8 @@ export async function getTargetProjectorState() {
 export const toggleProjector = async (req, res, next) => {
     // Extract state from the request body
     const { projectorState } = req.body;
-    console.log("Projector toggle requested, state:", projectorState);
     
     const state = await getTargetProjectorState();
-    console.log("Current state should be:", state);
 
     // Validate input: Check if projectorState is provided
     if (!projectorState) {

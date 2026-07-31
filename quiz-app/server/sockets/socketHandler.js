@@ -2,6 +2,7 @@ import logger from "../config/logger.js";
 import { getDB } from "../config/db.js";
 import { getTargetProjectorState } from "../controllers/projectorController.js";
 import { exec } from "child_process";
+import { getRobotStatus } from "../controllers/robotStatusController.js";
 
 export function registerSocketHandlers(io) {
 
@@ -115,36 +116,6 @@ export function registerSocketHandlers(io) {
       }
     });
 
-/* Quinten zijn code:
-    const blankScreen = () => {
-      exec("DISPLAY=:0 xset s activate", (error, stderr) => {
-        if (error) {
-          logger.error(`Error executing sleep command: ${error.message}`);
-          return;
-        }
-        if (stderr) {
-          logger.error(`Error output from sleep command: ${stderr}`);
-          return;
-        }
-      });
-      screenOn = false;
-    };
-
-    const wakeScreen = () => {
-      exec("DISPLAY=:0 xset s reset", (error, stderr) => {
-        if (error) {
-          logger.error(`Error executing wake command: ${error.message}`);
-          return;
-        }
-        if (stderr) {
-          logger.error(`Error output from wake command: ${stderr}`);
-          return;
-        }
-      });
-      screenOn = true;
-    };
-*/
-
 //Oplossing Matthijs voor het nieuwe scherm
   const blankScreen = () => {
     const seconds = 1*60;
@@ -176,6 +147,7 @@ export function registerSocketHandlers(io) {
     //
     // Robot platform events
     //
+    /*
     const robotEvents = [
       "robot-startup",
       "robot-explore",
@@ -192,7 +164,10 @@ export function registerSocketHandlers(io) {
       "robot-reboot",
       "robot-lost-charging",
       "robot-get-battery-percentage",
-      "robot-update-battery-percentage"
+      "robot-update-battery-percentage",
+      "robot-bumper-status",
+      "drive",
+      "robot-stop-for-x-time"
     ];
 
     robotEvents.forEach((event) => {
@@ -214,25 +189,119 @@ export function registerSocketHandlers(io) {
           }
         }
       });
-    });
-
-    // Manual toggle triggered by the Python button script
-    socket.on("manual-screen-toggle", () => {
-      if (screenOn) {
-        blankScreen();
-      } else {
-        wakeScreen();
-      }
-    });
+    });*/
 
     //
-    // Manual drive control events
+    // Robot platform events NIEUW MET DATABASE
     //
 
-    socket.on('drive', (data) => {
-      socket.broadcast.emit('drive', data);
+    socket.on("robot-startup", async (data) => {
+      logger.info("robot-startup", data || "");
+      socket.broadcast.emit("robot-startup", data);
+      await saveInDB("currentScreen", "robot-startup", "triggered by robot")
     });
 
+    socket.on("robot-explore", async (data) => {
+      logger.info("robot-explore", data || "");
+      socket.broadcast.emit("robot-explore", data);
+      await saveInDB("currentScreen", "robot-explore", "triggered by robot")
+    });
+
+    socket.on("robot-go-to-visitors", async (data) => {
+      logger.info("robot-go-to-visitors", data || "");
+      socket.broadcast.emit("robot-go-to-visitors", data);
+      await saveInDB("currentScreen", "robot-go-to-visitors", "triggered by robot")
+    });
+
+    socket.on("robot-arrived-at-visitors", async (data) => {
+      logger.info("robot-arrived-at-visitors", data || "");
+      socket.broadcast.emit("robot-arrived-at-visitors", data);
+      await saveInDB("currentScreen", "robot-arrived-at-visitors", "triggered by robot")
+    });
+
+    socket.on("drive-to-quiz-location", async (data) => {
+      logger.info("drive-to-quiz-location", data || "");
+      socket.broadcast.emit("drive-to-quiz-location", data);
+      socket.broadcast.emit("drive_to_quiz_location");
+      await saveInDB("currentScreen", "robot-arrived-at-visitors", "triggered by robot")
+    });
+
+    socket.on("robot-arrived-at-quiz-location", async (data) => {
+      logger.info("robot-arrived-at-quiz-location", data || "");
+      socket.broadcast.emit("robot-arrived-at-quiz-location", data);
+      await saveInDB("currentScreen", "robot-arrived-at-quiz-location", "triggered by robot")
+    });
+
+    socket.on("robot-go-charge", async (data) => {
+      logger.info("robot-go-charge", data || "");
+      socket.broadcast.emit("robot-go-charge", data);
+      await saveInDB("currentScreen", "robot-go-charge", "triggered by robot")
+    });
+
+    socket.on("robot-docking", async (data) => {
+      logger.info("robot-docking", data || "");
+      socket.broadcast.emit("robot-docking", data);
+      await saveInDB("currentScreen", "robot-docking", "triggered by robot")
+    });
+
+    socket.on("robot-charging", async (data) => {
+      logger.info("robot-charging", data || "");
+      socket.broadcast.emit("robot-charging", data);
+      await saveInDB("currentScreen", "robot-charging", "triggered by robot")
+      if (screenOn) blankScreen();
+    });
+
+    socket.on("robot-error-drive", async(data) => {
+      logger.info("robot-error-drive", data || "");
+      socket.broadcast.emit("robot-error-drive", data);
+      await saveInDB("currentScreen", "robot-error-drive", "triggered by robot")
+    });
+
+    socket.on("robot-error-charge", async (data) => {
+      logger.info("robot-error-charge", data || "");
+      socket.broadcast.emit("robot-error-charge", data);
+      await saveInDB("currentScreen", "robot-error-charge", "triggered by robot")
+    });
+
+    socket.on("robot-disconnected", async (data) => {
+      logger.info("robot-disconnected", data || "");
+      socket.broadcast.emit("robot-disconnected", data);
+      await saveInDB("currentScreen", "robot-disconnected", "triggered by robot")
+    });
+
+    socket.on("robot-lost-charging", async(data) => {
+      logger.info("robot-lost-charging", data || "");
+      socket.broadcast.emit("robot-lost-charging", data);
+      await saveInDB("currentScreen", "robot-lost-charging", "triggered by robot")
+    });
+
+    socket.on("robot-get-battery-percentage", (data) => {
+      logger.info("robot-get-battery-percentage", data || "");
+      socket.broadcast.emit("robot-get-battery-percentage", data);
+    });
+
+    socket.on("robot-update-battery-percentage", (data) => {
+      logger.info("robot-update-battery-percentage", data || "");
+      socket.broadcast.emit("robot-update-battery-percentage", data);
+    });
+
+    socket.on("robot-bumper-status", (data) => {
+      logger.info("robot-bumper-status", data || "");
+      console.log("bumper binnengekregen", data || "");
+      socket.broadcast.emit("robot-bumper-status", data);
+    });
+
+    socket.on("drive", (data) => {
+      logger.info("drive", data || "");
+      socket.broadcast.emit("drive", data);
+    });
+
+    socket.on("robot-stop-for-x-time", (data) => {
+      logger.info("robot-stop-for-x-time", data || "");
+      socket.broadcast.emit("robot-stop-for-x-time", data);
+    });
+
+    
     //
     // Quiz interface events
     //
@@ -351,6 +420,25 @@ export function registerSocketHandlers(io) {
   setInterval(() => syncProjectorState(), 60000); 
 }
 
+async function saveInDB(topic, value, msg) {
+    try {
+        const db = getDB();
+        const robotStatus = db.collection("robotStatus");
+        
+        await robotStatus.insertOne({
+            [topic]: value,
+            message: msg,
+            tijd: new Date()
+        });
+        
+        console.log(`Succesvol ${topic} in database opgeslagen!`);
+    } catch (error) {
+        console.error("Fout bij het opslaan in de database:", error);
+    }
+}
+
+
+
 /**
  * Synchronizes the projector state with the target state.
  * If an error occurs, it will keep retrying until successful.
@@ -361,7 +449,6 @@ async function syncProjectorState() {
     if (newState === true) {
         await toggleProjector("1");
         //await toggleProjector("sleep"); Veroorzaker van de uitval??
-        console.log("syncProjectorState() with newState === true")
     } else if (newState === false) {
         await toggleProjector("0");
     }

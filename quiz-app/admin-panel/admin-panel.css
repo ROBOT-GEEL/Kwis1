@@ -34,6 +34,7 @@
     --yellow: #F8B200;
     --darkYellow: #3e2c00;
     --red: #cc0000;
+    --orange: #f3991b;
     --green: #28a745;
 }
 
@@ -157,18 +158,6 @@ body {
     line-height: normal; 
 }
 
-.hardware-error {
-    display: none; /* Wordt getoond via JS */
-    background-color: #ffcccc;
-    color: #cc0000;
-    padding: 0; /* Padding volledig verwijderd */
-    border: 1px solid #cc0000;
-    border-radius: 5px;
-    margin-bottom: 1rem;
-    text-align: center;
-    width: 100%; /* Zorgt dat hij de breedte van de container volgt */
-}
-
 .errorText {
     margin: 5px 0; /* Een kleine margin op de tekst zelf is mooier dan padding op de box */
 }
@@ -187,7 +176,7 @@ body {
     border-radius: 0.5rem;
     cursor: pointer;
     transition: background-color 0.3s;
-    margin-top: auto;
+    margin-top: 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -364,9 +353,13 @@ body {
 
 /* Formaat van het batterij icoon */
 .battery-icon {
-    width: 28px;
-    height: 28px;
-    object-fit: contain;
+    width: 28px;  /* Zet hier de juiste breedte */
+    height: 28px; /* Zet hier de juiste hoogte */
+    background-color: currentColor; /* Zorgt dat style.color in JS perfect werkt */
+    
+    /* Haalt de vorm uit je SVG bestand */
+    -webkit-mask: url('assets/icons/battery.svg') no-repeat center / contain;
+    mask: url('assets/icons/battery.svg') no-repeat center / contain;
 }
 
 /* Styling van het percentage */
@@ -375,3 +368,4 @@ body {
     font-size: 1.1rem;
     color: var(--darkGreen, #005144); /* Maakt gebruik van je eerdere kleuren */
 }
+

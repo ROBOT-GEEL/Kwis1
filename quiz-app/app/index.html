@@ -67,6 +67,12 @@
             <button data-lang-key="ERROR_CLOSE" id="error-close">Terug naar het startscherm</button>
         </dialog>
 
+        <div id="robot-basis-screen" class="screen" style="display:block;">
+            <div>
+                <h1>Geen scherm om te laten zien...</h1>
+            </div>
+        </div>
+
         <div id="robot-startup-screen" class="screen" style="display:none;">
             <div id="robot-startup-screen-content">
                 <h1>Halloo!</h1>
@@ -75,7 +81,7 @@
             </div>
         </div>
 
-        <div id="robot-explore-screen" class="screen" style="display:block;">
+        <div id="robot-explore-screen" class="screen" style="display:none;">
             <div id="robot-explore-screen-content">
                 <h1 data-lang-key="EXPLORING">EXPLORING</h1>
                 <img src="./assets/exploring.gif" />
@@ -184,8 +190,8 @@
         
         <div id="robot-lost-charging" class="screen" style="display:none;">
             <div class="robot-lost-charging-container">
-                <h1>Hugoo geraakte niet bij het laadstation.
-                    Open het adminpaneel en rijdt via de manual drive functie de robot tegen het laadstation.</h1>
+                <h1>Hugoo geraakte niet bij het laadstation.</h1>
+                <p>Open het adminpaneel en rijdt via de manual drive functie de robot tegen het laadstation.</p>
             </div>
         </div>
 

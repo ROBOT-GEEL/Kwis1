@@ -1,0 +1,287 @@
+/* ==========================================================================
+   Fonts configuration
+   ========================================================================== */
+@font-face {
+    font-family: "CO Headline";
+    src: url("../shared/assets/fonts/Co-Headline.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+
+    ascent-override: 100%;
+    line-gap-override: 0%;
+}
+
+@font-face {
+    font-family: "CO Headline";
+    src: url("../shared/assets/fonts/Co-Headline-Bold.woff2") format("woff2");
+    font-weight: bold;
+    font-style: normal;
+
+    ascent-override: 100%;
+    line-gap-override: 0%;
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    src: url('../shared/assets/fonts/OpenSans-VariableFont_wdth,wght.ttf') format('truetype-variations');
+    font-weight: 100 900;
+    font-stretch: 75% 100%;
+    font-style: normal;
+}
+
+/* ==========================================================================
+   Global Variables
+   ========================================================================== */
+:root {
+    --darkGreen: #005144;
+    --darkGreen-hover: #026151;
+    --bgColor: #DAF5F0;
+    --cardBg: #ffffff;
+    --textColor: #000000;
+    --subTextColor: #555555;
+    --borderColor: #b9b9b9;
+    --dangerColor: #cc0000;
+}
+
+/* ==========================================================================
+   Base Layout
+   ========================================================================== */
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: var(--bgColor);
+    font-family: 'Open Sans', sans-serif;
+}
+
+.page-wrapper {
+    max-width: 900px; 
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================================================
+   Header Section
+   ========================================================================== */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.page-title {
+    color: var(--darkGreen);
+    font-family: "CO Headline", sans-serif;
+    font-size: 2.5rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.page-description {
+    color: var(--subTextColor);
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+/* ==========================================================================
+   Buttons (Touch-friendly sizes)
+   ========================================================================== */
+.btn-primary, 
+.btn-secondary {
+    font-family: "CO Headline", sans-serif;
+    font-size: 1.2rem; /* Larger text for touch */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 0 1.5rem;
+    
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    
+    transition-property: background-color, transform;
+    transition-duration: 0.3s, 0.2s;
+    transition-timing-function: ease;
+    vertical-align: middle;
+}
+
+.btn-text {
+    display: inline;
+    position: static; 
+    margin: 0;
+    line-height: 1;
+}
+
+.btn-primary { background-color: var(--darkGreen); color: #ffffff; }
+.btn-primary:hover { background-color: var(--darkGreen-hover); }
+
+.btn-secondary { background-color: var(--borderColor); color: var(--textColor); }
+.btn-secondary:hover { background-color: #bcbcbc; }
+
+/* ==========================================================================
+   Main Content & Selection Card
+   ========================================================================== */
+.content-body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 4rem;
+}
+
+.selection-card {
+    background-color: var(--cardBg);
+    border-radius: 0.5rem;
+    padding: 3rem; /* Increased padding for a larger feel */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    width: 100%;
+    max-width: 750px; /* Made the card wider */
+    text-align: center;
+}
+
+.warning-text {
+    color: var(--dangerColor);
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin: 0 0 2rem 0;
+    display: none; 
+    background-color: #ffe6e6;
+    padding: 1rem;
+    border-radius: 0.4rem;
+}
+
+/* ==========================================================================
+   Checkbox Grid Layout
+   ========================================================================== */
+.checkbox-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    margin-bottom: 3rem; /* Extra space before the buttons */
+}
+
+.checkbox-column {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem; /* Large gap for touchscreen safety */
+    text-align: left;
+    flex: 1;
+    padding: 0 2rem; /* More horizontal breathing room */
+}
+
+.divider {
+    width: 2px;
+    background-color: var(--borderColor);
+    margin: 0 1rem;
+}
+
+/* ==========================================================================
+   Modern & Large Checkbox Styling
+   ========================================================================== */
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-left: 2.5rem; /* More space for the larger box */
+    cursor: pointer;
+    font-size: 1.3rem; /* Larger font for readability */
+    user-select: none;
+    color: var(--textColor);
+}
+
+.custom-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 1.6rem; /* Larger box */
+    width: 1.6rem;
+    background-color: #eee;
+    border: 2px solid var(--borderColor);
+    border-radius: 4px;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.custom-checkbox:hover input ~ .checkmark {
+    background-color: #e0e0e0;
+}
+
+.custom-checkbox input:checked ~ .checkmark {
+    background-color: var(--darkGreen);
+    border-color: var(--darkGreen);
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.custom-checkbox input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Adjusted checkmark lines for the larger box */
+.custom-checkbox .checkmark:after {
+    left: 8px;
+    top: 3px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* ==========================================================================
+   Card Actions (Buttons)
+   ========================================================================== */
+.card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Space between primary and secondary button */
+}
+
+.action-btn {
+    width: 100%;
+    height: 4rem; /* Taller buttons for touch targets */
+}
+
+/* ==========================================================================
+   Mobile Responsiveness
+   ========================================================================== */
+@media (max-width: 650px) {
+    .page-wrapper {
+        padding: 1rem;
+    }
+
+    .checkbox-container {
+        flex-direction: column;
+        gap: 2.5rem;
+    }
+
+    .checkbox-column {
+        padding: 0;
+        gap: 2rem;
+    }
+
+    .divider {
+        width: 100%;
+        height: 2px;
+        margin: 1rem 0;
+    }
+
+    .selection-card {
+        padding: 1.5rem;
+    }
+}

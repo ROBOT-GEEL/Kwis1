@@ -15,17 +15,8 @@
             <h1 class="settings-title">Instellingen</h1>
             <p class="settings-description">Beheer hier de configuratie van de quiz en Hugoo.</p>
             
-            <div class="settings-button-row">
-                <div class="settings-actions">
-                    <button id="buttonSaveSettings" class="settings-btn-primary" onclick="buttonSaveSettings()">
-                        <span class="btn-text">Opslaan</span>
-                    </button>
-                    <button id="btnCancel" class="settings-btn-secondary" onclick="retrieveSettings()">
-                        <span class="btn-text">Annuleren</span>
-                    </button>
-                </div>
-                
-                <button class="settings-back-btn" onclick="window.location.href='../admin-panel'">
+            <div class="settings-button-row">               
+                <button id="btnBack" class="settings-back-btn">
                     <span class="btn-text">Terug naar admin panel</span>
                 </button>
             </div>
@@ -151,134 +142,6 @@
                     <p class="mobile-only-warning">Het herconfigureren van antwoordzones vereist een groot scherm en kan enkel op een pc worden uitgevoerd.</p>
                 </div>
             </section>
-
-            <!-- <section class="settings-card">
-                <h2 class="settings-card-title">Systeeminstellingen</h2>
-                <div class="settings-grid">
-                    
-                    <div class="settings-input-group">
-                        <label class="settings-label" for="currentDate">Huidige datum:</label>
-                        <input type="date" id="currentDate" class="settings-input">
-                    </div>
-
-                    <div class="settings-input-group">
-                        <label class="settings-label" for="currentTime">Huidige tijd:</label>
-                        <input type="time" id="currentTime" class="settings-input">
-                    </div>
-
-                    <div class="settings-input-group full-width-grid">
-                        <label class="settings-label">Actieve dagen en uren:</label>
-                        <div class="daily-schedule-container">
-                            
-                            <div class="daily-schedule-row">
-                                <label class="day-toggle">
-                                    <input type="checkbox" id="activeMon" value="1">
-                                    <span class="day-chip">Ma</span>
-                                </label>
-                                <div class="time-inputs">
-                                    <input type="time" id="startMon" class="settings-input">
-                                    <span>-</span>
-                                    <input type="time" id="endMon" class="settings-input">
-                                </div>
-                            </div>
-
-                            <div class="daily-schedule-row">
-                                <label class="day-toggle">
-                                    <input type="checkbox" id="activeTue" value="2">
-                                    <span class="day-chip">Di</span>
-                                </label>
-                                <div class="time-inputs">
-                                    <input type="time" id="startTue" class="settings-input">
-                                    <span>-</span>
-                                    <input type="time" id="endTue" class="settings-input">
-                                </div>
-                            </div>
-
-                            <div class="daily-schedule-row">
-                                <label class="day-toggle">
-                                    <input type="checkbox" id="activeWed" value="3">
-                                    <span class="day-chip">Wo</span>
-                                </label>
-                                <div class="time-inputs">
-                                    <input type="time" id="startWed" class="settings-input">
-                                    <span>-</span>
-                                    <input type="time" id="endWed" class="settings-input">
-                                </div>
-                            </div>
-
-                            <div class="daily-schedule-row">
-                                <label class="day-toggle">
-                                    <input type="checkbox" id="activeThu" value="4">
-                                    <span class="day-chip">Do</span>
-                                </label>
-                                <div class="time-inputs">
-                                    <input type="time" id="startThu" class="settings-input">
-                                    <span>-</span>
-                                    <input type="time" id="endThu" class="settings-input">
-                                </div>
-                            </div>
-
-                            <div class="daily-schedule-row">
-                                <label class="day-toggle">
-                                    <input type="checkbox" id="activeFri" value="5">
-                                    <span class="day-chip">Vr</span>
-                                </label>
-                                <div class="time-inputs">
-                                    <input type="time" id="startFri" class="settings-input">
-                                    <span>-</span>
-                                    <input type="time" id="endFri" class="settings-input">
-                                </div>
-                            </div>
-
-                            <div class="daily-schedule-row">
-                                <label class="day-toggle">
-                                    <input type="checkbox" id="activeSat" value="6">
-                                    <span class="day-chip">Za</span>
-                                </label>
-                                <div class="time-inputs">
-                                    <input type="time" id="startSat" class="settings-input">
-                                    <span>-</span>
-                                    <input type="time" id="endSat" class="settings-input">
-                                </div>
-                            </div>
-
-                            <div class="daily-schedule-row">
-                                <label class="day-toggle">
-                                    <input type="checkbox" id="activeSun" value="0">
-                                    <span class="day-chip">Zo</span>
-                                </label>
-                                <div class="time-inputs">
-                                    <input type="time" id="startSun" class="settings-input">
-                                    <span>-</span>
-                                    <input type="time" id="endSun" class="settings-input">
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
-            </section> -->
-
-            <div class="power-management-container">
-                
-                <section class="settings-card activate-card disabled-card" id="cardActivate">
-                    <h2 class="settings-card-title success-text">Hugoo inschakelen</h2>
-                    <p class="settings-description" style="margin-bottom: 1rem;">Hervat de normale werking van Hugoo.</p>
-                    <button id="btnActivate" class="settings-btn-success" onclick="activateRobot()">
-                        <span class="btn-text">Hugoo inschakelen</span>
-                    </button>
-                </section>
-
-                <section class="settings-card shutdown-card" id="cardShutdown">
-                    <h2 class="settings-card-title danger-text">Hugoo uitschakelen</h2>
-                    <p class="settings-description" style="margin-bottom: 1rem;">Wanneer Hugoo wordt afgesloten, zal hij naar het laadstation rijden en pas terug beginnen rijden als hij manueel wordt ingeschakeld.</p>
-                    <button id="btnShutdown" class="settings-btn-danger" onclick="shutdownRobot()">
-                        <span class="btn-text">Hugoo uitschakelen</span>
-                    </button>
-                </section>
-
-            </div>
 
             <section class="settings-card settings-legend">
                 <p><strong>Answer Time:</strong> De tijd die deelnemers krijgen voor te antwoorden op de gestelde vraag.</p>

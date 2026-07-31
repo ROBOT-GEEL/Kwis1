@@ -1,0 +1,139 @@
+@font-face {
+    font-family: "CO Headline";
+    src: url("../shared/assets/fonts/Co-Headline.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+    ascent-override: 100%;
+    line-gap-override: 0%;
+}
+
+@font-face {
+    font-family: "CO Headline";
+    src: url("../shared/assets/fonts/Co-Headline-Bold.woff2") format("woff2");
+    font-weight: bold;
+    font-style: normal;
+    ascent-override: 100%;
+    line-gap-override: 0%;
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    src: url('../shared/assets/fonts/OpenSans-VariableFont_wdth,wght.ttf') format('truetype-variations');
+    font-weight: 100 900;
+    font-stretch: 75% 100%;
+    font-style: normal;
+}
+
+/* ==========================================================================
+   Global Variables & Base
+   ========================================================================== */
+:root {
+    --darkGreen: #005144;
+    --darkGreen-hover: #026151;
+    --bgColor: #DAF5F0;
+    --cardBg: #ffffff;
+    --textColor: #000000;
+    --subTextColor: #555555;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: 'Open Sans', sans-serif; 
+    background-color: var(--bgColor); /* Voeg dit toe */
+}
+
+/* ==========================================================================
+   Layout & Container
+   ========================================================================== */
+.header-wrapper {
+    flex-shrink: 0;
+}
+
+/* Deze container zorgt voor de ademruimte aan de zijkanten */
+.container {
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 20px 30px; 
+}
+
+iframe {
+    flex-grow: 1;
+    width: 100%;
+    border: none;
+}
+
+/* ==========================================================================
+   Header & Text
+   ========================================================================== */
+.settings-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 1rem; 
+    width: 100%;
+}
+
+.settings-title {
+    color: var(--darkGreen);
+    font-family: "CO Headline", sans-serif;
+    font-size: 2.5rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.settings-description {
+    color: var(--subTextColor);
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+.settings-button-row {
+    display: flex; 
+    gap: 15px; 
+    margin-top: 15px; 
+}
+
+/* Beide knoppen delen nu dezelfde styling via de komma */
+.settings-back-btn,
+.settings-action-btn {
+    font-family: "CO Headline", sans-serif;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 0.3125rem;
+    cursor: pointer;
+    height: 3rem;
+    padding: 0 1.5rem;
+    background-color: var(--darkGreen); 
+    color: #ffffff;
+    
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1;
+
+    transition-property: background-color, transform;
+    transition-duration: 0.3s, 0.2s;
+    transition-timing-function: ease;
+    vertical-align: middle;
+}
+
+.settings-back-btn:hover,
+.settings-action-btn:hover { 
+    background-color: var(--darkGreen-hover); 
+    transform: translateY(-0.125rem); 
+}
+
+.btn-text {
+    display: inline;
+    position: static; 
+    margin: 0;
+    line-height: 1;
+}

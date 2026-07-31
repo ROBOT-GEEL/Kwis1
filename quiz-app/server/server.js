@@ -11,10 +11,13 @@ import { registerSocketHandlers } from "./sockets/socketHandler.js";
 // Routes
 import quizRoutes from "./routes/quiz.js";
 import cmsRoutes from "./routes/cms.js";
-import grafiekenRoutes from "./routes/grafieken.js";
+import statistiekenRoutes from "./routes/statistieken.js";
+import diagnoseRoutes from "./routes/diagnose.js";
 import projectorRoutes from "./routes/projector.js";
 import configRoutes from "./routes/config.js";
 import authRoutes from "./routes/auth.js";
+import robotStatus from "./routes/robotStatus.js";
+
 
 dotenv.config();
 const app = express();
@@ -46,17 +49,20 @@ app.use("/admin-panel", express.static(path.join(ROOT_DIR, "admin-panel")));
 app.use("/shared", express.static(path.join(ROOT_DIR, "shared")));
 app.use("/cms", express.static(path.join(ROOT_DIR, "Cms")));
 app.use("/diagnose", express.static(path.join(ROOT_DIR, "Diagnose")));
-app.use("/grafieken", express.static(path.join(ROOT_DIR, "Grafieken")));
+app.use("/statistieken", express.static(path.join(ROOT_DIR, "Statistieken")));
 app.use("/settings", express.static(path.join(ROOT_DIR, "Settings")));
 app.use("/manual-driving", express.static(path.join(ROOT_DIR, "manual-driving")));
 
 // API routes
 app.use("/quiz", quizRoutes);
 app.use("/cms", cmsRoutes);
-app.use("/grafieken", grafiekenRoutes);
+app.use("/statistieken", statistiekenRoutes);
+app.use("/diagnose", diagnoseRoutes);
 app.use("/projector-control", projectorRoutes);
 app.use("/config", configRoutes);
 app.use("/auth", authRoutes);
+app.use("/robot-status", robotStatus);
+
 
 // General Routes
 app.get("/", (req, res) => {

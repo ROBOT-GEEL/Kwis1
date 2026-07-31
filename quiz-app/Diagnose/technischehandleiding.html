@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technische Handleiding</title>
+    <link rel="icon" type="image/x-icon" href="../shared/assets/icons/favicon.ico">
+    <link rel="stylesheet" href="handleiding.css">
+</head>
+<body>
+
+    <div class="header-wrapper">
+        <div class="container"> <!-- Nieuwe container voor ademruimte en styling -->
+            <header class="settings-header">
+                <h1 class="settings-title">Technische leiding</h1>
+                <p class="settings-description">Raadpleeg hier de technische handleiding van Hugoo</p>
+                
+                <div class="settings-button-row">                
+                    <button class="settings-back-btn" onclick="window.location.href='../'">
+                        <span class="btn-text">Terug naar diagnose</span>
+                    </button>
+                    <button class="settings-action-btn" onclick="window.location.href='gebruikershandleiding.html'">
+                        <span class="btn-text">raadpleeg gebruikers handleiding</span>
+                    </button>
+                </div>
+            </header>
+        </div>
+    </div>
+
+    <iframe src="technischehandleiding_tabloo.pdf">
+        Jouw browser ondersteunt de ingesloten weergave helaas niet.
+        <a href="technischehandleiding_tabloo.pdf">Download de PDF hier.</a>
+    </iframe>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="../shared/scripts/admin-session.js"></script>
+
+</body>
+</html>
