@@ -174,7 +174,6 @@ async function toggleEasyVisitedButtons(easyVisited, state) {
             hasVisited = null;
             wantEasyQuestion = null;
 
-            changeScreen('follow-robot-screen'); //AAN TE PASSEN
             socket.emit('drive-to-quiz-location');
             socket.emit('robot-askScreen');
             

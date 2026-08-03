@@ -1,32 +1,14 @@
 let robotActive = null; //Zet op null om verkeerde status te vermijden
 
 document.addEventListener('DOMContentLoaded', () => {
-    retrieveRobotStatus(); //DIT MOET NOG WEG
-    //robotActive = socket.emit("robot-askIsActive"); //Haal bij laden de actuele status op
-    //updatePowerButtonUI();
+    robotActive = socket.emit("robot-askIsActive");
+    updatePowerButtonUI();
 });
 
-/* DEZE MOET WORDEN AANGEZET
 socket.on("robot-isActive", (data) => {
-    robotActive = data.robotActive; //Controlleren dat de json klopt met wat wordt verstuurd
+    robotActive = data.robotActive;
     updataPowerButtonUI();
-})*/
-
-//Deze functie moet verdwijnen, dit is de socket hierboven geworden
-function retrieveRobotStatus() {
-    fetch('/robot-status/get-robot-status')
-        .then(response => response.json())
-        .then(responseObj => {
-            if (responseObj.succes && responseObj.data && responseObj.data.robotActive !== undefined) {
-                robotActive = responseObj.data.robotActive;
-                updatePowerButtonUI();
-            }
-        })
-        .catch(error => {
-            console.error(`Fout bij het ophalen van instellingen: ${error}`);
-            document.getElementById("powerToggleText").textContent = "Fout bij laden";
-        });
-}
+})
 
 function updatePowerButtonUI() {
     const btn = document.getElementById("powerToggleBtn"); 
@@ -95,20 +77,9 @@ async function toggleRobotPower() {
     
     socket.emit("robot-activeButtonToggled", !CurrentRobotActive);
     
-    //Alles vlak hieronder moet weg
-    const success = await saveRobotStateToServer(robotActive);
-    if (success) {
-        console.log(`Robot succesvol ${robotActive ? 'ingeschakeld' : 'uitgeschakeld'}.`);
-    } else {
-        alert("Er is iets misgegaan bij het wijzigen van de status. Probeer het opnieuw.");
-        robotActive = CurrentRobotActive;
-        updatePowerButtonUI();
-    }
-
     setTimeout(() => {
         robotActive = socket.emit("robot-askIsActive"); //Vraag opnieuw naar de status
     }, 600);
-
 
     setTimeout(() => {
         if (robotActive !== CurrentRobotActive){
@@ -119,26 +90,6 @@ async function toggleRobotPower() {
             alert("Robot kon niet worden opgestart");
         }
     }, 400);
-}
-
-async function saveRobotStateToServer(isActive) {
-    socket.emit("robot-activeButtonToggled", isActive)
-    try {
-        const saveResponse = await fetch('/robot-status/insert-robot-status', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                robotActive: isActive
-            })
-        });
-
-        return saveResponse.ok;
-    } catch (error) {
-        console.error('Fout bij opslaan van de robot status:', error);
-        return false;
-    }
 }
 
 /**
