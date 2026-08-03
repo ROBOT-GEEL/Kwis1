@@ -8,35 +8,24 @@ export const getRobotStatus = async (req, res, next) => {
         const db = getDB();
         const robotStatus = db.collection("robotStatus");
 
-        // 1. Bepaal de op te vragen velden (fallback is het originele lijstje)
-        const defaultFields = ["robotActive", "currentScreen", "projectorOn"];
-        let requestedFields = defaultFields;
+        let projection = { _id: 0 }; 
 
-        // Als de client specifieke velden meegeeft (bijv: ?fields=robotActive,projectorOn)
         if (req.query.fields) {
-            requestedFields = req.query.fields.split(',').map(field => field.trim());
+            const requestedFields = req.query.fields.split(',').map(field => field.trim());
+            requestedFields.forEach(field => {
+                projection[field] = 1;
+            });
+            projection.tijd = 1; 
         }
 
-        // 2. Bouw dynamisch een array van promises op voor elk gevraagd veld
-        const promises = requestedFields.map(field => 
-            robotStatus.findOne({ [field]: { $exists: true } }, { sort: { tijd: -1 } })
-        );
+        // Haal altijd het actuele record op met id 0
+        const status = await robotStatus.findOne({ _id: 0 }, { projection });
 
-        // 3. Wacht tot alle queries klaar zijn
-        const docs = await Promise.all(promises);
+        if (!status) {
+            return res.status(200).json({ succes: true, data: {} });
+        }
 
-        // 4. Bouw het response object dynamisch op basis van de resultaten
-        const samengevoegdeData = {
-            laatsteUpdates: {}
-        };
-
-        requestedFields.forEach((field, index) => {
-            const doc = docs[index];
-            samengevoegdeData[field] = doc?.[field] ?? null;
-            samengevoegdeData.laatsteUpdates[field] = doc?.tijd ?? null;
-        });
-
-        return res.status(200).json({ succes: true, data: samengevoegdeData });
+        return res.status(200).json({ succes: true, data: status });
 
     } catch (e) {
         logger.error(`Er is een fout opgetreden bij het lezen uit de robotStatus database: ${e.message}`);
@@ -49,12 +38,29 @@ export const insertRobotStatus = async (req, res, next) => {
         const db = getDB();
         const robotStatus = db.collection("robotStatus");
         
-        const nieuweStatus = {
+        // 1. Haal het huidige record (id 0) op
+        const huidigRecord = await robotStatus.findOne({ _id: 0 });
+
+        // Dit zorgt voor een backup die we bij debug kunnen gebruiken
+        // 2. Als er een actueel record bestaat, kopieer deze in DEZELFDE collectie
+        if (huidigRecord) {
+            // Verwijder _id: 0, zodat MongoDB een nieuwe unieke ObjectId aanmaakt voor de kopie
+            delete huidigRecord._id; 
+            // Voeg de kopie toe aan dezelfde collectie als historisch record
+            await robotStatus.insertOne(huidigRecord);
+        }
+        
+        // 3. Update het vaste record (id 0) met de nieuwe data
+        const updateData = {
             ...req.body,
             tijd: new Date()
         };
 
-        await robotStatus.insertOne(nieuweStatus);
+        await robotStatus.updateOne(
+            { _id: 0 },
+            { $set: updateData },
+            { upsert: true }
+        );
 
         return res.status(200).json({ succes: true });
 

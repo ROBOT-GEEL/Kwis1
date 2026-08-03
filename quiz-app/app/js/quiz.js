@@ -349,6 +349,7 @@ class Quiz {
                 await this.#sendProjectorCommand("sleep");
                 socket.emit('projector-reset');
                 socket.emit('quiz-finished');
+                socket.emit('robot-askScreen');
             }
         } catch (errorCode) { 
             logError("[Quiz Runtime Error] An error occurred during the quiz execution");

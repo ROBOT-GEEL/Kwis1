@@ -1,9 +1,18 @@
-let robotActive = false;
+let robotActive = null; //Zet op null om verkeerde status te vermijden
 
 document.addEventListener('DOMContentLoaded', () => {
-    retrieveRobotStatus();
+    retrieveRobotStatus(); //DIT MOET NOG WEG
+    //robotActive = socket.emit("robot-askIsActive"); //Haal bij laden de actuele status op
+    //updatePowerButtonUI();
 });
 
+/* DEZE MOET WORDEN AANGEZET
+socket.on("robot-isActive", (data) => {
+    robotActive = data.robotActive; //Controlleren dat de json klopt met wat wordt verstuurd
+    updataPowerButtonUI();
+})*/
+
+//Deze functie moet verdwijnen, dit is de socket hierboven geworden
 function retrieveRobotStatus() {
     fetch('/robot-status/get-robot-status')
         .then(response => response.json())
@@ -26,57 +35,94 @@ function updatePowerButtonUI() {
     const iconWake = document.getElementById("iconWake");
     const iconSleep = document.getElementById("iconSleep");
 
-    // Aangepast: robotActive met kleine letter
     if (robotActive) {
         text.textContent = "Hugoo is aan het werk";
-        subtext.textContent = "Klik om Hugoo uit te schakelen"
-        text.classList.remove("power-text-shutdown");
+        subtext.textContent = "Klik om Hugoo uit te schakelen";
+        text.classList.remove("power-text-shutdown", "power-text-inactive");
         text.classList.add("power-text-activate");
-        btn.classList.remove("power-border-shutdown");
+        
+        btn.classList.remove("power-border-shutdown", "power-border-inactive");
         btn.classList.add("power-border-activate");
+        
         iconWake.className = "power-icon icon-active-wake";
         iconSleep.className = "power-icon icon-inactive";
-    } else {
+        
+    } else if (robotActive === false) {
         text.textContent = "Hugoo slaapt";
-        subtext.textContent = "Klik om Hugoo in te schakelen"
-        text.classList.remove("power-text-activate");
+        subtext.textContent = "Klik om Hugoo in te schakelen";
+        text.classList.remove("power-text-activate", "power-text-inactive");
         text.classList.add("power-text-shutdown");
-        btn.classList.remove("power-border-activate");
+        
+        btn.classList.remove("power-border-activate", "power-border-inactive");
         btn.classList.add("power-border-shutdown");
+        
         iconWake.className = "power-icon icon-inactive";
         iconSleep.className = "power-icon icon-active-sleep"; 
+        
+    } else { //Dit vangt null of undefined op
+        text.textContent = "Status wordt opgehaald";
+        subtext.textContent = "Even geduld...";
+        text.classList.remove("power-text-activate", "power-text-shutdown");
+        text.classList.add("power-text-inactive");
+        
+        btn.classList.remove("power-border-activate", "power-border-shutdown");
+        btn.classList.add("power-border-inactive");
+        
+        iconWake.className = "power-icon icon-inactive";
+        iconSleep.className = "power-icon icon-inactive"; 
     }
 }
 
 async function toggleRobotPower() {
-    // Aangepast: robotActive met kleine letter
-    const originalState = robotActive;
+    const btn = document.getElementById("powerToggleBtn");
 
-    if (robotActive) {
-        // Naam aangepast naar Hugoo voor consistentie
+    // Maak de knop even niet klikbaar
+    btn.disabled = true;
+
+    //Slaag tijdelijk lokaal op om de switch te kunnen zien
+    const CurrentRobotActive = robotActive
+    if (CurrentRobotActive === null){return;}
+
+    if (CurrentRobotActive) {
         const confirmShutdown = confirm("Weet je zeker dat je Hugoo wilt uitschakelen? Hij zal de huidige taken afbreken en naar het laadstation rijden.");
         if (!confirmShutdown) return; 
-        robotActive = false; 
+        CurrentRobotActive = false; 
     } else {
-        robotActive = true; 
+        CurrentRobotActive = true;
     }
 
     updatePowerButtonUI();
-
+    
+    socket.emit("robot-activeButtonToggled", !CurrentRobotActive);
+    
+    //Alles vlak hieronder moet weg
     const success = await saveRobotStateToServer(robotActive);
-
     if (success) {
         console.log(`Robot succesvol ${robotActive ? 'ingeschakeld' : 'uitgeschakeld'}.`);
     } else {
         alert("Er is iets misgegaan bij het wijzigen van de status. Probeer het opnieuw.");
-        robotActive = originalState;
+        robotActive = CurrentRobotActive;
         updatePowerButtonUI();
     }
 
-    if (typeof backToQuiz === "function") backToQuiz();
+    setTimeout(() => {
+        robotActive = socket.emit("robot-askIsActive"); //Vraag opnieuw naar de status
+    }, 600);
+
+
+    setTimeout(() => {
+        if (robotActive !== CurrentRobotActive){
+            btn.disabled = false;
+            if (typeof backToQuiz === "function") backToQuiz();
+        } else {
+            btn.disabled = false;
+            alert("Robot kon niet worden opgestart");
+        }
+    }, 400);
 }
 
 async function saveRobotStateToServer(isActive) {
+    socket.emit("robot-activeButtonToggled", isActive)
     try {
         const saveResponse = await fetch('/robot-status/insert-robot-status', {
             method: 'POST',

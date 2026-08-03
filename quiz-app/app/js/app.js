@@ -65,7 +65,7 @@ LanguageData.addLanguageChangeCallback(() => onLanguageChange());
  * - Change the screen to the start screen
  */
 document.addEventListener('DOMContentLoaded', async () => {
-    updateCurrentScreenFromDB();
+    socket.emit("robot-askScreen");
 
     await LanguageData.update();
     onLanguageChange();
@@ -174,8 +174,9 @@ async function toggleEasyVisitedButtons(easyVisited, state) {
             hasVisited = null;
             wantEasyQuestion = null;
 
-            changeScreen('follow-robot-screen');
+            changeScreen('follow-robot-screen'); //AAN TE PASSEN
             socket.emit('drive-to-quiz-location');
+            socket.emit('robot-askScreen');
             
             try {
                 await Quiz.initializeNewQuiz();
@@ -192,76 +193,6 @@ async function toggleEasyVisitedButtons(easyVisited, state) {
  */
 document.querySelector('#error-close').addEventListener('click', () => {
     socket.emit('quiz-finished');
-    changeScreen('start-screen');
+    socket.emit('robot-askScreen');
     document.querySelector('#error').close();
 });
-
-function updateCurrentScreenFromDB() {
-    console.log("updateCurrentScreenFromDB getriggered")
-    fetch('/robot-status/get-robot-status')
-        .then(response => response.json())
-        .then(responseObj => {
-            if (responseObj.succes && responseObj.data) {
-                const data = responseObj.data;
-                console.log(data);
-
-                if (data.currentScreen !== undefined && data.currentScreen !== null) {
-                    const command = data.currentScreen;
-                    console.log(`Commando uit database geladen: ${command}`);
-
-                    switch (command) {
-                        case 'robot-startup':
-                            robotStartup();
-                            break;
-                        case 'robot-lost-charging':
-                            robotLostCharging();
-                            break;
-                        case 'robot-explore':
-                            robotExplore();
-                            break;
-                        case 'robot-go-to-visitors':
-                            robotGoToVisitors();
-                            break;
-                        case 'robot-arrived-at-visitors':
-                            robotArrivedAtVisitors();
-                            break;
-                        case 'robot-arrived-at-quiz-location':
-                            robotArrivedAtQuizLocation(); 
-                            break;
-                        case 'robot-go-charge':
-                            robotGoCharge();
-                            break;
-                        case 'robot-docking':
-                            robotDocking();
-                            break;
-                        case 'robot-charging':
-                            robotCharging();
-                            break;
-                        case 'robot-error-drive':
-                            robotErrorDrive();
-                            break;
-                        case 'robot-error-charge':
-                            robotErrorCharge();
-                            break;
-                        case 'robot-disconnected':
-                            robotDisconnected();
-                            break;
-                        case 'robot-connected':
-                            robotConnected();
-                            break;
-                        default:
-                            // Veiligheidscheck: als er een onbekend commando in de DB staat
-                            console.warn(`[Waarschuwing] Onbekend commando uit DB: '${command}'. Val terug op basis scherm.`);
-                            changeScreen('robot-basis-screen');
-                            break;
-                    }
-                } else {
-                    changeScreen('robot-basis-screen');
-                }
-            }
-        })
-        .catch(error => {
-            console.error(`Fout bij het ophalen van instellingen: ${error}`);
-            changeScreen('robot-basis-screen');
-        });
-}

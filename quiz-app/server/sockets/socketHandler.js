@@ -147,8 +147,12 @@ export function registerSocketHandlers(io) {
     //
     // Robot platform events
     //
-    /*
+  
     const robotEvents = [
+      "robot-activeButtonToggled",
+      "robot-askIsActive",
+      "robot-isActive",
+      "robot-askScreen",
       "robot-startup",
       "robot-explore",
       "robot-go-to-visitors",
@@ -189,116 +193,6 @@ export function registerSocketHandlers(io) {
           }
         }
       });
-    });*/
-
-    //
-    // Robot platform events NIEUW MET DATABASE
-    //
-
-    socket.on("robot-startup", async (data) => {
-      logger.info("robot-startup", data || "");
-      socket.broadcast.emit("robot-startup", data);
-      await saveInDB("currentScreen", "robot-startup", "triggered by robot")
-    });
-
-    socket.on("robot-explore", async (data) => {
-      logger.info("robot-explore", data || "");
-      socket.broadcast.emit("robot-explore", data);
-      await saveInDB("currentScreen", "robot-explore", "triggered by robot")
-    });
-
-    socket.on("robot-go-to-visitors", async (data) => {
-      logger.info("robot-go-to-visitors", data || "");
-      socket.broadcast.emit("robot-go-to-visitors", data);
-      await saveInDB("currentScreen", "robot-go-to-visitors", "triggered by robot")
-    });
-
-    socket.on("robot-arrived-at-visitors", async (data) => {
-      logger.info("robot-arrived-at-visitors", data || "");
-      socket.broadcast.emit("robot-arrived-at-visitors", data);
-      await saveInDB("currentScreen", "robot-arrived-at-visitors", "triggered by robot")
-    });
-
-    socket.on("drive-to-quiz-location", async (data) => {
-      logger.info("drive-to-quiz-location", data || "");
-      socket.broadcast.emit("drive-to-quiz-location", data);
-      socket.broadcast.emit("drive_to_quiz_location");
-      await saveInDB("currentScreen", "robot-arrived-at-visitors", "triggered by robot")
-    });
-
-    socket.on("robot-arrived-at-quiz-location", async (data) => {
-      logger.info("robot-arrived-at-quiz-location", data || "");
-      socket.broadcast.emit("robot-arrived-at-quiz-location", data);
-      await saveInDB("currentScreen", "robot-arrived-at-quiz-location", "triggered by robot")
-    });
-
-    socket.on("robot-go-charge", async (data) => {
-      logger.info("robot-go-charge", data || "");
-      socket.broadcast.emit("robot-go-charge", data);
-      await saveInDB("currentScreen", "robot-go-charge", "triggered by robot")
-    });
-
-    socket.on("robot-docking", async (data) => {
-      logger.info("robot-docking", data || "");
-      socket.broadcast.emit("robot-docking", data);
-      await saveInDB("currentScreen", "robot-docking", "triggered by robot")
-    });
-
-    socket.on("robot-charging", async (data) => {
-      logger.info("robot-charging", data || "");
-      socket.broadcast.emit("robot-charging", data);
-      await saveInDB("currentScreen", "robot-charging", "triggered by robot")
-      if (screenOn) blankScreen();
-    });
-
-    socket.on("robot-error-drive", async(data) => {
-      logger.info("robot-error-drive", data || "");
-      socket.broadcast.emit("robot-error-drive", data);
-      await saveInDB("currentScreen", "robot-error-drive", "triggered by robot")
-    });
-
-    socket.on("robot-error-charge", async (data) => {
-      logger.info("robot-error-charge", data || "");
-      socket.broadcast.emit("robot-error-charge", data);
-      await saveInDB("currentScreen", "robot-error-charge", "triggered by robot")
-    });
-
-    socket.on("robot-disconnected", async (data) => {
-      logger.info("robot-disconnected", data || "");
-      socket.broadcast.emit("robot-disconnected", data);
-      await saveInDB("currentScreen", "robot-disconnected", "triggered by robot")
-    });
-
-    socket.on("robot-lost-charging", async(data) => {
-      logger.info("robot-lost-charging", data || "");
-      socket.broadcast.emit("robot-lost-charging", data);
-      await saveInDB("currentScreen", "robot-lost-charging", "triggered by robot")
-    });
-
-    socket.on("robot-get-battery-percentage", (data) => {
-      logger.info("robot-get-battery-percentage", data || "");
-      socket.broadcast.emit("robot-get-battery-percentage", data);
-    });
-
-    socket.on("robot-update-battery-percentage", (data) => {
-      logger.info("robot-update-battery-percentage", data || "");
-      socket.broadcast.emit("robot-update-battery-percentage", data);
-    });
-
-    socket.on("robot-bumper-status", (data) => {
-      logger.info("robot-bumper-status", data || "");
-      console.log("bumper binnengekregen", data || "");
-      socket.broadcast.emit("robot-bumper-status", data);
-    });
-
-    socket.on("drive", (data) => {
-      logger.info("drive", data || "");
-      socket.broadcast.emit("drive", data);
-    });
-
-    socket.on("robot-stop-for-x-time", (data) => {
-      logger.info("robot-stop-for-x-time", data || "");
-      socket.broadcast.emit("robot-stop-for-x-time", data);
     });
 
     
@@ -349,7 +243,8 @@ export function registerSocketHandlers(io) {
             // Register the NEW admin token and socket, effectively taking over
             currentAdminToken = token;
             currentAdminSocketId = socket.id;
-            
+
+            writeAdminStatusInDB(true); 
             socket.broadcast.emit("admin-panel-open");
 
             if (typeof callback === "function") callback();
@@ -364,8 +259,7 @@ export function registerSocketHandlers(io) {
                 currentAdminToken = null; 
                 currentAdminSocketId = null;
 
-                //io.emit("time-updated", new Date().toISOString());
-
+                writeAdminStatusInDB(false); 
                 socket.broadcast.emit("admin-panel-closed");
                 logger.info("Admin panel closed");
 
@@ -384,6 +278,7 @@ export function registerSocketHandlers(io) {
                 disconnectTimer = setTimeout(() => {
                     currentAdminToken = null;
                     currentAdminSocketId = null;
+                    writeAdminStatusInDB(false); 
                     socket.broadcast.emit("admin-panel-closed");
                     logger.info("Admin connection lost");
                 }, 5000); 
@@ -419,25 +314,6 @@ export function registerSocketHandlers(io) {
   // Check if the projector needs to be turned on
   setInterval(() => syncProjectorState(), 60000); 
 }
-
-async function saveInDB(topic, value, msg) {
-    try {
-        const db = getDB();
-        const robotStatus = db.collection("robotStatus");
-        
-        await robotStatus.insertOne({
-            [topic]: value,
-            message: msg,
-            tijd: new Date()
-        });
-        
-        console.log(`Succesvol ${topic} in database opgeslagen!`);
-    } catch (error) {
-        console.error("Fout bij het opslaan in de database:", error);
-    }
-}
-
-
 
 /**
  * Synchronizes the projector state with the target state.
@@ -490,6 +366,20 @@ async function toggleProjector(action) {
  */
 function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function writeAdminStatusInDB(isOpen){
+  try {
+      await fetch("http://localhost:80/robot-status/insert-robot-status", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ adminPanelIsOpen: isOpen })
+      });
+  } catch (fetchError) {
+      logger.error("Interne fetch naar DB faalde:", fetchError);
+  }
 }
 
 

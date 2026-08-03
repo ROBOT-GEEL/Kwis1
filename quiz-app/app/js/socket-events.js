@@ -9,34 +9,16 @@
 // ==========================================
 // SOCKET LISTENERS
 // ==========================================
-socket.on('robot-startup', () => { robotStartup(); });
-socket.on('robot-lost-charging', () => { robotLostCharging(); });
-socket.on('robot-explore', () => { robotExplore(); });
-socket.on('robot-go-to-visitors', () => { robotGoToVisitors(); });
-socket.on('robot-arrived-at-visitors', () => { robotArrivedAtVisitors(); });
-socket.on('robot-arrived-at-quiz-location', async () => { await robotArrivedAtQuizLocation(); });
-socket.on('robot-go-charge', () => { robotGoCharge(); });
-socket.on('robot-docking', () => { robotDocking(); });
-socket.on('robot-charging', () => { robotCharging(); });
-socket.on('robot-error-drive', () => { robotErrorDrive(); });
-socket.on('robot-error-charge', () => { robotErrorCharge(); });
-socket.on('robot-disconnected', () => { robotDisconnected(); });
-socket.on('robot-connected', () => { robotConnected(); });
 
+socket.on('robot-startup', () => { 
+    changeScreen('robot-startup-screen'); 
+});
 
-// ==========================================
-// FUNCTIE DEFINITIES
-// ==========================================
+socket.on('robot-lost-charging', () => { 
+    changeScreen('robot-lost-charging'); 
+});
 
-function robotStartup() {
-    changeScreen('robot-startup-screen');
-}
-
-function robotLostCharging() {
-    changeScreen('robot-lost-charging');
-}
-
-function robotExplore() {
+socket.on('robot-explore', () => { 
     changeScreen('robot-explore-screen');
 
     const interval = setInterval(() => {
@@ -52,9 +34,9 @@ function robotExplore() {
         });
         document.querySelectorAll('.language-selector')[(selectedLanguageIndex + 1) % 3].click();
     }, 2100);
-}
+});
 
-function robotGoToVisitors() {
+socket.on('robot-go-to-visitors', () => { 
     changeScreen('robot-go-to-visitors-screen');
 
     const interval = setInterval(() => {
@@ -70,9 +52,9 @@ function robotGoToVisitors() {
         });
         document.querySelectorAll('.language-selector')[(selectedLanguageIndex + 1) % 3].click();
     }, 2100);
-}
+});
 
-function robotArrivedAtVisitors() {
+socket.on('robot-arrived-at-visitors', () => { 
     document.querySelector('#NL-selector').click();
     changeScreen('start-screen');
 
@@ -85,9 +67,9 @@ function robotArrivedAtVisitors() {
             }
         }, Quiz.timeToStartQuiz * 1000);
     }
-}
+});
 
-async function robotArrivedAtQuizLocation() {
+socket.on('robot-arrived-at-quiz-location', async () => { 
     console.log('Robot has arrived at the quiz location!');
     try {
         await Quiz.start();
@@ -95,36 +77,36 @@ async function robotArrivedAtQuizLocation() {
         error(e);
         return;
     }
-}
+});
 
-function robotGoCharge() {
-    changeScreen('robot-go-charge-screen');
-}
+socket.on('robot-go-charge', () => { 
+    changeScreen('robot-go-charge-screen'); 
+});
 
-function robotDocking() {
+socket.on('robot-docking', () => { 
     console.log('Docking ontvangen');
     changeScreen('robot-docking-screen');
-}
+});
 
-function robotCharging() {
-    changeScreen('robot-charging-screen');
-}
+socket.on('robot-charging', () => { 
+    changeScreen('robot-charging-screen'); 
+});
 
-function robotErrorDrive() {
+socket.on('robot-error-drive', () => { 
     changeScreen('error-screen');
     document.querySelector('#error-container').innerHTML = `<h1>Hugoo is verdwaald...</h1><p>Gelieve dit aan het onthaal te melden.</p>`;
-}
+});
 
-function robotErrorCharge() {
+socket.on('robot-error-charge', () => { 
     changeScreen('error-screen');
     document.querySelector('#error-container').innerHTML = `<h1>Hugoo kan het laadstation niet vinden.</h1><p>Open het admin-paneel, ga naar diagnose en volg daar de rebootprocedure.</p>`;
-}
+});
 
-function robotDisconnected() {
+socket.on('robot-disconnected', () => { 
     changeScreen('error-screen');
     document.querySelector('#error-container').innerHTML = `<h1>De verbinding met het besturingssysteem is verloren gegaan.</h1><p>Even geduld aub...</p>`;
-}
+});
 
-function robotConnected() {
-    changeScreen('robot-startup-screen');
-}
+socket.on('robot-connected', () => { 
+    changeScreen('robot-startup-screen'); 
+});

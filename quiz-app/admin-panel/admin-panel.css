@@ -36,6 +36,7 @@
     --red: #cc0000;
     --orange: #f3991b;
     --green: #28a745;
+    --gray: #808080;
 }
 
 body {
@@ -223,12 +224,9 @@ body {
     transition: color 0.3s ease; 
 }
 
-.power-text-shutdown {
-    color: var(--red) !important;
-}
-.power-text-activate {
-    color: var(--green) !important;
-}
+.power-text-shutdown { color: var(--red) !important; }
+.power-text-activate { color: var(--green) !important; }
+.power-text-inactive { color: var(--gray) !important; } /* Aangepast van inactivate naar inactive */
 
 #powerToggleSubText {
     font-weight: bold;
@@ -322,13 +320,9 @@ body {
 }
 
 /* Dynamische linker randen voor de knop */
-.power-border-shutdown {
-    border-left: 6px solid var(--red) !important;
-}
-
-.power-border-activate {
-    border-left: 6px solid var(--green) !important;
-}
+.power-border-shutdown { border-left: 6px solid var(--red) !important; }
+.power-border-activate { border-left: 6px solid var(--green) !important; }
+.power-border-inactive { border-left: 6px solid var(--gray) !important; }
 
 /* ==========================================================================
    Batterij Status Linksboven
