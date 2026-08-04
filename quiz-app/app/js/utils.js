@@ -20,4 +20,8 @@ function changeScreen(screen) {
     document.querySelectorAll('.screen').forEach(s => {
         s.style.display = (s.id === screen) ? 'block' : 'none';
     });
+
+    if (screen !== "robot-arrived-at-quiz-location"){
+        Quiz.abortByScreenChange();
+    }
 }

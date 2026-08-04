@@ -3,7 +3,7 @@
  * Depends on: app.js (socket), utils.js (changeScreen), error.js (error)
  */
 class Debug {
-    static ENABLED = true;
+    static ENABLED = false;
 
     static {
         // Debug overlay functionality

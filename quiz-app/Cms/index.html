@@ -16,11 +16,62 @@
             <div class="header-section">
                 <h1 id="title" class="vragen">Vragen</h1>
                 <p id="pageExplanation" class="explanation-text"></p>
-                             
+                            
                 <div class="action-buttons" id="actionButtonsContainer">
-                    <button class="btn-primary"  onclick="window.location.href='../admin-panel'">Terug naar admin panel</button>
-                    <button id="buttonAddQuestion" class="btn-primary" style="margin-left:auto" onclick="buttonAddQuestion(document.getElementById('questionsFrame'))">Vraag Toevoegen</button>
+                    <button class="btn-primary" onclick="window.location.href='../admin-panel'">Terug naar admin panel</button>
                 </div>
+            </div>
+
+            <!-- === 2. De Toolbar (Knop toegevoegd) === -->
+            <div class="toolbar-container">
+                
+                <!-- Zoekbalk -->
+                <div class="search-wrapper">
+                    <input 
+                        type="text" 
+                        id="questionSearchBar" 
+                        class="search-input"
+                        onkeyup="filterQuestions()" 
+                        placeholder="Zoeken..." 
+                    >
+                </div>
+
+                <!-- Filter: Status -->
+                <div class="filter-wrapper">
+                    <div class="filter-icon-box">
+                        <label class="enableSwitch fake-switch">
+                            <input type="checkbox" id="uiStatusCheckbox" checked disabled>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <select id="filterStatus" class="filter-select" onchange="filterQuestions(); updateStatusUI(this)">
+                        <option value="all">Alle statussen</option>
+                        <option value="enabled">Actief</option>
+                        <option value="disabled">Inactief</option>
+                    </select>
+                </div>
+
+                <!-- Filter: Moeilijkheidsgraad -->
+                <div class="filter-wrapper">
+                    <div class="filter-icon-box" id="uiDifficultyBox">
+                        <img id="uiDifficultyIcon" class="filter-icon-img" src="icons/meterMakkelijk.svg" title="Filter moeilijkheid"/>
+                    </div>
+                    <select id="filterDifficulty" class="filter-select" onchange="filterQuestions(); updateDifficultyUI(this)">
+                        <option value="all">Alle niveaus</option>
+                        <option value="easy">Makkelijk</option>
+                        <option value="hard">Moeilijk</option>
+                    </select>
+                </div>
+
+                <!-- Toevoegen Knop -->
+                <button id="buttonAddQuestion" class="btn-primary toolbar-btn" onclick="buttonAddQuestion(document.getElementById('questionsFrame'))">
+                    + Vraag Toevoegen
+                </button>
+
+                <button id="print-button" class="btn-primary toolbar-btn" onclick="exportQuestions()">
+                    Exporteren
+                </button>
+
             </div>
 
             <div class="questionsBody">
@@ -34,8 +85,7 @@
     <script src="../shared/scripts/admin-session.js"></script>
     <script src="js/common.js"></script>
     <script src="js/questions.js"></script>
-    <!-- <script src="js/enable.js"></script> -->
-    <!-- <script src="js/visited.js"></script> -->
+    <script src="js/export.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

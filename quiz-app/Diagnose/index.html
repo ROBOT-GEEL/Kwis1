@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Acties</title>
+    <title>Admin Panel - Statistieken</title>
     <link rel="icon" type="image/x-icon" href="../shared/assets/icons/favicon.ico">
     <link rel="stylesheet" href="diagnose.css">
 </head>
@@ -15,9 +15,9 @@
             <h1 class="settings-title">Diagnose</h1>
             <p class="settings-description">Hier kan de projector bedienen en Hugoo met of zonder zijn programma's heropstarten</p>
             
-            <div class="settings-button-row right-aligned">
+            <div class="settings-button-row">
                 <button class="settings-back-btn" onclick="window.location.href='../admin-panel'"">
-                    <span class="btn-text">Terug naar het adminpaneel</span>
+                    <span class="btn-text">Terug naar admin panel</span>
                 </button>
             </div>
         </header>
@@ -74,13 +74,13 @@
                 <h2 class="settings-card-title">Rebootprocedure</h2>
                 
                 <div class="action-row">
-                    <button class="settings-btn-primary" onclick="rebootRobot('robot-hard'); greyOut(this)">
+                    <button class="settings-btn-primary" onclick="rebootRobot('robot-hard'); greyOutWaitForBT(this)">
                         <span class="btn-text">Reboot robot</span>
                     </button>
                     <p class="action-description">
                         Klik hier om de robot volledig herop te starten. Dit reset het rij-gedrag. 
-                        Nadat de robot is heropgestart moet je met manual drive de robot tegen het laadstation rijden 
-                        of de robot voor de QR-code in de werkzone zetten zodat de camera deze kan zien.
+                        Nadat de robot is heropgestart moet je met <b>manual drive</b> de robot tegen het <b>laadstation</b> rijden 
+                        of de robot voor de <b>QR-code in de werkzone</b> zetten zodat de camera deze kan zien.
                         Hierna zou de robot zijn normale werking moeten hervatten.
                     </p>
                 </div>
@@ -89,13 +89,6 @@
             <section class="settings-card">
                 <h2 class="settings-card-title">Overige rebootacties</h2>
                 
-                <div class="action-row">
-                    <button class="settings-btn-primary" onclick="rebootRobot('robot-hard'); greyOut(this)">
-                        <span class="btn-text">Reboot robot</span>
-                    </button>
-                    <p class="action-description">Herstart hier de volledige Orin Nano die verantwoordelijk is voor het rij-gedrag van de robot.</p>
-                </div>
-
                 <div class="action-row">
                     <button class="settings-btn-primary" onclick="rebootRobot('shutdown-robot'); greyOut(this)">
                         <span class="btn-text">Robot afsluiten</span>

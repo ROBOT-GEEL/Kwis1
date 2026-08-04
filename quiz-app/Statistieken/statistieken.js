@@ -70,9 +70,13 @@ function renderCharts(quizData) {
         const statusLabel = item.enabledQuestion ? "Actieve vraag" : "Inactieve vraag";
         const difficultyLabel = item.easyQuestion ? "Makkelijke vraag" : "Moeilijke vraag";
 
+        const dataStatus = item.enabledQuestion ? 'enabled' : 'disabled';
+        const dataDifficulty = item.easyQuestion ? 'easy' : 'hard';
+
+        const dataSearch = `${item.question.question || item.question} ${answerA} ${answerB} ${answerC}`.toLowerCase();
         
         const cardHTML = `
-            <div class="card quiz-mini-card">
+            <div class="card quiz-mini-card" data-status="${dataStatus}" data-difficulty="${dataDifficulty}" data-search="${dataSearch}">
                 <h3 class="quiz-question-title">${item.question.question || item.question}</h3>
                 
                 <div class="totals-header">
@@ -170,6 +174,40 @@ function wrapText(text, maxLineLength) {
     return lines;
 }
 
-// Start het script!
+/**
+ * Filtert de statistieken op basis van tekst, status en moeilijkheid.
+ */
+
+function filterStats() {
+    // 1. Lees de huidige waarden van alle filters uit
+    let input = document.getElementById('statsSearchBar').value.toLowerCase();
+    let statusFilter = document.getElementById('filterStatus').value;
+    let difficultyFilter = document.getElementById('filterDifficulty').value;
+    
+    // 2. Pak alle gegenereerde kaarten in de container
+    let statFrames = document.querySelectorAll('.quiz-mini-card');
+
+    statFrames.forEach(function(frame) {
+        // -- Check 1: Voldoet de tekst (vraag én antwoorden)? --
+        let textToSearch = frame.getAttribute('data-search') || "";
+        let matchesText = textToSearch.includes(input);
+
+        // -- Check 2: Voldoet de status? --
+        let itemStatus = frame.getAttribute('data-status');
+        let matchesStatus = (statusFilter === "all") || (statusFilter === itemStatus);
+
+        // -- Check 3: Voldoet de moeilijkheidsgraad? --
+        let itemDifficulty = frame.getAttribute('data-difficulty');
+        let matchesDifficulty = (difficultyFilter === "all") || (difficultyFilter === itemDifficulty);
+
+        // Als het blok aan ALLE filters voldoet, laten we hem zien
+        if (matchesText && matchesStatus && matchesDifficulty) {
+            frame.style.display = ""; 
+        } else {
+            frame.style.display = "none"; 
+        }
+    });
+}
+
 fetchQuizResults();
 

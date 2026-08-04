@@ -37,7 +37,7 @@
     --darkGreen-hover: #026151;
     --bgColor: #DAF5F0;
     --cardBg: #ffffff;
-    --textColor: #000000;
+    --textColor: #ffffff;
     --subTextColor: #555555;
     --borderColor: #b9b9b9;
 }
@@ -70,7 +70,7 @@ html, body {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 2rem;
+    margin-bottom: 0rem;
     flex-wrap: wrap;
     gap: 1rem;
 }
@@ -93,18 +93,20 @@ html, body {
    ========================================================================== */
 .content-body {
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem; 
     margin-top: 2rem;
+    width: 100%;
 }
 
 .selection-card {
     background-color: var(--cardBg);
     border-radius: 0.5rem;
     padding: 3rem; 
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 10px rgba(214, 24, 24, 0.08);
     width: 100%;
-    max-width: 650px; 
+    box-sizing: border-box;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -184,6 +186,7 @@ html, body {
    ========================================================================== */
 .card-actions {
     width: 100%;
+
 }
 
 .btn-secondary {
@@ -192,7 +195,6 @@ html, body {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    padding: 0 1.5rem;
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -200,14 +202,15 @@ html, body {
     transition-duration: 0.3s, 0.2s;
     transition-timing-function: ease;
     vertical-align: middle;
-    background-color: var(--borderColor); 
+    background-color: var(--darkGreen); 
     color: var(--textColor);
     width: 100%;
     height: 4rem;
+    box-sizing: border-box;
 }
 
 .btn-secondary:hover { 
-    background-color: #bcbcbc; 
+    background-color: var(--darkGreen-hover); 
 }
 
 .btn-text {

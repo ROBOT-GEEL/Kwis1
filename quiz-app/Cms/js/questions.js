@@ -8,11 +8,9 @@
  * Fetches all enabled questions and renders them with full edit controls.
  */
 function displayQuestions() {
-    // Update UI state
     updatePageUI("Vragen", "questionsButtonFrame");
     document.getElementById("buttonAddQuestion").style.display = "block";
 
-    // Load questions from the database
     fetch('/cms/getQuestions')
         .then(response => response.json())
         .then(questions => {
@@ -22,39 +20,41 @@ function displayQuestions() {
             questions.forEach(question => {
                 let questionFrame = document.createElement('div');
                 questionFrame.className = "questionFrame";
-                questionFrame.id = question._id;
+                const qId = question.questionId || question._id;
+                questionFrame.id = qId;
+                
                 questionFrame.innerHTML = `
                 <div class="questionBorder"></div>
                 
                 <div class="content-wrapper">
                     <div class="questionLanguageBundle" contenteditable="false">
-                        <div onclick="showAnswers(this.parentElement)" onmouseenter="showAnswers(this.parentElement, true)" class="question" style="display: none;">${question.en.question}</div>
-                        <div onclick="showAnswers(this.parentElement)" onmouseenter="showAnswers(this.parentElement, true)" class="question" style="display: flex;">${question.nl.question}</div>
-                        <div onclick="showAnswers(this.parentElement)" onmouseenter="showAnswers(this.parentElement, true)" class="question" style="display: none;">${question.fr.question}</div>
+                        <div onclick="showAnswers(this.parentElement)" onmouseenter="showAnswers(this.parentElement, true)" class="question" style="display: none;">${qId}. ${question.en.question}</div>
+                        <div onclick="showAnswers(this.parentElement)" onmouseenter="showAnswers(this.parentElement, true)" class="question" style="display: flex;">${qId}. ${question.nl.question}</div>
+                        <div onclick="showAnswers(this.parentElement)" onmouseenter="showAnswers(this.parentElement, true)" class="question" style="display: none;">${qId}. ${question.fr.question}</div>
                     </div>
                     <div class="answers" toggleEnable="true" correctAnswer="${question.correctAnswer}" style="display: none;" language="nl">
                         <div class="answerEN" style="display: none;">
-                            <input type="radio" name="correctAnswerSelectEn_${question._id}" id="correctAwnserA" onclick="selectCorrectAnswer(this.parentElement,'A')" ${(question.correctAnswer === 0)? "checked" : ""} disabled>
+                            <input type="radio" name="correctAnswerSelectEn_${qId}" id="correctAwnserA" onclick="selectCorrectAnswer(this.parentElement,'A')" ${(question.correctAnswer === 0)? "checked" : ""} disabled>
                             <div class="answerA" contenteditable="false">${question.en.answers[0]}</div>
-                            <input type="radio" name="correctAnswerSelectEn_${question._id}" id="correctAwnserB" onclick="selectCorrectAnswer(this.parentElement,'B')" ${(question.correctAnswer === 1)? "checked" : ""} disabled>
+                            <input type="radio" name="correctAnswerSelectEn_${qId}" id="correctAwnserB" onclick="selectCorrectAnswer(this.parentElement,'B')" ${(question.correctAnswer === 1)? "checked" : ""} disabled>
                             <div class="answerB" contenteditable="false">${question.en.answers[1]}</div>
-                            <input type="radio" name="correctAnswerSelectEn_${question._id}" id="correctAwnserC" onclick="selectCorrectAnswer(this.parentElement,'C')" ${(question.correctAnswer === 2)? "checked" : ""} disabled>
+                            <input type="radio" name="correctAnswerSelectEn_${qId}" id="correctAwnserC" onclick="selectCorrectAnswer(this.parentElement,'C')" ${(question.correctAnswer === 2)? "checked" : ""} disabled>
                             <div class="answerC" contenteditable="false">${question.en.answers[2]}</div>
                         </div>
                         <div class="answerNL" style="display: block;">
-                            <input type="radio" name="correctAnswerSelectNl_${question._id}" id="correctAwnserA" onclick="selectCorrectAnswer(this.parentElement,'A')" ${(question.correctAnswer === 0)? "checked" : ""} disabled>
+                            <input type="radio" name="correctAnswerSelectNl_${qId}" id="correctAwnserA" onclick="selectCorrectAnswer(this.parentElement,'A')" ${(question.correctAnswer === 0)? "checked" : ""} disabled>
                             <div class="answerA" contenteditable="false">${question.nl.answers[0]}</div>
-                            <input type="radio" name="correctAnswerSelectNl_${question._id}" id="correctAwnserB" onclick="selectCorrectAnswer(this.parentElement,'B')" ${(question.correctAnswer === 1)? "checked" : ""} disabled>
+                            <input type="radio" name="correctAnswerSelectNl_${qId}" id="correctAwnserB" onclick="selectCorrectAnswer(this.parentElement,'B')" ${(question.correctAnswer === 1)? "checked" : ""} disabled>
                             <div class="answerB" contenteditable="false">${question.nl.answers[1]}</div>
-                            <input type="radio" name="correctAnswerSelectNl_${question._id}" id="correctAwnserC" onclick="selectCorrectAnswer(this.parentElement,'C')" ${(question.correctAnswer === 2)? "checked" : ""} disabled>
+                            <input type="radio" name="correctAnswerSelectNl_${qId}" id="correctAwnserC" onclick="selectCorrectAnswer(this.parentElement,'C')" ${(question.correctAnswer === 2)? "checked" : ""} disabled>
                             <div class="answerC" contenteditable="false">${question.nl.answers[2]}</div>
                         </div>
                         <div class="answerFR" style="display: none;">
-                            <input type="radio" name="correctAnswerSelectFr_${question._id}" id="correctAwnserA" onclick="selectCorrectAnswer(this.parentElement,'A')" ${(question.correctAnswer === 0)? "checked" : ""} disabled>
+                            <input type="radio" name="correctAnswerSelectFr_${qId}" id="correctAwnserA" onclick="selectCorrectAnswer(this.parentElement,'A')" ${(question.correctAnswer === 0)? "checked" : ""} disabled>
                             <div class="answerA" contenteditable="false">${question.fr.answers[0]}</div>
-                            <input type="radio" name="correctAnswerSelectFr_${question._id}" id="correctAwnserB" onclick="selectCorrectAnswer(this.parentElement,'B')" ${(question.correctAnswer === 1)? "checked" : ""} disabled>
+                            <input type="radio" name="correctAnswerSelectFr_${qId}" id="correctAwnserB" onclick="selectCorrectAnswer(this.parentElement,'B')" ${(question.correctAnswer === 1)? "checked" : ""} disabled>
                             <div class="answerB" contenteditable="false">${question.fr.answers[1]}</div>
-                            <input type="radio" name="correctAnswerSelectFr_${question._id}" id="correctAwnserC" onclick="selectCorrectAnswer(this.parentElement,'C')" ${(question.correctAnswer === 2)? "checked" : ""} disabled>
+                            <input type="radio" name="correctAnswerSelectFr_${qId}" id="correctAwnserC" onclick="selectCorrectAnswer(this.parentElement,'C')" ${(question.correctAnswer === 2)? "checked" : ""} disabled>
                             <div class="answerC" contenteditable="false">${question.fr.answers[2]}</div>
                         </div>
                     </div>
@@ -78,16 +78,16 @@ function displayQuestions() {
                     <div class="easyQuestion" 
                         style="background-color: ${question.easyQuestion ? '#DAF5DB' : '#F5DADA'};"
                         data-easy="${question.easyQuestion ? 'true' : 'false'}" 
-                        onclick="easyQuestion('${question._id}')">
+                        onclick="easyQuestion('${qId}')">
                         <img class="easyQuestionIcon" src="${question.easyQuestion ? 'icons/meterMakkelijk.svg' : 'icons/meterMoeilijk.svg'}" title="Definieer moeilijkheid"/>
                     </div>
                     
-                    <div class="deleteQuestion" onclick="deleteQuestion('${question._id}')">
+                    <div class="deleteQuestion" onclick="deleteQuestion('${qId}')">
                         <img class="deleteQuestionIcon" src="icons/recyclebin.svg" title="vraag verwijderen"/>
                     </div>
 
                     <label class="enableSwitch">
-                        <input type="checkbox" onchange="toggleQuestionStatus('${question._id}', this.checked)" ${question.enabled ? 'checked' : ''}>
+                        <input type="checkbox" onchange="toggleQuestionStatus('${qId}', this.checked)" ${question.enabled ? 'checked' : ''}>
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -214,168 +214,181 @@ function showAnswers(element, forceOpen = false) {
 }
 
 /**
- * Enables the content-editable fields for a specific question.
+ * Enables the content-editable fields for ALL languages simultaneously.
+ * @param {HTMLElement} questionFrame - The .questionFrame element to make editable.
+ */
+/**
+ * Enables the content-editable fields for ALL languages simultaneously.
  * @param {HTMLElement} questionFrame - The .questionFrame element to make editable.
  */
 function enableEditing(questionFrame) {
-    questionFrame.querySelector('.previousLanguage').style.display = "none";
-    questionFrame.querySelector('.nextLanguage').style.display = "none";
-
     let questionBundle = questionFrame.querySelector('.questionLanguageBundle');
     let questions = questionBundle.querySelectorAll('.question');
     let answersBundle = questionFrame.querySelector(".answers");
-    let language = answersBundle.getAttribute("language");
-    let answers = questionFrame.querySelector((language === "en") ? ".answerEN" : ((language === "nl") ? ".answerNL" : ".answerFR"));
-    let languageIndex = (language === "en") ? 0 : (language === "nl") ? 1 : 2;
 
+    // Zet de opslaan-knop klaar
     let editFrame = questionFrame.querySelector('.editframe');
-    editFrame.innerHTML = '<img class="editIcon" src="icons/save.svg">';
+    editFrame.innerHTML = '<img class="editIcon" src="icons/save.svg" title="Opslaan">';
     editFrame.onclick = function() {
         saveChanges(questionFrame);
     };
 
-    questions[languageIndex].onclick = null;
-    questions[languageIndex].onmouseenter = null;
     answersBundle.setAttribute("toggleEnable", false);
     if (answersBundle.style.display === 'none') {
         answersBundle.style.display = 'block'; 
     }
 
-    answers.children[0].removeAttribute("disabled");
-    answers.children[2].removeAttribute("disabled");
-    answers.children[4].removeAttribute("disabled");
-
-    questionBundle.contentEditable = 'false'; 
-    questions[languageIndex].contentEditable = 'true';
+    const languages = ["en", "nl", "fr"];
     
-    answers.children[1].contentEditable = 'true';
-    answers.children[3].contentEditable = 'true';
-    answers.children[5].contentEditable = 'true';
+    // 2. Loop door ALLE talen en maak ze allemaal bewerkbaar
+    for (let i = 0; i < 3; i++) {
+        questions[i].onclick = null;
+        questions[i].onmouseenter = null;
+        questions[i].contentEditable = 'true';
 
+        let ansDiv = questionFrame.querySelector(
+            languages[i] === "en" ? ".answerEN" : (languages[i] === "nl" ? ".answerNL" : ".answerFR")
+        );
+        
+        // Tekstvelden bewerkbaar maken
+        ansDiv.children[1].contentEditable = 'true';
+        ansDiv.children[3].contentEditable = 'true';
+        ansDiv.children[5].contentEditable = 'true';
+
+        // --- NIEUW: Radiobuttons activeren én direct synchroniseren ---
+        // De indices 0, 2 en 4 zijn de posities van de radiobuttons in de ansDiv
+        [0, 2, 4].forEach(radioIndex => {
+            ansDiv.children[radioIndex].removeAttribute("disabled");
+            
+            // Als deze specifieke radiobutton wordt aangeklikt:
+            ansDiv.children[radioIndex].onchange = function() {
+                // Zet het vinkje op dezelfde positie aan voor álle 3 de talen
+                questionFrame.querySelector(".answerEN").children[radioIndex].checked = true;
+                questionFrame.querySelector(".answerNL").children[radioIndex].checked = true;
+                questionFrame.querySelector(".answerFR").children[radioIndex].checked = true;
+            };
+        });
+    }
+
+    let currentLang = answersBundle.getAttribute("language");
+    let languageIndex = (currentLang === "en") ? 0 : (currentLang === "nl") ? 1 : 2;
     questions[languageIndex].focus();
 }
 
 /**
- * Saves the changes from an edited question to the database.
- * @param {HTMLElement} questionFrame - The .questionFrame being saved.
- */
-/**
- * Saves the changes from an edited question to the database.
+ * Validates all languages and saves the changes to the database.
  */
 function saveChanges(questionFrame) {
     let questionBundle = questionFrame.querySelector('.questionLanguageBundle');
-    // ROBUUST: Pak de specifieke vraag-divs
     let questions = questionBundle.querySelectorAll('.question');
     let answersBundle = questionFrame.querySelector(".answers");
-    let language = answersBundle.getAttribute("language");
-    let answers = questionFrame.querySelector((language === "en") ? ".answerEN" : ((language === "nl") ? ".answerNL" : ".answerFR"));
-    let languageIndex = (language === "en") ? 0 : (language === "nl") ? 1 : 2;
 
-    let correctAnswer = (answers.children[0].checked) ? 0 : (answers.children[2].checked) ? 1 : 2;
+    const languages = ["en", "nl", "fr"];
+    let globalCorrectAnswer = null;
+    let dataToSave = {}; // Hier bouwen we onze JSON payload op
 
-    if (answers.children[1].textContent.trim() === "" ||
-        answers.children[3].textContent.trim() === "" ||
-        answers.children[5].textContent.trim() === "") {
-        alert("Al de antwoorden dienen ingevuld te worden.");
-        return;
-    }
-
-    if (questions[languageIndex].textContent.trim() === "") {
-        alert("De vraag dient ingevuld te worden.");
-        return;
-    }
-
-    if (!answers.children[0].checked && !answers.children[2].checked && !answers.children[4].checked) {
-        alert("Er dient een juist antwoord gekozen te worden met behulp van de radiobuttons.");
-        return;
-    }
-
+    // 1. Validatie & Data verzamelen over ALLE talen heen
     for (let i = 0; i < 3; i++) {
-        answersBundle.children[i].children[2 * correctAnswer].checked = true;
+        let lang = languages[i];
+        let ansDiv = questionFrame.querySelector(
+            lang === "en" ? ".answerEN" : (lang === "nl" ? ".answerNL" : ".answerFR")
+        );
+
+        let qText = questions[i].textContent.trim();
+        let a1Text = ansDiv.children[1].textContent.trim();
+        let a2Text = ansDiv.children[3].textContent.trim();
+        let a3Text = ansDiv.children[5].textContent.trim();
+
+        // Check op lege velden
+        if (qText === "" || a1Text === "" || a2Text === "" || a3Text === "") {
+            setLanguage(questionFrame, lang); // Spring direct naar de ontbrekende taal!
+            alert(`Vul alstublieft de vraag en alle 3 antwoorden in voor de taal: ${lang.toUpperCase()}`);
+            return; // Stop de save functie
+        }
+
+        // Bepaal correct antwoord (hoeft maar 1x omdat ze synchroon lopen dankzij selectCorrectAnswer)
+        if (i === 0) {
+            if (!ansDiv.children[0].checked && !ansDiv.children[2].checked && !ansDiv.children[4].checked) {
+                setLanguage(questionFrame, lang);
+                alert("Kies het juiste antwoord met de radiobuttons.");
+                return;
+            }
+            globalCorrectAnswer = (ansDiv.children[0].checked) ? 0 : (ansDiv.children[2].checked) ? 1 : 2;
+        }
+
+        // Sla de teksten op in ons object
+        dataToSave[lang] = {
+            question: qText,
+            answers: [a1Text, a2Text, a3Text]
+        };
     }
 
-    answers.children[0].setAttribute("disabled", "disabled");
-    answers.children[2].setAttribute("disabled", "disabled");
-    answers.children[4].setAttribute("disabled", "disabled");
+    // 2. Als we hier zijn geraakt, is alles gevalideerd! Tijd om de UI weer op slot te doen.
+    for (let i = 0; i < 3; i++) {
+        let lang = languages[i];
+        let ansDiv = questionFrame.querySelector(
+            lang === "en" ? ".answerEN" : (lang === "nl" ? ".answerNL" : ".answerFR")
+        );
 
-    questionFrame.querySelector('.previousLanguage').style.display = "flex";
-    questionFrame.querySelector('.nextLanguage').style.display = "flex";
+        questions[i].contentEditable = 'false';
+        questions[i].onclick = function() { showAnswers(questionBundle); };
+        questions[i].onmouseenter = function() { showAnswers(questionBundle, true); };
 
-    // Zet alles netjes weer op slot
-    questions[languageIndex].contentEditable = 'false';
-    answers.children[1].contentEditable = 'false';
-    answers.children[3].contentEditable = 'false';
-    answers.children[5].contentEditable = 'false';
+        ansDiv.children[0].setAttribute("disabled", "disabled");
+        ansDiv.children[2].setAttribute("disabled", "disabled");
+        ansDiv.children[4].setAttribute("disabled", "disabled");
+
+        ansDiv.children[1].contentEditable = 'false';
+        ansDiv.children[3].contentEditable = 'false';
+        ansDiv.children[5].contentEditable = 'false';
+    }
 
     let editFrame = questionFrame.querySelector('.editframe');
-    editFrame.innerHTML = '<img class="editIcon" src="icons/edit.svg">';
+    editFrame.innerHTML = '<img class="editIcon" src="icons/edit.svg" title="Bewerk">';
     editFrame.onclick = function() {
         enableEditing(questionFrame);
     };
 
-    // Robuuste koppeling voor het openklappen van de antwoorden
-    questions[languageIndex].onclick = function() {
-        showAnswers(questionBundle);
-    };
-    
-    questions[languageIndex].onmouseenter = function() {
-    showAnswers(questionBundle, true);
-    };
-
     answersBundle.style.display = 'none';
 
-    // --- Send data to server ---
+    // 3. Stuur ALLES in één keer naar de backend
     fetch("/cms/editQuestion", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                // GEFIXED: Haal de ID rechtstreeks uit het questionFrame
-                questionId: questionFrame.getAttribute("id"),
-                language: language,
-                newQuestion: questions[languageIndex].textContent.trim(), 
-                newAnswer1: answersBundle.children[languageIndex].children[1].textContent.trim(),
-                newAnswer2: answersBundle.children[languageIndex].children[3].textContent.trim(),
-                newAnswer3: answersBundle.children[languageIndex].children[5].textContent.trim(),
-                correctAnswer: correctAnswer,
-            })
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            questionId: questionFrame.getAttribute("id"),
+            correctAnswer: globalCorrectAnswer,
+            translations: dataToSave // Bevat .en, .nl, .fr
         })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.error('Failed to save question');
-                throw new Error('Failed to save question');
-            }
-        })
-        .then(data => {
-            if (data.newId) {
-                // This was a new question; server returned the new _id
-                console.log('New question created with Id:', data.newId);
-                
-                // Stel ID in
-                questionFrame.setAttribute("id", data.newId);
+    })
+    .then(response => {
+        if (response.ok) return response.json();
+        throw new Error('Failed to save question');
+    })
+    .then(data => {
+        if (data.newId) {
+            console.log('New question created with Id:', data.newId);
+            questionFrame.setAttribute("id", data.newId);
+            questionFrame.querySelector('.deleteQuestion').style.display = '';
+            questionFrame.querySelector('.enableSwitch').style.display = '';
 
-                // NIEUW: Maak vuilbakje en enable-switch weer zichtbaar
-                questionFrame.querySelector('.deleteQuestion').style.display = '';
-                questionFrame.querySelector('.enableSwitch').style.display = '';
-
-                const newQuestionText = questions[languageIndex].textContent.trim();
-                // ... (de rest van je bestaande code hier blijft hetzelfde)
-                
-                // Check of de gebruiker de vraag intussen makkelijk heeft gemaakt...
-                const isEasy = questionFrame.querySelector('.easyQuestion').getAttribute('data-easy') === 'true';
-                if (isEasy) {
-                    fetch("/cms/saveEasyCheckBoxes", {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ questionDict: { [data.newId]: { easySwitch: true } } })
-                    });
-                }
+            const isEasy = questionFrame.querySelector('.easyQuestion').getAttribute('data-easy') === 'true';
+            if (isEasy) {
+                fetch("/cms/saveEasyCheckBoxes", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ questionDict: { [data.newId]: { easySwitch: true } } })
+                });
             }
-        })
-    }
+        }
+    })
+    .catch(error => {
+        console.error(`Error saving questions: ${error}`);
+        alert("Er ging iets mis bij het opslaan op de server.");
+    });
+}
 
 /**
  * Synchronizes the selected correct answer across all language tabs.
@@ -577,6 +590,46 @@ function toggleQuestionStatus(questionId, isEnabled) {
             if (checkbox) {
                 checkbox.checked = !isEnabled; // Draai de visuele verandering terug
             }
+        }
+    });
+}
+
+/**
+ * Filtert de weergegeven vragen op basis van de tekst in de zoekbalk.
+ * Doorzoekt de tekst van zowel de vragen als de antwoorden over alle talen heen.
+ */
+
+function filterQuestions() {
+    // 1. Lees de huidige waarden van alle filters uit
+    let input = document.getElementById('questionSearchBar').value.toLowerCase();
+    let statusFilter = document.getElementById('filterStatus').value;
+    let difficultyFilter = document.getElementById('filterDifficulty').value;
+    
+    let questionFrames = document.querySelectorAll('.questionFrame');
+
+    questionFrames.forEach(function(frame) {
+        // -- Check 1: Voldoet de tekst? --
+        let contentWrapper = frame.querySelector('.content-wrapper');
+        let textToSearch = contentWrapper ? contentWrapper.textContent.toLowerCase() : "";
+        let matchesText = textToSearch.includes(input);
+
+        // -- Check 2: Voldoet de status (Enabled/Disabled)? --
+        let isEnabled = frame.querySelector('.enableSwitch input').checked;
+        let matchesStatus = (statusFilter === "all") || 
+                            (statusFilter === "enabled" && isEnabled) || 
+                            (statusFilter === "disabled" && !isEnabled);
+
+        // -- Check 3: Voldoet de moeilijkheidsgraad (Easy/Hard)? --
+        let isEasy = frame.querySelector('.easyQuestion').getAttribute('data-easy') === 'true';
+        let matchesDifficulty = (difficultyFilter === "all") || 
+                                (difficultyFilter === "easy" && isEasy) || 
+                                (difficultyFilter === "hard" && !isEasy);
+
+        // Als de vraag aan ALLE actieve filters voldoet, laten we hem zien
+        if (matchesText && matchesStatus && matchesDifficulty) {
+            frame.style.display = ""; 
+        } else {
+            frame.style.display = "none"; 
         }
     });
 }

@@ -144,7 +144,7 @@ body {
 
 .btn-primary, .btn-secondary {
     font-family: "CO Headline", sans-serif;
-    font-size: 1rem;
+    font-size: 1.1rem;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -156,6 +156,16 @@ body {
     align-items: center;
     padding: 0 1.5rem 0.0rem 1.5rem; 
     line-height: 1;
+}
+
+.btn-primary.settings-btn-nonActive,
+.btn-secondary.settings-btn-nonActive,
+.settings-btn-nonActive,
+.settings-btn-nonActive:hover {    
+    background-color: #b9b9b9 !important;
+    color: #ffffff !important;
+    cursor: not-allowed;
+    opacity: 1 !important;
 }
 
 .btn-primary { background-color: var(--darkGreen); color: #ffffff; }
@@ -381,8 +391,135 @@ input:focus + .slider { box-shadow: 0 0 1px var(--darkGreen); }
 input:checked + .slider:before { transform: translateX(26px); }
 
 /* ==========================================================================
+   Toolbar: Search & Filters
+   ========================================================================== */
+.toolbar-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+    flex-wrap: wrap; /* Voorkomt dat het uitbreekt op kleine schermen */
+}
+
+/* --- Zoekbalk sectie --- */
+.search-wrapper {
+    flex: 1; /* Neemt alle overgebleven ruimte in */
+    min-width: 250px; 
+}
+
+.search-input {
+    width: 100%;
+    height: 3.2rem; /* Exact zelfde hoogte als je actieknoppen */
+    box-sizing: border-box;
+    padding: 0 1rem;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.1rem;
+    color: #000000;
+    background-color: #ffffff;
+    border: solid 0.1rem #d4d4d4;
+    border-radius: 0.5rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-input::placeholder {
+    color: #555;
+    font-style: italic;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--darkGreen);
+    box-shadow: 0 0 0 2px rgba(0, 81, 68, 0.2); 
+}
+
+/* --- Dropdown Filters sectie --- */
+.filter-wrapper {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border: solid 0.1rem #d4d4d4;
+    border-radius: 0.5rem;
+    overflow: hidden; /* Houdt de ronde hoeken strak */
+    height: 3.2rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.filter-wrapper:focus-within {
+    border-color: var(--darkGreen);
+    box-shadow: 0 0 0 2px rgba(0, 81, 68, 0.2);
+}
+
+.filter-icon-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.2rem;
+    height: 100%;
+    background-color: #f9f9f9;
+    border-right: solid 0.1rem #d4d4d4;
+    transition: background-color 0.3s ease;
+}
+
+.filter-icon-img {
+    height: 1.3rem;
+    width: 1.3rem;
+}
+
+/* Zorgt dat de toggle-switch netjes in de filterbox past */
+.fake-switch {
+    transform: scale(0.65); 
+    margin: 0;
+}
+
+.filter-select {
+    border: none;
+    background: transparent;
+    padding: 0 1rem 0 0.5rem;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1rem;
+    color: #000;
+    outline: none;
+    cursor: pointer;
+    height: 100%;
+    appearance: auto; /* Laat het native dropdown pijltje zien */
+}
+
+/* --- Styling voor de toevoegen-knop in de toolbar --- */
+.toolbar-btn {
+    height: 3.2rem; /* Exact dezelfde hoogte als de filters en zoekbalk */
+    border-radius: 0.5rem; /* Zelfde afgeronde hoeken */
+    white-space: nowrap; /* Zorgt dat de tekst niet afbreekt naar een 2e regel */
+    font-size: 1.1rem;
+    margin-left: auto; /* Duwt de knop helemaal naar rechts op grote schermen */
+}
+
+
+/* ==========================================================================
    Mobile Responsiveness
    ========================================================================== */
+
+/* Aanvulling op de eerdere @media (max-width: 850px) voor de toolbar */
+@media (max-width: 850px) {
+    .toolbar-btn {
+        margin-left: 0;
+        width: 100%; /* Op mobiel wordt de knop net als de zoekbalk lekker breed */
+        flex: none;
+    }
+}
+
+/* --- Responsiviteit voor telefoons --- */
+@media (max-width: 850px) {
+    .search-wrapper {
+        width: 100%;
+        flex: none; /* Op mobiel wordt de zoekbalk de volle breedte */
+    }
+    .filter-wrapper {
+        flex: 1; /* De filters verdelen de overgebleven ruimte eronder 50/50 */
+        min-width: 140px;
+    }
+}
+
 @media (max-width: 850px) {
     .page-container {
         flex-direction: column;
@@ -442,3 +579,4 @@ input:checked + .slider:before { transform: translateX(26px); }
         justify-content: flex-end; /* Houdt de knoppen rechts uitgelijnd op de nieuwe regel */
     }
 }
+

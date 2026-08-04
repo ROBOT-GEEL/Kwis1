@@ -87,6 +87,7 @@ let hasVisited = null;
 
 // This event listener shows the modal to ask if the participants want easy questions.
 document.querySelector('#play-quiz-button').addEventListener('click', async () => {
+    document.querySelector('#NL-selector').click();
     toggleEasyVisitedOpened();
     setTimeout(async () => {
         toggleEasyVisitedButtonsReset();
@@ -175,7 +176,6 @@ async function toggleEasyVisitedButtons(easyVisited, state) {
             wantEasyQuestion = null;
 
             socket.emit('drive-to-quiz-location');
-            socket.emit('robot-askScreen');
             
             try {
                 await Quiz.initializeNewQuiz();

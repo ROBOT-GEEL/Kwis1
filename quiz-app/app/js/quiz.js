@@ -222,6 +222,13 @@ class Quiz {
      *
      * @param {string} errorCode - The error code to display in the error message
      */
+
+    static async abortByScreenChange(){
+        if (this.#active){
+            this.#abortQuiz("Ander scherm ontvangen") 
+        }
+    }
+
     static async #abortQuiz(errorCode) {
         // Prevent multiple error triggers from running simultaneously
 

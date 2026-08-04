@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Miniatuur Quiz Resultaat</title>
+    <title>Admin Panel - Statistieken</title>
+    <link rel="icon" image="image/x-icon" href="../shared/assets/icons/favicon.ico">
     <link rel="stylesheet" href="statistieken.css">
 </head>
 <body>
@@ -21,6 +22,44 @@
         </header>
     </div>
 
+    <div class="toolbar-container">
+        <div class="search-wrapper">
+            <input 
+                type="text" 
+                id="statsSearchBar" 
+                class="search-input"
+                onkeyup="filterStats()" 
+                placeholder="Zoek een resultaat of speler..." 
+            >
+        </div>
+
+        <div class="filter-wrapper">
+            <div class="filter-icon-box">
+                <label class="enableSwitch fake-switch">
+                    <input type="checkbox" id="uiStatusCheckbox" checked disabled>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            <select id="filterStatus" class="filter-select" onchange="filterStats()">
+                <option value="all">Alle statussen</option>
+                <option value="enabled">Actief</option>
+                <option value="disabled">Inactief</option>
+            </select>
+        </div>
+
+        <div class="filter-wrapper">
+            <div class="filter-icon-box" id="uiDifficultyBox">
+                <img id="uiDifficultyIcon" class="filter-icon-img" src="assets/icons/meterMakkelijk.svg" title="Filter"/>
+            </div>
+            <select id="filterDifficulty" class="filter-select" onchange="filterStats()">
+                <option value="all">Alle niveaus</option>
+                <option value="easy">Makkelijk</option>
+                <option value="hard">Moeilijk</option>
+            </select>
+        </div>
+
+    </div>
+
     <div class="page-wrapper" id="chartsContainer">
         <!-- Hier worden de grafieken dynamisch ingeladen door JavaScript -->
     </div>
@@ -29,5 +68,6 @@
     <script src="../shared/scripts/admin-session.js"></script>
     <script src="assets/chart/chart.js"></script>
     <script src="statistieken.js"></script>
+    
 </body>
 </html>

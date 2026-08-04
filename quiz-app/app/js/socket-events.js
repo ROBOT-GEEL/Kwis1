@@ -36,26 +36,7 @@ socket.on('robot-explore', () => {
     }, 2100);
 });
 
-socket.on('robot-go-to-visitors', () => { 
-    changeScreen('robot-go-to-visitors-screen');
-
-    const interval = setInterval(() => {
-        if (document.querySelector('#robot-go-to-visitors-screen').style.display === 'none') {
-            clearInterval(interval);
-            return;
-        }
-        let selectedLanguageIndex = 0;
-        document.querySelectorAll('.language-selector').forEach((el, index) => {
-            if (el.classList.contains('selected-language')) {
-                selectedLanguageIndex = index;
-            }
-        });
-        document.querySelectorAll('.language-selector')[(selectedLanguageIndex + 1) % 3].click();
-    }, 2100);
-});
-
 socket.on('robot-arrived-at-visitors', () => { 
-    document.querySelector('#NL-selector').click();
     changeScreen('start-screen');
 
     if (Quiz.timeToStartQuiz > 0) {
@@ -110,3 +91,8 @@ socket.on('robot-disconnected', () => {
 socket.on('robot-connected', () => { 
     changeScreen('robot-startup-screen'); 
 });
+
+socket.on('follow-robot-screen', () => { 
+    changeScreen('follow-robot-screen'); 
+});
+

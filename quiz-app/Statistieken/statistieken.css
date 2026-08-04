@@ -215,3 +215,240 @@ body {
     min-height: 15.625rem; /* Voorheen 250px */
     width: 100%;
 }
+
+/* ==========================================================================
+   Toolbar: Search & Filters
+   ========================================================================== */
+.toolbar-container {
+    display: flex;
+    gap: 1rem;
+    margin: 0 auto 1.5rem auto;
+    width: 100%;
+    flex-wrap: wrap; 
+    max-width: 75rem; 
+    padding: 0 1.5rem; 
+}
+/* --- Zoekbalk sectie --- */
+.search-wrapper {
+    flex: 1; 
+    min-width: 250px; 
+}
+
+.search-input {
+    width: 100%;
+    height: 3.2rem; 
+    box-sizing: border-box;
+    padding: 0 1rem;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.1rem;
+    color: #000000;
+    background-color: #ffffff;
+    border: solid 0.1rem #d4d4d4;
+    border-radius: 0.5rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-input::placeholder {
+    color: #555;
+    font-style: italic;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #005144; /* darkGreen */
+    box-shadow: 0 0 0 2px rgba(0, 81, 68, 0.2); 
+}
+
+/* --- Dropdown Filters sectie --- */
+.filter-wrapper {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border: solid 0.1rem #d4d4d4;
+    border-radius: 0.5rem;
+    overflow: hidden; 
+    height: 3.2rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.filter-wrapper:focus-within {
+    border-color: #005144;
+    box-shadow: 0 0 0 2px rgba(0, 81, 68, 0.2);
+}
+
+.filter-icon-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.2rem;
+    height: 100%;
+    background-color: #f9f9f9;
+    border-right: solid 0.1rem #d4d4d4;
+    transition: background-color 0.3s ease;
+}
+
+.filter-icon-img {
+    height: 1.3rem;
+    width: 1.3rem;
+}
+
+.fake-switch {
+    transform: scale(0.65); 
+    margin: 0;
+}
+
+.filter-select {
+    border: none;
+    background: transparent;
+    padding: 0 1rem 0 0.5rem;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1rem;
+    color: #000;
+    outline: none;
+    cursor: pointer;
+    height: 100%;
+    appearance: auto; 
+}
+
+/* --- Knop sectie --- */
+.btn-primary { 
+    background-color: #005144; 
+    color: #ffffff; 
+    font-family: "CO Headline", sans-serif;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 1.5rem;
+}
+
+.btn-primary:hover { background-color: #026151; }
+
+.toolbar-btn {
+    height: 3.2rem; 
+    border-radius: 0.5rem; 
+    white-space: nowrap; 
+    font-size: 1.1rem;
+    margin-left: auto; 
+}
+
+/* =========================================
+   Toggle Switch (In-/Uitgeschakeld icoon)
+   ========================================= */
+
+/* De buitenste container */
+.enableSwitch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  margin: 0; /* Zorg dat hij mooi in de box past */
+}
+
+/* Verberg de standaard HTML checkbox */
+.enableSwitch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* De achtergrond van de schuifknop (standaard grijs) */
+.enableSwitch .slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+}
+
+/* Het witte bolletje in de switch */
+.enableSwitch .slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+}
+
+/* De achtergrondkleur als de switch aan staat (groen) */
+.enableSwitch input:checked + .slider {
+  background-color: var(--darkGreen); /* Pas deze kleur aan als je in jouw CMS een specifiek groen gebruikt! */
+}
+
+/* Verschuif het witte bolletje naar rechts als de switch aan staat */
+.enableSwitch input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+/* Maak de achtergrond en het bolletje mooi rond */
+.enableSwitch .slider.round {
+  border-radius: 24px;
+}
+
+.enableSwitch .slider.round:before {
+  border-radius: 50%;
+}
+
+/* Omdat dit een 'nep' knop is (disabled) die we als icoon gebruiken,
+   zetten we de cursor op standaard (geen klik-vingertje). */
+.enableSwitch input:disabled + .slider {
+  cursor: default;
+}
+
+/* ==========================================================================
+   Mobile Responsiveness (max-width: 850px)
+   ========================================================================== */
+@media (max-width: 850px) {
+    /* 1. Containers en marges strak trekken op mobiel */
+    .header-wrapper, 
+    .toolbar-container, 
+    #chartsContainer {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    .header-wrapper {
+        padding-top: 1rem;
+    }
+
+    /* 2. Grafieken onder elkaar zetten in plaats van naast elkaar */
+    #chartsContainer {
+        grid-template-columns: 1fr; 
+        gap: 1rem;
+        padding-top: 1rem;
+    }
+
+    /* 3. Toolbar (Zoekbalk & Filters) instellingen */
+    .search-wrapper {
+        width: 100%;
+        flex: none; /* Zoekbalk pakt de hele bovenste regel */
+    }
+    
+    .filter-wrapper {
+        flex: 1; /* Filters verdelen de overgebleven ruimte 50/50 */
+        min-width: 140px;
+    }
+
+    .toolbar-btn {
+        margin-left: 0;
+        width: 100%; 
+        flex: none;
+    }
+
+    /* 4. Settings knoppen (Terug-knop) makkelijker klikbaar maken */
+    .settings-button-row {
+        width: 100%;
+    }
+
+    .settings-back-btn {
+        width: 100%; /* Knop over de volle breedte op mobiel */
+        justify-content: center;
+    }
+}

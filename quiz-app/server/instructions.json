@@ -10,9 +10,9 @@
         "FR": "Répondez en vous tenant dans la zone A, B ou C."
     },
     "endScreen": {
-        "NL": "<h1>Bedankt om mee te spelen! </h1><h2>Er valt nog veel meer te ondekken</h2>",
-        "EN": "<h1>Thank you for playing with us! </h1><h2>There is a lot more to explore in our expo!</h2>",
-        "FR": "<h1>Merci d'avoir joué avec nous! </h1><h2>Il y'a plus a decouvrir!</h2>"
+        "NL": "<h1>Bedankt om mee te spelen! </h1><h2>Er valt nog veel meer te ondekken in de Expoo!</h2>",
+        "EN": "<h1>Thank you for playing with us! </h1><h2>There is a lot more to explore in our Expoo!</h2>",
+        "FR": "<h1>Merci d'avoir joué avec nous! </h1><h2>Il y'a plus a decouvrir dans l'Expoo!</h2>"
     },
     "startScreen": {
         "NL": "<h1>De quiz gaat zodadelijk beginnen! </h1><h2>Neem plaats in de antwoordvakken</h2>",

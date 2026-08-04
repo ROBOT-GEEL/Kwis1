@@ -116,33 +116,6 @@ export function registerSocketHandlers(io) {
       }
     });
 
-//Oplossing Matthijs voor het nieuwe scherm
-  const blankScreen = () => {
-    const seconds = 1*60;
-    exec(`DISPLAY=:0 xset +dpms`, () => {
-      exec(`DISPLAY=:0 xset dpms ${seconds} ${seconds} ${seconds}`, (error, stderr) => {
-        if (error) {
-          logger.error(`Error setting DPMS timeout: ${error.message}`);
-          return;
-        }
-        logger.info(`Screen power saviour: ${seconds} seconds.`);
-      });
-    });
-  };
-
-  const wakeScreen = () => {
-    exec('xset dpms force on;');
-    const seconds = 12*60;
-    exec(`DISPLAY=:0 xset +dpms`, () => {
-      exec(`DISPLAY=:0 xset dpms ${seconds} ${seconds} ${seconds}`, (error, stderr) => {
-        if (error) {
-          logger.error(`Error setting DPMS timeout: ${error.message}`);
-          return;
-        }
-        logger.info(`Screen power saviour: ${seconds} seconds.`);
-      });
-    });
-  };
 
     //
     // Robot platform events
@@ -155,10 +128,10 @@ export function registerSocketHandlers(io) {
       "robot-askScreen",
       "robot-startup",
       "robot-explore",
-      "robot-go-to-visitors",
       "robot-arrived-at-visitors",
       "drive-to-quiz-location",
       "robot-arrived-at-quiz-location",
+      "follow-robot-screen",
       "robot-go-charge",
       "robot-docking",
       "robot-charging",
@@ -177,21 +150,15 @@ export function registerSocketHandlers(io) {
     robotEvents.forEach((event) => {
       socket.on(event, (data) => {
         logger.info(event, data || "");
+        if (event !== "robot-bumper-status"){
+          console.log(event, data || "");
+        }
         socket.broadcast.emit(event, data);
 
         if (event === "drive-to-quiz-location") {
           socket.broadcast.emit("drive_to_quiz_location");
         }
 
-        if (event === "robot-charging") {
-          if (screenOn) {
-            blankScreen();
-          }
-        } else {
-          if (!screenOn) {
-            wakeScreen();
-          }
-        }
       });
     });
 
@@ -245,6 +212,7 @@ export function registerSocketHandlers(io) {
             currentAdminSocketId = socket.id;
 
             writeAdminStatusInDB(true); 
+            toggleProjector("sleep");
             socket.broadcast.emit("admin-panel-open");
 
             if (typeof callback === "function") callback();

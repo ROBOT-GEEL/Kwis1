@@ -61,12 +61,25 @@ export const getZones = async (req, res, next) => {
 
 export const delQuestion = async (req, res, next) => {
   try {
-    const collection = global.db.collection("questions");
-    const questionId = new ObjectId(req.body.questionId);
-    await collection.deleteOne({ _id: questionId });
+    const questionsCollection = global.db.collection("questions");
+    const resultsCollection = global.db.collection("results");
+    
+    const questionObjectId = new ObjectId(req.body.questionId); 
+
+    const questionDoc = await questionsCollection.findOne({ _id: questionObjectId }); 
+
+    if (!questionDoc) {
+      return res.status(404).send("Vraag niet gevonden");
+    }
+
+    const numericQuestionId = Number(questionDoc.questionId); 
+
+    await resultsCollection.deleteMany({ questionId: numericQuestionId }); 
+    await questionsCollection.deleteOne({ _id: questionObjectId }); 
+
     res.sendStatus(200);
   } catch (err) {
-    console.error("Error deleting question:", err);
+    console.error("Error deleting question and results:", err);
     res.status(500).send("Internal Server Error");
   }
 };
@@ -75,35 +88,28 @@ export const editQuestion = async (req, res, next) => {
   try {
     const collection = global.db.collection("questions");
 
-    const question = req.body.newQuestion;
-    const answers = [req.body.newAnswer1, req.body.newAnswer2, req.body.newAnswer3];
+    // Haal de data uit het nieuwe frontend verzoek (1 request, 3 talen)
+    const { questionId, correctAnswer, translations } = req.body;
 
-    const questionKey =
-      req.body.language === "en"
-        ? "en.question"
-        : req.body.language === "nl"
-        ? "nl.question"
-        : "fr.question";
-    const answersKey =
-      req.body.language === "en"
-        ? "en.answers"
-        : req.body.language === "nl"
-        ? "nl.answers"
-        : "fr.answers";
-
-    // If editing an existing question
-    if (req.body.questionId) {
-      const questionIdObject = new ObjectId(req.body.questionId);
+    // Check of we een bestaande vraag updaten (en of het id geldig is)
+    // We checken expliciet of het geen nieuwe lege string is
+    if (questionId && ObjectId.isValid(questionId)) {
+      const questionIdObject = new ObjectId(questionId);
       const filter = { _id: questionIdObject };
+      
+      // Update alle drie de talen en het correcte antwoord tegelijk
       const updateOperation = {
         $set: {
-          [questionKey]: question,
-          [answersKey]: answers,
-          correctAnswer: req.body.correctAnswer,
+          en: translations.en,
+          nl: translations.nl,
+          fr: translations.fr,
+          correctAnswer: correctAnswer,
         },
       };
+      
       await collection.updateOne(filter, updateOperation);
       res.status(200).send({ updated: true });
+      
     } else {
       // Create a new question
       const highestIdPipeline = [
@@ -112,11 +118,12 @@ export const editQuestion = async (req, res, next) => {
       const highestIndex = await collection.aggregate(highestIdPipeline).toArray();
       const newId = highestIndex[0] ? highestIndex[0].maxQuestionId + 1 : 0;
 
+      // We bouwen het document exact op zoals andere functies verwachten
       const newQuestion = {
-        correctAnswer: req.body.correctAnswer,
-        en: { question, answers },
-        fr: { question, answers },
-        nl: { question, answers },
+        correctAnswer: correctAnswer,
+        en: translations.en,
+        nl: translations.nl,
+        fr: translations.fr,
         enabled: true,
         easyQuestion: false,
         questionId: newId,
@@ -136,7 +143,8 @@ export const getQuestions = async (req, res, next) => {
     const collection = global.db.collection("questions");
     const questions = await collection.find({}).sort({
       enabled: -1,
-      easyQuestion: -1
+      easyQuestion: -1,
+      questionId: -1
     }).toArray();
     res.json(questions);
   } catch (error) {

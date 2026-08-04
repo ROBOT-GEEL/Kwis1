@@ -8,10 +8,6 @@ function exploring() {
     socket.emit("robot-explore");
 }
 
-function toVisitor() {
-    socket.emit("robot-go-to-visitors");
-}
-
 function atVisitor() {
     socket.emit("robot-arrived-at-visitors");
 }
@@ -54,4 +50,8 @@ function projectorStatsScreen() {
 
 function robotLostCharging() {
     socket.emit("robot-lost-charging");
+}
+
+function followRobotScreen() {
+    socket.emit("follow-robot-screen");
 }

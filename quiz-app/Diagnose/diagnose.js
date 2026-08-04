@@ -9,6 +9,34 @@ async function greyOut(buttonElement){
     }
 }
 
+async function greyOutWaitForBT(buttonElement) {
+    if (!buttonElement) return; 
+    buttonElement.classList.add('settings-btn-nonActive');
+    buttonElement.disabled = true; 
+
+    try {
+        await new Promise((resolve, reject) => {
+            
+            const timeout = setTimeout(() => {
+                reject(new Error("timeout")); // Dit activeert de 'catch' blok
+            }, 600000); 
+
+            socket.once("robot-ready", (data = null) => {
+                clearTimeout(timeout); // Stop de timer, de robot is er!
+                resolve(); // Dit laat de 'await' succesvol afronden
+            });
+        });
+        console.log("Robot is klaar!"); 
+
+    } catch (error) {
+        alert("Er liep iets mis bij de opstart van de robot.");
+        
+    } finally {
+        buttonElement.classList.remove('settings-btn-nonActive');
+        buttonElement.disabled = false;
+    }
+}
+
 socket.on("robot-bumper-status", (status) => {    
     console.log("bumper", status.msg);
     const errorContainerBumper = document.getElementById('hardwareErrorContainerBumper');
