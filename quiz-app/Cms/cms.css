@@ -296,7 +296,7 @@ body {
    ========================================================================== */
 
 /* 1. Basis styling voor alle knoppen (GEEN position: absolute meer!) */
-.editframe, .easyQuestion, .deleteQuestion,
+.editframe, .easyQuestion, .deleteQuestion, .questionIdBox,
 .language, .previousLanguage, .nextLanguage {
     height: 2.6rem;
     display: flex;
@@ -318,7 +318,7 @@ body {
 }
 
 /* 2. Styling specifiek voor de actieknoppen (potloodje en extra's) */
-.editframe, .easyQuestion, .deleteQuestion {
+.editframe, .easyQuestion, .deleteQuestion, .questionIdBox {
     border: solid 0.1rem #d9d9d9;
     width: 3.2rem;
     box-sizing: border-box;
@@ -331,12 +331,12 @@ body {
 }
 
 /* 3. Styling specifiek voor de taalknoppen */
-.nextLanguage, .previousLanguage, .language {
+.nextLanguage, .previousLanguage, .language, .questionIdText {
     width: 2.6rem;
     transition: transform 0.2s ease, background-color 0.2s;
 }
 
-.language {
+.language, .questionIdText {
     font-family: 'Open Sans', sans-serif;
     font-size: 1.1rem;
     font-weight: 600;
@@ -347,6 +347,17 @@ body {
     transform: translateY(-2px);
     background-color: #f1f1f1;
 }
+
+/* 3. Styling specifiek voor de quiestionID knop */
+.questionIdText {
+    width: 2.6rem;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: default;
+    text-align: center;
+}
+
 
 /* ==========================================================================
    Toggle Switches for Active/Visited pages

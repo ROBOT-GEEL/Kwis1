@@ -96,3 +96,10 @@ socket.on('follow-robot-screen', () => {
     changeScreen('follow-robot-screen'); 
 });
 
+socket.on("robot-bumper-status", (status) => {    
+    console.log("bumper", status.msg);
+    if (status && status.msg && (status.msg !== "De bumper is niet ingedrukt")) {
+        alert(status.msg)
+    }
+});
+

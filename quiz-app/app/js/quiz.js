@@ -68,6 +68,7 @@ class Quiz {
         socket.on("robot-disconnected", async () => {
             await this.#abortQuiz("ROBOT_DISCONNECTED");
         });
+
     }
 
     /**
@@ -223,9 +224,25 @@ class Quiz {
      * @param {string} errorCode - The error code to display in the error message
      */
 
-    static async abortByScreenChange(){
+    static async abortByScreenChange(message="Ander scherm ontvangen"){
         if (this.#active){
-            this.#abortQuiz("Ander scherm ontvangen") 
+            socket.emit('quiz-finished');
+
+            if (this.#cancelled) return; 
+            
+            this.#cancelled = true;
+            this.#currentQuestionIndex = this.#questions.length; // Break out of any running question loops
+
+            // Reset projector state
+            socket.emit('projector-reset');
+
+            // Turn off the projector lens
+            try {
+                await this.#sendProjectorCommand("sleep");
+            } catch (e) {
+                logError("[Quiz Interface] Could not turn off projector lens during error handling.");
+            }  
+
         }
     }
 

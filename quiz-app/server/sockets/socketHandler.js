@@ -147,10 +147,12 @@ export function registerSocketHandlers(io) {
       "robot-stop-for-x-time"
     ];
 
+    let projectorAanUit = false;
+
     robotEvents.forEach((event) => {
       socket.on(event, (data) => {
         logger.info(event, data || "");
-        if (event !== "robot-bumper-status"){
+        if (event !== "robot-bumper-status") {
           console.log(event, data || "");
         }
         socket.broadcast.emit(event, data);
@@ -159,6 +161,20 @@ export function registerSocketHandlers(io) {
           socket.broadcast.emit("drive_to_quiz_location");
         }
 
+        if (event === "robot-isActive") {
+          const status = data; 
+          if (status !== projectorAanUit) {
+            if (status === true) {
+              toggleProjector(1);
+              console.log("Projector wordt ingeschakeld")
+              projectorAanUit = true;
+            } else {
+              toggleProjector(0);
+              console.log("Projector wordt uitgeschakeld")
+              projectorAanUit = false;
+            }
+          }
+        }
       });
     });
 
@@ -170,6 +186,7 @@ export function registerSocketHandlers(io) {
     quizEvents.forEach((event) => {
       socket.on(event, () => {
         logger.info(event);
+        console.log(event);
         socket.broadcast.emit(event);
       });
     });
@@ -184,6 +201,7 @@ export function registerSocketHandlers(io) {
 
     peopleEvents.forEach((event) => {
       socket.on(event, () => {
+        console.log(event);
         logger.info(event);
         socket.broadcast.emit(event);
       });
@@ -193,6 +211,7 @@ export function registerSocketHandlers(io) {
     // Admin panel events
     //
     socket.on("admin-panel-open", (token, callback) => {
+        console.log("admin-panel-open");
         try {
             // Clear any pending disconnect timers to prevent accidental lock releases
             if (disconnectTimer) {
@@ -222,6 +241,7 @@ export function registerSocketHandlers(io) {
     });
 
     socket.on("admin-panel-closed", async (token, callback) => {
+        console.log("admin-panel-closed");
         try {
             if (token === currentAdminToken) {
                 currentAdminToken = null; 

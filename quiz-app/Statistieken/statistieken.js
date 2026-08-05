@@ -33,7 +33,7 @@ function renderCharts(quizData) {
     container.innerHTML = ''; // Zorg dat de container leeg is
 
     quizData.forEach((item, index) => {
-       
+        
         const canvasId = `quizChart_${index}`;
         
         const pctVisited = item.totalVisited > 0 
@@ -73,11 +73,19 @@ function renderCharts(quizData) {
         const dataStatus = item.enabledQuestion ? 'enabled' : 'disabled';
         const dataDifficulty = item.easyQuestion ? 'easy' : 'hard';
 
-        const dataSearch = `${item.question.question || item.question} ${answerA} ${answerB} ${answerC}`.toLowerCase();
+        // Haal het questionId op (controleer of het in item of in item.question zit in jouw JSON data)
+        console.log(item);
+        const displayId = item.questionId || (item.question && item.question.questionId) || "Onbekend ID";
+
+        // Voeg het ID toe aan de search string, zodat je ook op ID kan zoeken in de zoekbalk
+        const dataSearch = `${displayId} ${item.question.question || item.question} ${answerA} ${answerB} ${answerC}`.toLowerCase();
         
         const cardHTML = `
             <div class="card quiz-mini-card" data-status="${dataStatus}" data-difficulty="${dataDifficulty}" data-search="${dataSearch}">
-                <h3 class="quiz-question-title">${item.question.question || item.question}</h3>
+                <h3 class="quiz-question-title">
+                    <span style="color: #6c757d; font-size: 0.75em; margin-right: 8px;">Vraag ${displayId}</span>
+                    ${item.question.question || item.question}
+                </h3>
                 
                 <div class="totals-header">
                     <div class="header-left">
@@ -97,7 +105,7 @@ function renderCharts(quizData) {
         `;
         
         container.insertAdjacentHTML('beforeend', cardHTML);
-      
+       
         const ctx = document.getElementById(canvasId).getContext('2d');
         new Chart(ctx, {
             type: 'bar',

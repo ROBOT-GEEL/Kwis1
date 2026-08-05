@@ -2,7 +2,6 @@ import { getDB } from "../config/db.js";
 import logger from "../config/logger.js";
 
 export const getRobotStatus = async (req, res, next) => {
-    logger.info("getRobotStatus requested");
 
     try {
         const db = getDB();
@@ -24,7 +23,6 @@ export const getRobotStatus = async (req, res, next) => {
         if (!status) {
             return res.status(200).json({ succes: true, data: {} });
         }
-
         return res.status(200).json({ succes: true, data: status });
 
     } catch (e) {
@@ -34,22 +32,11 @@ export const getRobotStatus = async (req, res, next) => {
 };
 
 export const insertRobotStatus = async (req, res, next) => {
+
     try {
         const db = getDB();
         const robotStatus = db.collection("robotStatus");
-        
-        // 1. Haal het huidige record (id 0) op
-        const huidigRecord = await robotStatus.findOne({ _id: 0 });
 
-        // Dit zorgt voor een backup die we bij debug kunnen gebruiken
-        // 2. Als er een actueel record bestaat, kopieer deze in DEZELFDE collectie
-        if (huidigRecord) {
-            // Verwijder _id: 0, zodat MongoDB een nieuwe unieke ObjectId aanmaakt voor de kopie
-            delete huidigRecord._id; 
-            // Voeg de kopie toe aan dezelfde collectie als historisch record
-            await robotStatus.insertOne(huidigRecord);
-        }
-        
         // 3. Update het vaste record (id 0) met de nieuwe data
         const updateData = {
             ...req.body,

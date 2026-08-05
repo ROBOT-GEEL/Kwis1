@@ -43,6 +43,7 @@ export const getResults = async (req, res, next) => {
       }
 
       finalResults.push({
+        questionId: question.questionId,
         question: question.nl || "",
         easyQuestion: question.easyQuestion || false,
         enabledQuestion: question.enabled || false,

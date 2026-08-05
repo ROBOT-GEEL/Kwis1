@@ -10,6 +10,7 @@ $(document).ready(function () {
         
         try {
             socket.emit("robot-stop-for-x-time", { time: 4000 });
+            Quiz.abortByScreenChange("Adminpaneel aangeklikt");
         } catch (error) {
             console.error("Fout bij het versturen van socket event:", error);
         }

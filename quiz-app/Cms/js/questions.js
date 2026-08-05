@@ -77,12 +77,15 @@ function displayQuestions() {
                         <img class="editIcon" src="icons/edit.svg" title="Bewerk"/>
                     </div>
                     
-                    <!-- FIX: Knoppen maken nu dynamisch gebruik van de elementen zelf i.p.v. hardgecodeerde string variabelen -->
                     <div class="easyQuestion" 
                         style="background-color: ${question.easyQuestion ? '#DAF5DB' : '#F5DADA'};"
                         data-easy="${question.easyQuestion ? 'true' : 'false'}" 
                         onclick="easyQuestion(this)">
                         <img class="easyQuestionIcon" src="${question.easyQuestion ? 'icons/meterMakkelijk.svg' : 'icons/meterMoeilijk.svg'}" title="Definieer moeilijkheid"/>
+                    </div>
+
+                    <div class="questionIdBox" style="cursor: default" onclick="alert(\`Gebruik vraagID's om makkelijk naar vragen te kunnen verwijzen. Iedere vraag krijgt bij aanmaak een uniek ID.\`);">
+                        <p class="questionIdText">${question.questionId}</p>
                     </div>
                     
                     <div class="deleteQuestion" onclick="deleteQuestion(this.closest('.questionFrame').id)">
@@ -606,6 +609,10 @@ function toggleQuestionStatus(questionId, isEnabled) {
  * Doorzoekt de tekst van zowel de vragen als de antwoorden over alle talen heen.
  */
 
+/**
+ * Filtert de weergegeven vragen op basis van de tekst in de zoekbalk.
+ * Doorzoekt de tekst van de vragen, antwoorden én het unieke questionID.
+ */
 function filterQuestions() {
     // 1. Lees de huidige waarden van alle filters uit
     let input = document.getElementById('questionSearchBar').value.toLowerCase();
@@ -615,10 +622,16 @@ function filterQuestions() {
     let questionFrames = document.querySelectorAll('.questionFrame');
 
     questionFrames.forEach(function(frame) {
-        // -- Check 1: Voldoet de tekst? --
+        // -- Check 1: Voldoet de tekst of het questionID? --
         let contentWrapper = frame.querySelector('.content-wrapper');
         let textToSearch = contentWrapper ? contentWrapper.textContent.toLowerCase() : "";
-        let matchesText = textToSearch.includes(input);
+        
+        // Haal het ID op uit de HTML
+        let idElement = frame.querySelector('.questionIdText');
+        let idText = idElement ? idElement.textContent.toLowerCase() : "";
+        
+        // Check of de input voorkomt in de tekst OF in het ID
+        let matchesText = textToSearch.includes(input) || idText.includes(input);
 
         // -- Check 2: Voldoet de status (Enabled/Disabled)? --
         let isEnabled = frame.querySelector('.enableSwitch input').checked;
@@ -627,7 +640,8 @@ function filterQuestions() {
                             (statusFilter === "disabled" && !isEnabled);
 
         // -- Check 3: Voldoet de moeilijkheidsgraad (Easy/Hard)? --
-        let isEasy = frame.querySelector('.easyQuestion').getAttribute('data-easy') === 'true';
+        let easyElement = frame.querySelector('.easyQuestion');
+        let isEasy = easyElement ? easyElement.getAttribute('data-easy') === 'true' : false;
         let matchesDifficulty = (difficultyFilter === "all") || 
                                 (difficultyFilter === "easy" && isEasy) || 
                                 (difficultyFilter === "hard" && !isEasy);

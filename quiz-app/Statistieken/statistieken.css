@@ -255,7 +255,7 @@ body {
 
 .search-input:focus {
     outline: none;
-    border-color: #005144; /* darkGreen */
+    border-color: var(--darkGreen);
     box-shadow: 0 0 0 2px rgba(0, 81, 68, 0.2); 
 }
 
