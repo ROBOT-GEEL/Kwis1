@@ -20,7 +20,9 @@ function displayQuestions() {
             questions.forEach(question => {
                 let questionFrame = document.createElement('div');
                 questionFrame.className = "questionFrame";
-                const qId = question.questionId || question._id;
+                
+                // FIX: Haal consequent het juiste _id uit de database
+                const qId = question._id; 
                 questionFrame.id = qId;
                 
                 questionFrame.innerHTML = `
@@ -28,9 +30,9 @@ function displayQuestions() {
                 
                 <div class="content-wrapper">
                     <div class="questionLanguageBundle" contenteditable="false">
-                        <div onclick="showAnswers(this.parentElement)" onmouseenter="showAnswers(this.parentElement, true)" class="question" style="display: none;">${qId}. ${question.en.question}</div>
-                        <div onclick="showAnswers(this.parentElement)" onmouseenter="showAnswers(this.parentElement, true)" class="question" style="display: flex;">${qId}. ${question.nl.question}</div>
-                        <div onclick="showAnswers(this.parentElement)" onmouseenter="showAnswers(this.parentElement, true)" class="question" style="display: none;">${qId}. ${question.fr.question}</div>
+                        <div onclick="showAnswers(this.parentElement)" onmouseenter="showAnswers(this.parentElement, true)" class="question" style="display: none;">${question.en.question}</div>
+                        <div onclick="showAnswers(this.parentElement)" onmouseenter="showAnswers(this.parentElement, true)" class="question" style="display: flex;">${question.nl.question}</div>
+                        <div onclick="showAnswers(this.parentElement)" onmouseenter="showAnswers(this.parentElement, true)" class="question" style="display: none;">${question.fr.question}</div>
                     </div>
                     <div class="answers" toggleEnable="true" correctAnswer="${question.correctAnswer}" style="display: none;" language="nl">
                         <div class="answerEN" style="display: none;">
@@ -75,19 +77,20 @@ function displayQuestions() {
                         <img class="editIcon" src="icons/edit.svg" title="Bewerk"/>
                     </div>
                     
+                    <!-- FIX: Knoppen maken nu dynamisch gebruik van de elementen zelf i.p.v. hardgecodeerde string variabelen -->
                     <div class="easyQuestion" 
                         style="background-color: ${question.easyQuestion ? '#DAF5DB' : '#F5DADA'};"
                         data-easy="${question.easyQuestion ? 'true' : 'false'}" 
-                        onclick="easyQuestion('${qId}')">
+                        onclick="easyQuestion(this)">
                         <img class="easyQuestionIcon" src="${question.easyQuestion ? 'icons/meterMakkelijk.svg' : 'icons/meterMoeilijk.svg'}" title="Definieer moeilijkheid"/>
                     </div>
                     
-                    <div class="deleteQuestion" onclick="deleteQuestion('${qId}')">
+                    <div class="deleteQuestion" onclick="deleteQuestion(this.closest('.questionFrame').id)">
                         <img class="deleteQuestionIcon" src="icons/recyclebin.svg" title="vraag verwijderen"/>
                     </div>
 
                     <label class="enableSwitch">
-                        <input type="checkbox" onchange="toggleQuestionStatus('${qId}', this.checked)" ${question.enabled ? 'checked' : ''}>
+                        <input type="checkbox" onchange="toggleQuestionStatus(this.closest('.questionFrame').id, this.checked)" ${question.enabled ? 'checked' : ''}>
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -107,6 +110,10 @@ function buttonAddQuestion(questionsFrame) {
     questionFrame.className = 'questionFrame';
     // Let op: geen ID instellen! Zo weet de backend dat dit een nieuwe vraag is.
 
+    // FIX: Genereer een tijdelijk uniek ID zodat radiobuttons van 
+    // meerdere onopgeslagen vragen elkaar niet uitschakelen.
+    const tempId = "new_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+
     questionFrame.innerHTML = `
     <div class="questionBorder"></div>
     
@@ -118,27 +125,27 @@ function buttonAddQuestion(questionsFrame) {
         </div>
         <div class="answers" toggleEnable="true" style="display: none;" language="nl">
             <div class="answerEN" style="display: none;">
-                <input type="radio" name="correctAnswerSelectEn_new" id="correctAwnserA" disabled>
+                <input type="radio" name="correctAnswerSelectEn_${tempId}" id="correctAwnserA" disabled>
                 <div class="answerA" contenteditable="false">&nbsp;</div>
-                <input type="radio" name="correctAnswerSelectEn_new" id="correctAwnserB" disabled>
+                <input type="radio" name="correctAnswerSelectEn_${tempId}" id="correctAwnserB" disabled>
                 <div class="answerB" contenteditable="false">&nbsp;</div>
-                <input type="radio" name="correctAnswerSelectEn_new" id="correctAwnserC" disabled>
+                <input type="radio" name="correctAnswerSelectEn_${tempId}" id="correctAwnserC" disabled>
                 <div class="answerC" contenteditable="false">&nbsp;</div>
             </div>
             <div class="answerNL" style="display: block;">
-                <input type="radio" name="correctAnswerSelectNl_new" id="correctAwnserA" disabled>
+                <input type="radio" name="correctAnswerSelectNl_${tempId}" id="correctAwnserA" disabled>
                 <div class="answerA" contenteditable="false">&nbsp;</div>
-                <input type="radio" name="correctAnswerSelectNl_new" id="correctAwnserB" disabled>
+                <input type="radio" name="correctAnswerSelectNl_${tempId}" id="correctAwnserB" disabled>
                 <div class="answerB" contenteditable="false">&nbsp;</div>
-                <input type="radio" name="correctAnswerSelectNl_new" id="correctAwnserC" disabled>
+                <input type="radio" name="correctAnswerSelectNl_${tempId}" id="correctAwnserC" disabled>
                 <div class="answerC" contenteditable="false">&nbsp;</div>
             </div>
             <div class="answerFR" style="display: none;">
-                <input type="radio" name="correctAnswerSelectFr_new" id="correctAwnserA" disabled>
+                <input type="radio" name="correctAnswerSelectFr_${tempId}" id="correctAwnserA" disabled>
                 <div class="answerA" contenteditable="false">&nbsp;</div>
-                <input type="radio" name="correctAnswerSelectFr_new" id="correctAwnserB" disabled>
+                <input type="radio" name="correctAnswerSelectFr_${tempId}" id="correctAwnserB" disabled>
                 <div class="answerB" contenteditable="false">&nbsp;</div>
-                <input type="radio" name="correctAnswerSelectFr_new" id="correctAwnserC" disabled>
+                <input type="radio" name="correctAnswerSelectFr_${tempId}" id="correctAwnserC" disabled>
                 <div class="answerC" contenteditable="false">&nbsp;</div>
             </div>
         </div>
@@ -176,7 +183,7 @@ function buttonAddQuestion(questionsFrame) {
         </label>
     </div>
     `;
-    questionsFrame.insertBefore(questionFrame, questionsFrame.firstChild); // Optioneel: zet nieuwe vraag bovenaan
+    questionsFrame.insertBefore(questionFrame, questionsFrame.firstChild); 
     
     // Automatisch openen om te bewerken
     enableEditing(questionFrame);
