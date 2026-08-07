@@ -720,6 +720,76 @@ a#easy-numpad-close {
 .easy-numpad-number-container .cancel { background-color: #ef5350; }
 .easy-numpad-number-container .done { background-color: #388E3C; }
 
+/* ==========================================================================
+   BumperAlert
+   ========================================================================== */
+
+#bumper-alert {
+    /* De basis positionering over alles heen */
+    position: fixed; 
+    top: 2rem; 
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99999; 
+    
+    /* Jouw hardware-error opmaak */
+    background-color: #ffcccc;
+    color: #cc0000;
+    padding: 1rem; 
+    border: 1px solid #cc0000;
+    border-radius: 5px;
+    text-align: center;
+    width: 90%; 
+    max-width: 30rem; /* Zorgt dat hij niet het héle scherm vult op grote displays */
+    box-sizing: border-box; 
+    word-wrap: break-word;
+    
+    /* Extra toevoeging voor de leesbaarheid */
+    font-size: 1.5rem;
+    font-weight: bold;
+    box-shadow: 0 0.5rem 1rem rgba(204, 0, 0, 0.2); 
+}
+
+.bumper-grid {
+    display: grid;
+    grid-template-columns: 3rem 6rem 3rem; 
+    grid-template-rows: 3rem 6rem 3rem;    
+    gap: 1rem; 
+    justify-content: center;
+    align-items: center; 
+    margin-top: 1.25rem;
+}
+
+.grid-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* DE FIX: Forceer alle pijlen op exact dezelfde afmeting */
+.pijl img {
+    width: 3rem;
+    height: 3rem;
+    object-fit: contain; 
+}
+
+/* De robot in het midden mag wél de volledige ruimte (6x6rem) pakken */
+.robot-midden img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.pijl {
+    opacity: 0.2; 
+    transition: opacity 0.2s ease-in-out;
+}
+
+.pijl.actief {
+    opacity: 1; 
+}
+
+
 @media only screen and (max-width: 850px) {
     .easy-numpad-container {
         width: 95%;

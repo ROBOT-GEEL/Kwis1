@@ -1,4 +1,4 @@
-const socket = io(`ws://${window.location.hostname}`);
+const socket = io();
 
 function startup() {
     socket.emit("robot-startup");

@@ -33,9 +33,9 @@
     },
 
     "FOLLOW_SCREEN_TEXT": {
-        "NL": "Volg me naar de quizlocatie!",
-        "EN": "Follow me to the quiz location!",
-        "FR": "Suivez-moi jusqu'à<br>l'emplacement du quiz!"
+        "NL": "Hugoo rijdt naar de quizlocatie <br> Kijk naar het balkon!",
+        "EN": "Hugoo is driving to the quiz venue <br> Look at the balcony!",
+        "FR": "Hugoo se rend en voiture au lieu du quiz <br> Regardez le balcon!"
     },
     "QUIZ_SCREEN_QUESTION": {
         "NL": "%question%",
@@ -107,6 +107,12 @@
         "NL": "Nee",
         "EN": "No",
         "FR": "Non"
+    },
+
+    "BUMPER_ALERT": {
+    "NL": "Oeps! Ik bots ergens tegenaan",
+    "EN": "Oops! I bumped into something",
+    "FR": "Oups ! J'ai heurté quelque chose"
     },
 
     "ERROR_TITLE": {

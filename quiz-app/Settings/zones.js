@@ -4,7 +4,7 @@ let zones = {
     3: []
 };
 
-let currentActiveZone = 1;
+let currentActiveZone = 3;
 const maxPoints = 4;
 
 // Kleuren voor de zones

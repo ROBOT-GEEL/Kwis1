@@ -1,7 +1,5 @@
 import net from "net";
-import { fetchSettingsFromDB } from "./cmsController.js";
-
-//let lastProjectorStatus = null;
+import { getRobotStatus } from "./robotStatusController.js";
 
 /**
  * Business logic to determine if the projector should be active.
@@ -9,68 +7,68 @@ import { fetchSettingsFromDB } from "./cmsController.js";
  */
 export async function getTargetProjectorState() {
     try {
-        const settings = await fetchSettingsFromDB();
-        return settings?.robotActive
+        const robotStatus = await getRobotStatus();
+        console.log("getTargetProjectorState")
+        console.log(robotStatus?.robotActive)
+        return robotStatus?.robotActive;
+        
 
-        // const now = new Date();
-
-        // const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        // const currentDay = days[now.getDay()];
-        // const dayConfig = settings?.schedule?.[currentDay];
-
-        // let shouldBeOn = false;
-
-        // if (dayConfig?.active && dayConfig.start && dayConfig.end && settings?.robotActive) {
-        //     const hours = String(now.getHours()).padStart(2, '0');
-        //     const minutes = String(now.getMinutes()).padStart(2, '0');
-        //     const currentTime = `${hours}:${minutes}`;
-
-        //     if (currentTime >= dayConfig.start && currentTime < dayConfig.end && settings.robotActive) {
-        //         shouldBeOn = true;
-        //     }
-        // }
-
-        // // Only return a boolean if the state actually changes, otherwise return null
-        // if (shouldBeOn !== lastProjectorStatus) {
-        //     lastProjectorStatus = shouldBeOn;
-        //     return shouldBeOn;
-        // }
-
-        // return null; // No change needed
     } catch (error) {
         return null;
     }
 }
 
 export const toggleProjector = async (req, res, next) => {
-    // Extract state from the request body
     const { projectorState } = req.body;
+    let state = projectorState;
     
-    const state = await getTargetProjectorState();
+    if ((!state) || (state === "DB")) { // Als er niets is meegestuurd, haal het dan uit de DB
+        try {
+            const response = await fetch("http://localhost:80/robot-status/get-robot-status");
 
-    // Validate input: Check if projectorState is provided
-    if (!projectorState) {
+            if (response.ok) {
+                const antwoord = await response.json();
+                const dbActive = antwoord.data?.robotActive; 
+                
+                if (dbActive === true) state = "1"; // Zet de database boolean (true/false) om naar de verwachte strings ("1"/"0")
+                else if (dbActive === false) state = "0";
+                
+            } else {
+                console.error(`Interne API gaf een foutcode: ${response.status}`);
+            }
+        } catch (fetchError) {
+            console.error("Interne fetch naar DB faalde:", fetchError);
+        }
+    }
+
+    // Zorg ervoor dat state altijd een string is, om errors bij de === check te voorkomen
+    if (state !== undefined && state !== null) {
+        state = String(state);
+    }
+
+    // Validate input: Check if state is properly determined
+    if (!state) {
         return res.status(400).json({
             success: false,
-            error: "Missing projectorState in request body"
+            error: "Missing projectorState in request body and DB fallback failed."
         });
     }
 
     // Translate numeric state to command string
     let command;
-    if (projectorState === "1") {
+    if (state === "1") {
         command = "PROJECTORON";
-    } else if (projectorState === "0") {
+    } else if (state === "0") {
         command = "PROJECTOROFF";
-    } else if (projectorState === "sleep") {
+    } else if (state === "sleep") {
         command = "PROJECTORSLEEP";
-    } else if (projectorState === "wake") {
+    } else if (state === "wake") {
         command = "PROJECTORNOTSLEEP";
     } else {
         // Validate input: Check if the state is known
         return res.status(400).json({
             success: false,
-            error: `Invalid projectorState: ${projectorState}`
+            error: `Invalid projectorState: ${state}`
         });
     }
 

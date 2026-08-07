@@ -366,7 +366,7 @@ class Quiz {
                 changeScreen('quiz-finished-screen');
                 this.#showProjectorCounting();
                 await wait(3000);
-                this.#showProjectorStats();
+                await this.#showProjectorStats();
                 await wait(this.#finishedScreenTime * 1000);
                 this.#showProjectorEndScreen();
                 await wait(this.#finishedScreenTime * 1000);
@@ -389,13 +389,13 @@ class Quiz {
         });
 
         // Wait half the time for the instructions to be shown before showing the second instructions screen
-        await wait(this.#instructionsScreenTime / 2 * 1000);
+        await wait((this.#instructionsScreenTime / 2) * 1000);
 
         socket.emit('projector-show-instructions-2', {
             instruction: this.#instructions['instruction_2'][LanguageData.selectedLanguage]
         });
 
-        await wait(this.#instructionsScreenTime / 2 * 1000);
+        await wait((this.#instructionsScreenTime / 2) * 1000);
     }
 
     static async #showProjectorStartScreen(){

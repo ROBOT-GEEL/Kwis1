@@ -22,6 +22,7 @@ function changeScreen(screen) {
     });
 
     if (screen !== "robot-arrived-at-quiz-location"){
-        Quiz.abortByScreenChange();
+        console.log("Ander scherm ontvangen dan robot-arrived-at-quiz-location");
+        Quiz.abortByScreenChange("Ander scherm van BT ontvangen");
     }
 }

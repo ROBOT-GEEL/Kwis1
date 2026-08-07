@@ -9,7 +9,7 @@ $(document).ready(function () {
         show_easy_numpad();
         
         try {
-            socket.emit("robot-stop-for-x-time", { time: 4000 });
+            socket.emit("robot-stop-for-x-time", { time: 8000 });
             Quiz.abortByScreenChange("Adminpaneel aangeklikt");
         } catch (error) {
             console.error("Fout bij het versturen van socket event:", error);

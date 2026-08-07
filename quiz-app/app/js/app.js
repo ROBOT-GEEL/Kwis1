@@ -38,6 +38,9 @@ function onLanguageChange() {
     document.querySelector('[data-lang-key=VISITED_EXPOO_MODAL_YES]').innerHTML = LanguageData.get("VISITED_EXPOO_MODAL_YES");
     document.querySelector('[data-lang-key=VISITED_EXPOO_MODAL_NO]').innerHTML = LanguageData.get("VISITED_EXPOO_MODAL_NO");
 
+    // Bumper
+    document.querySelector('[data-lang-key=BUMPER_ALERT]').innerHTML = LanguageData.get("BUMPER_ALERT");
+
     // Exploring
     document.querySelector('[data-lang-key=EXPLORING]').innerHTML = LanguageData.get("EXPLORING");
 

@@ -64,6 +64,10 @@ socket.on('robot-go-charge', () => {
     changeScreen('robot-go-charge-screen'); 
 });
 
+socket.on('admin-panel-open', () => { 
+    Quiz.abortByScreenChange("Adminpaneel geopend");
+});
+
 socket.on('robot-docking', () => { 
     console.log('Docking ontvangen');
     changeScreen('robot-docking-screen');
@@ -97,9 +101,61 @@ socket.on('follow-robot-screen', () => {
 });
 
 socket.on("robot-bumper-status", (status) => {    
-    console.log("bumper", status.msg);
+    const allePijlen = [
+        'voor', 'achter', 'links', 'rechts', 
+        'linksboven', 'rechtsboven', 'linksonder', 'rechtsonder'
+    ];
+
     if (status && status.msg && (status.msg !== "De bumper is niet ingedrukt")) {
-        alert(status.msg)
+        // 1. Toon het bumper-alert scherm
+        document.getElementById('bumper-alert').style.display = 'block';
+        
+        // 2. Haal de 'actief' class weg bij alle pijlen (reset)
+        allePijlen.forEach(richting => {
+            const pijl = document.getElementById(`pijl-${richting}`);
+            if (pijl) {
+                pijl.classList.remove('actief');
+            }
+        });
+        
+        // Zet de tekst om naar kleine letters voor veilig zoeken
+        const msg = status.msg.toLowerCase();
+        
+        // 3. Check welke woorden er precies in de status staan
+        const voor = msg.includes("vooraan");
+        const achter = msg.includes("achteraan");
+        const links = msg.includes("links");
+        const rechts = msg.includes("rechts");
+
+        // Hulpfunctie om de code schoon te houden
+        const activeerPijl = (richting) => {
+            const pijl = document.getElementById(`pijl-${richting}`);
+            if (pijl) pijl.classList.add('actief');
+        };
+
+        // 4. Bepaal welke pijlen moeten oplichten (meerdere tegelijk mogelijk!)
+               
+        if (voor) activeerPijl('achter');
+        if (achter) activeerPijl('voor');
+        if (links) activeerPijl('links');
+        if (rechts) activeerPijl('rechts');
+
+        // Schuine kanten (hoeken) omgedraaid
+        if (voor && links) activeerPijl('linksonder');
+        if (voor && rechts) activeerPijl('rechtsonder');
+        if (achter && links) activeerPijl('linksboven');
+        if (achter && rechts) activeerPijl('rechtsboven');
+
+    } else {
+        // De bumper is weer los: Verberg het alert
+        document.getElementById('bumper-alert').style.display = 'none';
+        
+        // Reset ook alle pijlen weer
+        allePijlen.forEach(richting => {
+            const pijl = document.getElementById(`pijl-${richting}`);
+            if (pijl) {
+                pijl.classList.remove('actief');
+            }
+        });
     }
 });
-

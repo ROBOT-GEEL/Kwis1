@@ -224,8 +224,15 @@ h1, h2, h3{
 }
 
 .KULeuven-logo {
-  max-height: 15vh; 
+  max-height: 20vh; 
   height: auto;
+  padding-right: 4vh;
+}
+
+.Cocoon2440-logo {
+  max-height: 25vh; 
+  height: auto;
+  padding-left: 4vh;
 }
 
 /* --- TIMER --- */

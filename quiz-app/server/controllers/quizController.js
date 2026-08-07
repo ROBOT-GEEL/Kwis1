@@ -22,22 +22,46 @@ export const getQuestions = async (req, res) => {
 };
 
 export const getStatisticsForProjector = async (req, res) => {
+    console.log("Statistieken opgevraagd voor de projector")
     try {
         const db = getDB();
         const resultsCollection = db.collection("results");
         const questionsCollection = db.collection("questions");
+        const quizParams = db.collection("params");
+
         const quizId = req.body.quizId; 
 
-        const quizResults = await resultsCollection.find({ quizId: quizId }).toArray();
+        const quizParamRecord = await quizParams.findOne({}, { sort: { _id: -1 } });
+        const expectedNumerOfQuestions = quizParamRecord.maxQuestions;
+        console.log("expectednumerofquestions:", expectedNumerOfQuestions);
 
+        let numberOfQuestionsInDB = 0;
+        let quizResults = [];
 
+        let timeoutReached = false;
+        setTimeout(() => { timeoutReached = true; }, 4000);        
+
+        while (true){
+            console.log("ophalen DB");
+            quizResults = await resultsCollection.find({ quizId: quizId }).toArray();
+            numberOfQuestionsInDB = quizResults.length;
+            if ((numberOfQuestionsInDB === expectedNumerOfQuestions)||timeoutReached) {
+                break;
+            }
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+        console.log("Statistieken doorgestuurd voor de projector")
+
+        if (timeoutReached) {
+            console.log("Gestopt vanwege timeout!");
+        }
+        
         let totalCorrect = 0;
         let total = 0;
 
         for (let i = 0; i < quizResults.length; i++) {
             const currentResult = quizResults[i];
             const resultsArray = currentResult.results;
-            resultsArray.reverse(); //Pi telt vanuit zijn standpunt van links naar rechts dus [C,B,A]
             const questionId = currentResult.questionId;
             
             const question = await questionsCollection.findOne({ questionId: questionId });

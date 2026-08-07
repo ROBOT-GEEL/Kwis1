@@ -92,6 +92,7 @@ export function registerSocketHandlers(io) {
     });
 
     socket.on("count_people_answer", async (msg) => {
+      console.log("schrijf nu in DB");
       logger.info("count_people_answer", msg);
 
       try {
@@ -127,6 +128,7 @@ export function registerSocketHandlers(io) {
       "robot-isActive",
       "robot-askScreen",
       "robot-startup",
+      "robot-ready",
       "robot-explore",
       "robot-arrived-at-visitors",
       "drive-to-quiz-location",
@@ -147,8 +149,6 @@ export function registerSocketHandlers(io) {
       "robot-stop-for-x-time"
     ];
 
-    let projectorAanUit = false;
-
     robotEvents.forEach((event) => {
       socket.on(event, (data) => {
         logger.info(event, data || "");
@@ -162,18 +162,7 @@ export function registerSocketHandlers(io) {
         }
 
         if (event === "robot-isActive") {
-          const status = data; 
-          if (status !== projectorAanUit) {
-            if (status === true) {
-              toggleProjector(1);
-              console.log("Projector wordt ingeschakeld")
-              projectorAanUit = true;
-            } else {
-              toggleProjector(0);
-              console.log("Projector wordt uitgeschakeld")
-              projectorAanUit = false;
-            }
-          }
+          toggleProjector("DB");
         }
       });
     });
@@ -251,7 +240,8 @@ export function registerSocketHandlers(io) {
                 socket.broadcast.emit("admin-panel-closed");
                 logger.info("Admin panel closed");
 
-                syncProjectorState();
+                toggleProjector("DB");
+
             }
             if (typeof callback === "function") callback();
         } catch (error) {
@@ -299,31 +289,21 @@ export function registerSocketHandlers(io) {
   // Send the time to all the clients
   //setInterval(() => {io.emit("time-updated", new Date().toISOString());}, 3600000);
 
-  // Check if the projector needs to be turned on
-  setInterval(() => syncProjectorState(), 60000); 
+  // Check if the projector needs to be turned on by looking for robotActive in DB (elke 5 minuten)
+  setInterval(() => toggleProjector("DB"), 300000); 
 }
 
-/**
- * Synchronizes the projector state with the target state.
- * If an error occurs, it will keep retrying until successful.
- */
-async function syncProjectorState() {
-    const newState = await getTargetProjectorState();
-    
-    if (newState === true) {
-        await toggleProjector("1");
-        //await toggleProjector("sleep"); Veroorzaker van de uitval??
-    } else if (newState === false) {
-        await toggleProjector("0");
-    }
-}
+
 
 /**
  * Sends a toggle command to the projector.
  * Retries automatically on network or server errors.
  */
-async function toggleProjector(action) {
+async function toggleProjector(action, failcount = 0) {
     const retryDelay = 10000;
+    const maxRetry = 5;
+
+    if (failcount >= maxRetry){return;}
 
     try {
         const response = await fetch("http://localhost/projector-control/toggle", {
@@ -334,18 +314,21 @@ async function toggleProjector(action) {
 
         if (response && response.ok) {
             const data = await response.json();
+            console.log("Projector command successful:", data);
             logger.info("Projector command successful:", data);
         } else {
             // Server error
             logger.error(`Server error (${response ? response.status : "No response"}). Retrying in ${retryDelay / 1000}s...`);
+            console.log(`Server error (${response ? response.status : "No response"}). Retrying in ${retryDelay / 1000}s...`);
             await wait(retryDelay);
-            return toggleProjector(action);
+            return toggleProjector(action, failcount+1);
         }
     } catch (error) {
         // Network error
         logger.error(`Network error: ${error.message}. Retrying in ${retryDelay / 1000}s...`);
+        console.log(`Network error: ${error.message}. Retrying in ${retryDelay / 1000}s...`);
         await wait(retryDelay);
-        return toggleProjector(action);
+        return toggleProjector(action, failcount+1);
     }
 }
 

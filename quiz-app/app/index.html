@@ -67,6 +67,46 @@
             <button data-lang-key="ERROR_CLOSE" id="error-close">Terug naar het startscherm</button>
         </dialog>
 
+        <div id="bumper-alert" style="display: none;">
+            <p id="bumper-alert-text" data-lang-key="BUMPER_ALERT">BUMPER_ALERT</p>
+            
+            <!-- Het 3x3 Grid met diagonale SVG's -->
+            <div class="bumper-grid">
+                <!-- Rij 1: Boven -->
+                <div class="grid-cell pijl" id="pijl-linksboven">
+                    <img src="./assets/bumperlinksboven.svg" alt="Links Boven">
+                </div>
+                <div class="grid-cell pijl" id="pijl-voor">
+                    <img src="./assets/bumperboven.svg" alt="Boven">
+                </div>
+                <div class="grid-cell pijl" id="pijl-rechtsboven">
+                    <img src="./assets/bumperrechtsboven.svg" alt="Rechts Boven">
+                </div>
+
+                <!-- Rij 2: Midden -->
+                <div class="grid-cell pijl" id="pijl-links">
+                    <img src="./assets/bumperlinks.svg" alt="Links">
+                </div>
+                <div class="grid-cell robot-midden">
+                    <img src="./assets/RobotBumper.svg" alt="Robot Midden">
+                </div>
+                <div class="grid-cell pijl" id="pijl-rechts">
+                    <img src="./assets/bumperrechts.svg" alt="Rechts">
+                </div>
+
+                <!-- Rij 3: Onder -->
+                <div class="grid-cell pijl" id="pijl-linksonder">
+                    <img src="./assets/bumperlinksonder.svg" alt="Links Onder">
+                </div>
+                <div class="grid-cell pijl" id="pijl-achter">
+                    <img src="./assets/bumperonder.svg" alt="Onder">
+                </div>
+                <div class="grid-cell pijl" id="pijl-rechtsonder">
+                    <img src="./assets/bumperrechtsonder.svg" alt="Rechts Onder">
+                </div>
+            </div>
+        </div>
+
         <div id="robot-basis-screen" class="screen" style="display:block;">
             <div id="robot-basis-screen-content">
                 <h1>Even geduld...</h1>

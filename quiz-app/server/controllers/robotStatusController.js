@@ -18,7 +18,7 @@ export const getRobotStatus = async (req, res, next) => {
         }
 
         // Haal altijd het actuele record op met id 0
-        const status = await robotStatus.findOne({ _id: 0 }, { projection });
+        const status = await robotStatus.findOne({ robotStatusId: 0 }, { projection });
 
         if (!status) {
             return res.status(200).json({ succes: true, data: {} });
@@ -37,14 +37,13 @@ export const insertRobotStatus = async (req, res, next) => {
         const db = getDB();
         const robotStatus = db.collection("robotStatus");
 
-        // 3. Update het vaste record (id 0) met de nieuwe data
         const updateData = {
             ...req.body,
             tijd: new Date()
         };
 
         await robotStatus.updateOne(
-            { _id: 0 },
+            { robotStatusId: 0 },
             { $set: updateData },
             { upsert: true }
         );
