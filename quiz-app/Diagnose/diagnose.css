@@ -193,6 +193,15 @@ body {
     margin: 0;
     line-height: 1.5;
 }
+.action-description ul {
+    padding-left: 20px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+.action-description p {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
 
 /* ==========================================================================
    Layout voor errors van de projector

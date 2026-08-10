@@ -75,22 +75,6 @@
                     </div>
 
                     <div class="settings-input-group">
-                        <label class="settings-label" for="timeToStartQuiz">Time To Start Quiz (sec):</label>
-                        <div class="number-input-wrapper">
-                            <input type="number" id="timeToStartQuiz" class="settings-input"
-                                min="1" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                            <div class="spinner-buttons">
-                                <button type="button" class="spinner-btn" onclick="document.getElementById('timeToStartQuiz').stepDown()">
-                                    <img src="./icons/arrowDown.svg" alt="Omlaag" class="spinner-icon">
-                                </button>
-                                <button type="button" class="spinner-btn" onclick="document.getElementById('timeToStartQuiz').stepUp()">
-                                    <img src="./icons/arrowUp.svg" alt="Omhoog" class="spinner-icon">
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="settings-input-group">
                         <label class="settings-label" for="instructionsScreenTime">Instructions Screen Time (sec):</label>
                         <div class="number-input-wrapper">
                             <input type="number" id="instructionsScreenTime" class="settings-input"
@@ -148,8 +132,7 @@
                 <p><strong>Max questions:</strong> Het aantal vragen waaruit een niet vroegtijdig beëindigde quiz zal bestaan.</p>
                 <p><strong>Next Question Delay:</strong> De tijd tussen vragen waarbij het juiste antwoord van de vorige vraag bekeken kan worden.</p>
                 <p><strong>Cancel Inactive Quiz:</strong> Zorgt dat een quiz vroegtijdig beëindigd wordt wanneer er twee opeenvolgende vragen niet worden beantwoord.</p>
-                <p><strong>Instructions / Finished Screen Time:</strong> De tijd die voorzien wordt voor de instructie- en eindschermen weer te geven.</p>
-                <p><strong>Time To Start Quiz:</strong> De tijd die een bezoeker krijgt om de quiz te starten vanaf dat de robot is aangekomen.</p>
+                <p><strong>Instructions / Finished Screen Time:</strong> De tijd per scherm die voorzien wordt voor de instructie- en eindschermen weer te geven.</p>
             </section>
 
         </main>

@@ -1,7 +1,7 @@
 function validateInputs() {
     const numericFieldIds = [
         "answerTime", "maxQuestions", "nextQuestionDelay", 
-        "timeToStartQuiz", "instructionsScreenTime", "finishedScreenTime"
+        "instructionsScreenTime", "finishedScreenTime"
     ];
     
     for (const id of numericFieldIds) {
@@ -30,7 +30,6 @@ async function buttonSaveSettings() {
         settingsDict.nextQuestionDelay = parseInt(document.getElementById("nextQuestionDelay").value);
         settingsDict.instructionsScreenTime = parseInt(document.getElementById("instructionsScreenTime").value);
         settingsDict.finishedScreenTime = parseInt(document.getElementById("finishedScreenTime").value);
-        settingsDict.timeToStartQuiz = parseInt(document.getElementById("timeToStartQuiz").value);
         settingsDict.cancelInactiveQuiz = document.getElementById("cancelInactiveQuizCheckbox").checked;
 
         const response = await fetch('/cms/saveSettings', {
@@ -66,7 +65,6 @@ function retrieveSettings() {
         document.getElementById("cancelInactiveQuizCheckbox").checked = Settings.cancelInactiveQuiz;
         document.getElementById("instructionsScreenTime").value = Settings.instructionsScreenTime;
         document.getElementById("finishedScreenTime").value = Settings.finishedScreenTime;
-        document.getElementById("timeToStartQuiz").value = Settings.timeToStartQuiz;
                
         const saveBtn = document.getElementById("buttonSaveSettings");
         if (saveBtn) saveBtn.textContent = "Opgeslagen";

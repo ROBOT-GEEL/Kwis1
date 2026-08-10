@@ -269,7 +269,7 @@ export function registerSocketHandlers(io) {
     socket.on("screen-reboot", (data) => {
     
       if (data.type === 'hard') {
-          console.log("Reboot command voor de Pi ontvangen. Herstarten...");
+          console.log("Reboot command voor de Pi ontvangen.");
           
           exec("sudo reboot", (error, stdout, stderr) => {
               if (error) {
@@ -281,6 +281,20 @@ export function registerSocketHandlers(io) {
                   return;
               }
               console.log(`Reboot succesvol gestart: ${stdout}`);
+          });
+      } else if (data.type === 'shutdown') {
+          console.log("shutdown command voor de Pi ontvangen.");
+          
+          exec("sudo shutdown now", (error, stdout, stderr) => {
+              if (error) {
+                  console.error(`Fout bij shutdown van de Pi: ${error.message}`);
+                  return;
+              }
+              if (stderr) {
+                  console.error(`Shutdown waarschuwing/fout: ${stderr}`);
+                  return;
+              }
+              console.log(`Shutdown succesvol gestart: ${stdout}`);
           });
       }
     });

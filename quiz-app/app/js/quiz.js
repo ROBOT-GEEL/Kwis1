@@ -25,7 +25,6 @@ class Quiz {
     static #active = false;
     static #isInitialized = false;
     static #instructions = [];
-    static timeToStartQuiz = 0;
 
     static {
         // Add a language change callback to update the quiz screen
@@ -87,7 +86,6 @@ class Quiz {
         await this.#updateParameters();
         this.#questions = await this.#getQuestions();
         this.#instructions = await this.#getInstructions();
-        await this.updateTimeToStartQuiz();
         this.#isInitialized = true;
 
         this.#prepareProjectorForQuiz();
@@ -198,26 +196,6 @@ class Quiz {
         return data;
     }
 
-    static async #getTimeToStartQuiz() {
-        let response;
-        try {
-            response = await fetch('/quiz/time-to-start');
-        } catch {
-            logError("[Quiz Interface] Network error while fetching time to start quiz");
-            throw "ERROR_PARAMETERS_FETCH";
-        }
-        if (!response.ok) {
-            logError("[Quiz Interface] Error fetching time to start quiz: " + response.status);
-            throw "ERROR_PARAMETERS_STATUS";
-        }
-        const data = await response.json();
-        return data.time;
-    }
-
-    static async updateTimeToStartQuiz() {
-        this.timeToStartQuiz = await this.#getTimeToStartQuiz();
-    }
-
     /**
      * Aborts the quiz due to an error, resets the projector, and shows an error message.
      *
@@ -233,17 +211,18 @@ class Quiz {
             this.#cancelled = true;
             this.#currentQuestionIndex = this.#questions.length; // Break out of any running question loops
 
-            // Reset projector state
-            socket.emit('projector-reset');
-
-            // Turn off the projector lens
-            try {
-                await this.#sendProjectorCommand("sleep");
-            } catch (e) {
-                logError("[Quiz Interface] Could not turn off projector lens during error handling.");
-            }  
-
+            
         }
+
+        socket.emit('projector-reset');
+
+        // Turn off the projector lens
+        try {
+            await this.#sendProjectorCommand("sleep");
+        } catch (e) {
+            logError("[Quiz Interface] Could not turn off projector lens during error handling.");
+        }  
+
     }
 
     static async #abortQuiz(errorCode) {
@@ -389,13 +368,13 @@ class Quiz {
         });
 
         // Wait half the time for the instructions to be shown before showing the second instructions screen
-        await wait((this.#instructionsScreenTime / 2) * 1000);
+        await wait((this.#instructionsScreenTime) * 1000);
 
         socket.emit('projector-show-instructions-2', {
             instruction: this.#instructions['instruction_2'][LanguageData.selectedLanguage]
         });
 
-        await wait((this.#instructionsScreenTime / 2) * 1000);
+        await wait((this.#instructionsScreenTime) * 1000);
     }
 
     static async #showProjectorStartScreen(){

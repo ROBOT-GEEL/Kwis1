@@ -38,16 +38,6 @@ socket.on('robot-explore', () => {
 
 socket.on('robot-arrived-at-visitors', () => { 
     changeScreen('start-screen');
-
-    if (Quiz.timeToStartQuiz > 0) {
-        console.log('Waiting for quiz to start...');
-        setTimeout(() => {
-            console.log(`Quiz inactive: ${document.querySelector('#start-screen').style.display === 'block'}`);
-            if (document.querySelector('#start-screen').style.display === 'block') {
-                socket.emit('quiz-inactive');
-            }
-        }, Quiz.timeToStartQuiz * 1000);
-    }
 });
 
 socket.on('robot-arrived-at-quiz-location', async () => { 
@@ -79,7 +69,7 @@ socket.on('robot-charging', () => {
 
 socket.on('robot-error-drive', () => { 
     changeScreen('error-screen');
-    document.querySelector('#error-container').innerHTML = `<h1>Hugoo is verdwaald...</h1><p>Gelieve dit aan het onthaal te melden.</p>`;
+    document.querySelector('#error-container').innerHTML = `<h1>Hugoo is verdwaald...</h1><p>Open het admin-paneel, ga naar diagnose en volg daar de verdwaaldprocedure.</p>`;
 });
 
 socket.on('robot-error-charge', () => { 

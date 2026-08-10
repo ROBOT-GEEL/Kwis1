@@ -77,15 +77,35 @@
                     <button class="settings-btn-primary" onclick="rebootRobot('robot-hard'); greyOutWaitForBT(this)">
                         <span class="btn-text">Reboot robot</span>
                     </button>
-                    <p class="action-description">
-                        Klik hier om de robot volledig herop te starten. Dit reset het rij-gedrag. <br>
-                        Als de robot en zijn programma's succesvol zijn heropgestart zal de knop terug groen worden. <br>
-                        De robot zal nu niet meer weten waar hij is, kies een methode: <br>
-                        - Zet de robot via manual drive tegen het laadstation <br>
-                        - Zet de robot via manual drive met zijn camera +-2 meter voor de QR-code <br>
+                    <div class="action-description">
+                        <p>Klik hier om de robot volledig herop te starten. Dit reset het rij-gedrag. <br>
+                        De robot zal seffens niet meer weten waar hij is, kies een methode:</p>
+                        <ul>
+                            <li>Zet de robot via manual drive tegen het laadstation</li>
+                            <li>Zet de robot via manual drive +-2 meter recht voor de QR-code. Zorg dat de camera aan de voorzijde de code kan zien.</li>
+                        </ul>
+                        <p>Klik nu op de rebootknop. <br>
                         De robot kan ongeveer een meter naar voor rijden tijdens opstart.<br>
-                        Wanneer je nu het adminpaneel sluit zal de robot zijn normale werking moeten hervatten.
-                    </p>
+                        Als de robot en zijn programma's succesvol zijn heropgestart zal de knop terug groen worden. <br>
+                        Wanneer je nu het adminpaneel sluit zal de robot zijn normale werking moeten hervatten.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="settings-card">
+                <h2 class="settings-card-title">Verdwaaldprocedure</h2>
+                <div class="action-row">
+                    <button class="settings-btn-primary" onclick="window.location.href='/manual-driving'">
+                        <span class="btn-text">Ga naar <br>manueel rijden</span>
+                    </button>
+                    <div class="action-description">
+                        <p>De robot weet niet meer waar hij is, kies een methode:</p>
+                        <ul>
+                            <li>Zet de robot via manual drive tegen het laadstation</li>
+                            <li>Zet de robot via manual drive +-2 meter recht voor de QR-code. Zorg dat de camera aan de voorzijde de code kan zien.</li>
+                        </ul>
+                        <p>Nadat je dit gedaan hebt moet de robot zijn normale werking hervatten.</p>
+                    </div>
                 </div>
             </section>
             
@@ -107,6 +127,13 @@
                         <span class="btn-text">Reboot Scherm</span>
                     </button>
                     <p class="action-description">Herstart de Raspberry Pi 5 die verantwoordelijk is voor het tonen van alle schermen opnieuw op.</p>
+                </div>
+
+                <div class="action-row">
+                    <button class="settings-btn-primary" onclick="rebootRobot('shutdown-pi'); greyOut(this)">
+                        <span class="btn-text">Scherm afsluiten</span>
+                    </button>
+                    <p class="action-description">Sluit de Raspberry Pi 5 af die verantwoordelijk is voor het tonen van alle schermen.</p>
                 </div>
 
             </section>     

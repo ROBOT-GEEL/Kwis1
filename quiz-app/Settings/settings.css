@@ -474,11 +474,6 @@ body {
     margin: 0;
 }
 
-/* Hide default spinners in Firefox */
-.number-input-wrapper input[type="number"] {
-    -moz-appearance: textfield;
-} 
-
 /* ==========================================================================
    Mobile Responsiveness
    ========================================================================== */

@@ -107,6 +107,9 @@ async function rebootRobot(type) {
         else if (type === 'pi-hard') {
             socket.emit('screen-reboot', { type: 'hard' });
         }
+        else if (type === 'shutdown-pi') {
+            socket.emit('screen-reboot', { type: 'shutdown' });
+        }
     } catch (error) {
         console.error("Fout tijdens het herstarten:", error.message);
     }
