@@ -211,18 +211,15 @@ class Quiz {
             this.#cancelled = true;
             this.#currentQuestionIndex = this.#questions.length; // Break out of any running question loops
 
-            
-        }
+            socket.emit('projector-reset');
 
-        socket.emit('projector-reset');
-
-        // Turn off the projector lens
-        try {
-            await this.#sendProjectorCommand("sleep");
-        } catch (e) {
-            logError("[Quiz Interface] Could not turn off projector lens during error handling.");
-        }  
-
+            // Turn off the projector lens
+            try {
+                await this.#sendProjectorCommand("sleep");
+            } catch (e) {
+                logError("[Quiz Interface] Could not turn off projector lens during error handling.");
+            } 
+        }   
     }
 
     static async #abortQuiz(errorCode) {

@@ -1,0 +1,14 @@
+[Unit]
+Description=Dagelijkse MongoDB Backup voor de Quiz App
+After=network.target
+
+[Service]
+Type=oneshot
+
+User=robotoo
+Group=robotoo
+
+ExecStart=/home/robotoo/Documents/quiz-app/db-backup/backup.sh
+
+TimeoutStartSec=300
+

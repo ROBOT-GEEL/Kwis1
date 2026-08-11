@@ -1,0 +1,24 @@
+[Unit]
+Description=Service to start the server
+After=network.target
+
+# Make sure that the service keeps trying
+StartLimitIntervalSec=0
+
+[Service]
+User=robotoo
+Group=robotoo
+WorkingDirectory=/home/robotoo/Documents/quiz-app/server
+ExecStart=/usr/bin/node server.js
+
+# Always restart the script when it crashes
+Restart=always
+RestartSec=10
+
+# Logging
+Environment=NODE_ENV=production
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

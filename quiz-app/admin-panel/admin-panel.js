@@ -107,7 +107,7 @@ async function toggleRobotPower() {
         if (previousStatus !== robotActive) {
             window.location.href = "../"; // Succesvolle status-wissel
         } else {
-            alert("De wijziging is niet geaccepteerd door de robot. Probeer het opnieuw.");
+            alert("De wijziging is niet geaccepteerd door de robot. Mogelijks is de batterijspanning te laag. Controlleer de batterijspanning en probeer het opnieuw.");
             updatePowerButtonUI(); // UI synchroniseren met ware status
         }
 

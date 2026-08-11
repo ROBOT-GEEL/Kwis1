@@ -89,6 +89,7 @@ function easy_numpad_clear(event) {
 }
 
 function easy_numpad_cancel(event) {
+    socket.emit("login-canceled");
     event.preventDefault();
     $('#easy-numpad-frame').remove();
     console.log("cancel output");

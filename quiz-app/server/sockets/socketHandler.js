@@ -146,7 +146,8 @@ export function registerSocketHandlers(io) {
       "robot-update-battery-percentage",
       "robot-bumper-status",
       "drive",
-      "robot-stop-for-x-time"
+      "robot-stop-for-x-time",
+      "login-canceled"
     ];
 
     robotEvents.forEach((event) => {

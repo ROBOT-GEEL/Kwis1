@@ -1,0 +1,22 @@
+[Unit]
+Description=Service that activates the wake-screen script
+
+# Make sure that the service keeps trying
+StartLimitIntervalSec=0
+
+[Service]
+User=robotoo
+WorkingDirectory=/home/robotoo/Documents
+ExecStart=/home/robotoo/Documents/venv/bin/python3 wake-screen.py
+
+# Always restart the script when it crashes
+Restart=always
+RestartSec=10
+
+# Logging
+Environment=PYTHONUNBUFFERED=1
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

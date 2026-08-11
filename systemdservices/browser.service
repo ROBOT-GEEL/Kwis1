@@ -1,0 +1,59 @@
+[Unit]
+Description=Opens chromium in kiosk mode
+After=graphical.target
+
+# Make sure that the service keeps trying
+StartLimitIntervalSec=0
+
+[Service]
+User=robotoo
+Group=robotoo
+
+# Memory and crash management
+MemoryMax=2G
+OOMPolicy=restart
+LimitMEMLOCK=infinity
+
+# Display settings
+Environment=HOME=/home/robotoo
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/robotoo/.Xauthority
+
+#Force dutch language
+Environment="LANG=nl_BE.UTF-8"
+Environment="LC_TIME=nl_BE.UTF-8"
+
+# Clean up any remaining processes before starting
+ExecStartPre=-/usr/bin/killall -9 chromium
+
+ExecStart=/usr/bin/chromium-browser \
+  --kiosk \
+  --user-data-dir=/home/robotoo/.config/chromium-kiosk \
+  --no-first-run \
+  --no-default-browser-check \
+  --disable-infobars \
+  --disable-session-crashed-bubble \
+  --disable-save-password-bubble \
+  --force-renderer-accessibility \
+  --incognito \
+  --overscroll-history-navigation=0 \
+  --check-for-update-interval=31536000 \
+  --password-store=basic \
+  --noerrdialogs \
+  --disable-features=Translate \
+  --disable-notifications \
+  --disk-cache-dir=/dev/null \
+  --disable-crash-reporter \
+  --disable-dev-shm-usage \
+  --lang=nl \
+  file:///home/robotoo/Documents/browser/kiosk_master.html?kiosk=1
+
+# Always restart if the process stops or crashes
+Restart=always
+RestartSec=15
+
+# Ensure all subprocesses are killed on stop/restart
+KillMode=mixed
+
+[Install]
+WantedBy=graphical.target
