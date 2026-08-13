@@ -1,4 +1,10 @@
 {
+    "EVEN_GEDULD": {
+        "NL": "Even geduld...",
+        "EN": "Please be patient...",
+        "FR": "s'il te plaît sois patient..."
+    },
+    
     "EXPLORING": {
         "NL": "Hugoo is aan het verkennen...",
         "EN": "Hugoo is exploring...",

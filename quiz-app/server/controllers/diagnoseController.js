@@ -9,15 +9,14 @@ export const makeDiagnose = async (req, res, next) => {
     // Zet het template-object BINNEN de functie, zodat elke API-call met een schone lei begint.
     const diagnoseCheck = {
         "nodes": {
-            "static_transform_publisher odom odom_combined": {
-                "/base_to_camera_link": { "status": false },
-                "/base_to_gyro": { "status": false },
-                "/base_to_laser": { "status": false },
-                "/base_to_link": { "status": false }
+            "Odom Transform": {
             },
             "Nav2": {
                 "/amcl": { "status": false },
-                "/basic_navigator": { "status": false },
+                "/base_to_camera_link": { "status": false },
+                "/base_to_gyro": { "status": false },
+                "/base_to_laser": { "status": false },
+                "/base_to_link": { "status": false },
                 "/behavior_server": { "status": false },
                 "/bt_navigator": { "status": false },
                 "/bt_navigator_navigate_through_poses_rclcpp_node": { "status": false },
@@ -34,33 +33,50 @@ export const makeDiagnose = async (req, res, next) => {
                 "/map_server": { "status": false },
                 "/nav2_container": { "status": false },
                 "/planner_server": { "status": false },
-                "/publish_back_pose": { "status": false },
+                "/robot_state_publisher_flagship_mec_dl": { "status": false },
                 "/smoother_server": { "status": false },
                 "/velocity_smoother": { "status": false },
                 "/waypoint_cycle": { "status": false },
-                "/waypoint_follower": { "status": false }
-            },
-            "drive_mux": { "/drive_mux": { "status": false } },
-            "quiz_bt_node": { "/quiz_bt_node": { "status": false } },
-            "drive_to_coord": { "/drive_to_goal": { "status": false } },
-            "bumper": { "/gpio_reader_node": { "status": false } },
-            "Camera": {
-                "/camera/camera": { "status": false },
-                "/robot_state_publisher_flagship_mec_dl": { "status": false },
+                "/waypoint_follower": { "status": false },
                 "/wheeltec_robot": { "status": false }
             },
-            "Visualtracker": { "/people_follower": { "status": false } },
-            "pointcloud_to_laserscan": { "/pointcloud_to_laserscan": { "status": false } },
-            "keepout_filter": {
+            "Drive Mux": {
+                "/drive_mux": { "status": false }
+            },
+            "Quiz BT node": {
+                "/quiz_bt_node": { "status": false }
+            },
+            "Drive to Coord": {
+                "/drive_to_goal": { "status": false }
+            },
+            "Bumper": {
+                "/gpio_reader_node": { "status": false }
+            },
+            "Camera": {
+                "/camera/camera": { "status": false }
+            },
+            "People Follower": {
+                "/people_follower": { "status": false }
+            },
+            "Pointcloud to Laserscan": {
+                "/pointcloud_to_laserscan": { "status": false },
+            },
+            "Keepoutfilters": {
                 "/costmap_filter_info_server": { "status": false },
                 "/keepout_filter_throttle": { "status": false },
                 "/keepout_map_server": { "status": false },
                 "/lifecycle_manager_costmap_filters": { "status": false }
             },
-            "auto_recharge": { "/auto_recharger": { "status": false } },
-            "robot_position_reset": {},
-            "april_tabloo": { "/apriltag_absolute_pose": { "status": false } },
-            "mecabot_bt": {
+            "Autocharge": {
+                "/auto_recharger": { "status": false }
+            },
+            "Robot Position Reset": {
+                "/publish_back_pose": { "status": false }
+            },
+            "Apriltag": {
+                "/apriltag_absolute_pose": { "status": false }
+            },
+            "Behavior Tree": {
                 "/btArrivedAtVisitors": { "status": false },
                 "/btBatteryCharged": { "status": false },
                 "/btBatteryFull": { "status": false },
@@ -71,13 +87,17 @@ export const makeDiagnose = async (req, res, next) => {
                 "/btCheckNetworkError": { "status": false },
                 "/btCheckingNearbyVisitors": { "status": false },
                 "/btConnectionLost": { "status": false },
+                "/btDriveQuizLocation": { "status": false },
                 "/btDriveToChargingStation": { "status": false },
                 "/btDriveWorkArea": { "status": false },
+                "/btFallbackDriveQuizLocation": { "status": false },
                 "/btFallbackDriveToChargingStation": { "status": false },
                 "/btFallbackDriveToWorkArea": { "status": false },
                 "/btFallbackIsRobotAtChargingStation": { "status": false },
+                "/btFallbackIsRobotAtQuiz": { "status": false },
                 "/btFallbackIsRobotAtWorkArea": { "status": false },
                 "/btInWorkingZone": { "status": false },
+                "/btIsRobotAtQuiz": { "status": false },
                 "/btIsRobotAtWorkArea": { "status": false },
                 "/btIsRobotCharging": { "status": false },
                 "/btMainBTSetErrorFlag": { "status": false },
@@ -90,74 +110,49 @@ export const makeDiagnose = async (req, res, next) => {
                 "/btStartDrivingToPeople": { "status": false },
                 "/btStatusDriveToChargingDock": { "status": false },
                 "/btStopRobotCharging": { "status": false },
-                "/bt_BatteryOk_node": { "status": false },
-                "/bt_robot_rotation_follow_me": { "status": false },
-                "/btDriveQuizLocation": { "status": false },
-                "/btFallbackDriveQuizLocation": { "status": false },
-                "/btFallbackIsRobotAtQuiz": { "status": false },
-                "/btIsRobotAtQuiz": { "status": false },
                 "/btWaitQuizToEnd": { "status": false },
-                "/bt_robot_at_quiz_node": { "status": false }
+                "/bt_BatteryOk_node": { "status": false },
+                "/bt_robot_at_quiz_node": { "status": false },
+                "/bt_robot_rotation_follow_me": { "status": false }
             },
-            "autocharge_batcheck": { "/autocharge_batcheck": { "status": false } }
+            "Battery check": {
+                "/autocharge_batcheck": { "status": false }
+            }
         },
         "topics": {
-            "temp": {
-                "/BatteryAverageVoltage": { "status": false },
-                "/BehaviorTreeNode": { "status": false },
-                "/ManualDriveControleLocation": { "status": false },
+            "Robot Operating System": {
+                "/parameter_events": { "status": false },
+                "/rosout": { "status": false }
+            },
+            "Odom Transform": {
+                "/tf_static": { "status": false }
+            },
+            "Nav2": {
                 "/PowerVoltage": { "status": false },
-                "/admin": { "status": false },
                 "/amcl/transition_event": { "status": false },
                 "/amcl_pose": { "status": false },
-                "/auto_recharge_event": { "status": false },
-                "/battery_percentage": { "status": false },
                 "/behavior_server/transition_event": { "status": false },
                 "/behavior_tree_log": { "status": false },
                 "/bond": { "status": false },
-                "/btDriveCoord": { "status": false },
                 "/bt_navigator/transition_event": { "status": false },
-                "/bump_cmd_vel": { "status": false },
-                "/camera/color/camera_info": { "status": false },
-                "/camera/color/image_raw": { "status": false },
-                "/camera/depth/camera_info": { "status": false },
-                "/camera/depth/image_raw": { "status": false },
-                "/camera/depth/points": { "status": false },
-                "/camera/ir/camera_info": { "status": false },
-                "/camera/ir/image_raw": { "status": false },
                 "/camera_scan": { "status": false },
-                "/charge_XSTOP": { "status": false },
-                "/charge_cmd_vel": { "status": false },
-                "/charger_position_update": { "status": false },
-                "/chassis_security": { "status": false },
                 "/clicked_point": { "status": false },
                 "/cmd_vel": { "status": false },
                 "/cmd_vel_nav": { "status": false },
-                "/connection": { "status": false },
                 "/controller_server/transition_event": { "status": false },
                 "/costmap_filter_info": { "status": false },
-                "/costmap_filter_info_server/transition_event": { "status": false },
-                "/detected_image": { "status": false },
                 "/diagnostics": { "status": false },
-                "/drive_to_coord_status": { "status": false },
-                "/estop_cmd_vel": { "status": false },
-                "/force_charge": { "status": false },
                 "/global_costmap/costmap": { "status": false },
                 "/global_costmap/costmap_raw": { "status": false },
                 "/global_costmap/costmap_updates": { "status": false },
                 "/global_costmap/footprint": { "status": false },
                 "/global_costmap/global_costmap/transition_event": { "status": false },
                 "/global_costmap/published_footprint": { "status": false },
-                "/goal_marker": { "status": false },
                 "/goal_pose": { "status": false },
-                "/gui_cmd_vel": { "status": false },
                 "/imu/data": { "status": false },
                 "/imu/data_raw": { "status": false },
-                "/infrared_docking_status": { "status": false },
                 "/initialpose": { "status": false },
                 "/joint_states": { "status": false },
-                "/keepout_filter_mask": { "status": false },
-                "/keepout_map_server/transition_event": { "status": false },
                 "/local_costmap/clearing_endpoints": { "status": false },
                 "/local_costmap/costmap": { "status": false },
                 "/local_costmap/costmap_raw": { "status": false },
@@ -170,44 +165,155 @@ export const makeDiagnose = async (req, res, next) => {
                 "/lslidar_order": { "status": false },
                 "/map": { "status": false },
                 "/map_server/transition_event": { "status": false },
-                "/object_tracker/current_position": { "status": false },
                 "/odom": { "status": false },
                 "/odom_combined": { "status": false },
-                "/parameter_events": { "status": false },
                 "/particle_cloud": { "status": false },
                 "/path_point": { "status": false },
-                "/peoplesearchcoord": { "status": false },
                 "/plan": { "status": false },
                 "/plan_smoothed": { "status": false },
                 "/planner_server/transition_event": { "status": false },
-                "/quiz": { "status": false },
-                "/reboot_command": { "status": false },
                 "/red_vel": { "status": false },
-                "/resetPositionChargeStation": { "status": false },
-                "/reset_active": { "status": false },
                 "/robot_charging_current": { "status": false },
                 "/robot_charging_flag": { "status": false },
                 "/robot_cmd_vel": { "status": false },
                 "/robot_description": { "status": false },
                 "/robot_recharge_flag": { "status": false },
                 "/robot_red_flag": { "status": false },
-                "/rosout": { "status": false },
-                "/rpitopic": { "status": false },
                 "/scan": { "status": false },
-                "/search_cmd_vel": { "status": false },
                 "/set_pose": { "status": false },
                 "/smoother_server/transition_event": { "status": false },
                 "/speed_limit": { "status": false },
+                "/tf": { "status": false },
+                "/tf_static": { "status": false },
+                "/trajectories": { "status": false },
+                "/transformed_global_plan": { "status": false },
+                "/velocity_smoother/transition_event": { "status": false },
+                "/waypoint_follower/transition_event": { "status": false }
+            },
+            "Drive Mux": {
+                "/bump_cmd_vel": { "status": false },
+                "/charge_cmd_vel": { "status": false },
+                "/chargehp_cmd_vel": { "status": false },
+                "/cmd_vel": { "status": false },
+                "/estop_cmd_vel": { "status": false },
+                "/gui_cmd_vel": { "status": false },
+                "/robot_cmd_vel": { "status": false },
+                "/search_cmd_vel": { "status": false },
+                "/turn_cmd_vel": { "status": false }
+            },
+            "Quiz BT node": {
+                "/BatteryAverageVoltage": { "status": false },
+                "/ManualDriveControleLocation": { "status": false },
+                "/admin": { "status": false },
+                "/ask_button_quiz": { "status": false },
+                "/bump_status": { "status": false },
+                "/connection": { "status": false },
+                "/estop_cmd_vel": { "status": false },
+                "/gui_cmd_vel": { "status": false },
+                "/quiz": { "status": false },
+                "/quizbtnode_activestatus": { "status": false },
+                "/rpitopic": { "status": false }
+            },
+            "Drive to Coord": {
+                "/BehaviorTreeNode": { "status": false },
+                "/btDriveCoord": { "status": false },
+                "/drive_to_coord_status": { "status": false },
+                "/estop_cmd_vel": { "status": false },
+                "/peoplesearchcoord": { "status": false },
+                "/toggle_keepout": { "status": false }
+            },
+            "Bumper": {
+                "/bump_cmd_vel": { "status": false },
+                "/bump_status": { "status": false }
+            },
+            "Camera": {
+                "/camera/color/camera_info": { "status": false },
+                "/camera/color/image_raw": { "status": false },
+                "/camera/depth/camera_info": { "status": false },
+                "/camera/depth/image_raw": { "status": false },
+                "/camera/depth/points": { "status": false },
+                "/tf": { "status": false },
+                "/tf_static": { "status": false }
+            },
+            "People Follower": {
+                "/camera/color/image_raw": { "status": false },
+                "/camera/depth/image_raw": { "status": false },
+                "/detected_image": { "status": false },
+                "/object_tracker/current_position": { "status": false },
+                "/peoplesearchcoord": { "status": false },
                 "/target_distance": { "status": false },
                 "/tf": { "status": false },
                 "/tf_static": { "status": false },
-                "/toggle_keepout": { "status": false },
+                "/tracking_enable": { "status": false }
+            },
+            "Pointcloud to Laserscan": {
+                "/camera_scan": { "status": false },
+                "/tf": { "status": false },
+                "/tf_static": { "status": false }
+            },
+            "Keepoutfilters": {
+                "/bond": { "status": false },
+                "/costmap_filter_info": { "status": false },
+                "/costmap_filter_info_server/transition_event": { "status": false },
+                "/diagnostics": { "status": false },
+                "/keepout_filter_mask": { "status": false },
+                "/keepout_map_server/transition_event": { "status": false },
+                "/toggle_keepout": { "status": false }
+            },
+            "Autocharge": {
+                "/PowerVoltage": { "status": false },
+                "/auto_recharge_event": { "status": false },
+                "/battery_percentage": { "status": false },
+                "/charge_XSTOP": { "status": false },
+                "/charge_cmd_vel": { "status": false },
+                "/chargehp_cmd_vel": { "status": false },
+                "/charger_position_update": { "status": false },
+                "/chassis_security": { "status": false },
+                "/force_charge": { "status": false },
+                "/goal_marker": { "status": false },
+                "/odom": { "status": false },
+                "/resetPositionChargeStation": { "status": false },
+                "/robot_charging_current": { "status": false },
+                "/robot_recharge_flag": { "status": false },
+                "/robot_red_flag": { "status": false },
+                "/rpitopic": { "status": false }
+            },
+            "Robot Position Reset": {
+                "/ManualDriveControleLocation": { "status": false },
+                "/charge_XSTOP": { "status": false },
+                "/initialpose": { "status": false },
+                "/resetPositionChargeStation": { "status": false },
+                "/reset_active": { "status": false }
+            },
+            "Apriltag": {
+                "/camera/color/camera_info": { "status": false },
+                "/camera/color/image_raw": { "status": false },
+                "/initialpose": { "status": false },
+                "/reset_active": { "status": false },
+                "/reset_done": { "status": false },
+                "/rpitopic": { "status": false }
+            },
+            "Behavior Tree": {
+                "/BehaviorTreeNode": { "status": false },
+                "/ask_button_quiz": { "status": false },
+                "/auto_recharge_event": { "status": false },
+                "/btDriveCoord": { "status": false },
+                "/connection": { "status": false },
+                "/drive_to_coord_status": { "status": false },
+                "/estop_cmd_vel": { "status": false },
+                "/force_charge": { "status": false },
+                "/gui_cmd_vel": { "status": false },
+                "/quiz": { "status": false },
+                "/quizbtnode_activestatus": { "status": false },
+                "/rpitopic": { "status": false },
+                "/search_cmd_vel": { "status": false },
+                "/target_distance": { "status": false },
                 "/tracking_enable": { "status": false },
-                "/trajectories": { "status": false },
-                "/transformed_global_plan": { "status": false },
-                "/turn_cmd_vel": { "status": false },
-                "/velocity_smoother/transition_event": { "status": false },
-                "/waypoint_follower/transition_event": { "status": false }
+                "/turn_cmd_vel": { "status": false }
+            },
+            "Battery check": {
+                "/BatteryAverageVoltage": { "status": false },
+                "/PowerVoltage": { "status": false }
             }
         }
     };

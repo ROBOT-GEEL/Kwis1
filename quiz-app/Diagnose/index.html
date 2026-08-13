@@ -23,6 +23,63 @@
         </header>
 
         <main class="settings-content">
+
+            <section class="settings-card">
+                <h2 class="settings-card-title">Handleiding</h2>
+                
+                <div class="action-row">
+                    <button class="settings-btn-primary" onclick="window.location.href='../diagnose/gebruikershandleiding.html'">
+                        <span class="btn-text">Gebruikershandleiding</span>
+                    </button>
+                    <p class="action-description">Raadpleeg hier de gebruikershandleiding van Hugoo</p>
+                </div>
+
+                <!-- <div class="action-row">
+                    <button class="settings-btn-primary" onclick="window.location.href='../diagnose/technischehandleiding.html'">
+                        <span class="btn-text">Technische handleiding</span>
+                    </button>
+                    <p class="action-description">Raadpleeg hier de technische handleiding van Hugoo</p>
+                </div> -->
+
+            </section>
+
+            <section class="settings-card">
+                <h2 class="settings-card-title">Rebootprocedure</h2>
+                
+                <div class="action-row">
+                    <button class="settings-btn-primary" onclick="rebootRobot('robot-hard'); greyOutWaitForBT(this)">
+                        <span class="btn-text">Reboot robot</span>
+                    </button>
+                    <div class="action-description">
+                        <p>
+                            Klik hier om de robot volledig herop te starten. Dit reset het rij-gedrag. <br>
+                            De robot zal seffens niet meer weten waar hij is.<br>
+                            Zet de robot via manual drive +-2 meter recht voor een QR-code. Zorg dat de camera aan de voorzijde de code kan zien.</li>
+                            Klik nu op de rebootknop. <br>
+                            De robot kan ongeveer een meter naar voor rijden tijdens opstart.<br>
+                            Als de robot en zijn programma's succesvol zijn heropgestart zal de knop terug groen worden. <br>
+                            Wanneer je nu het adminpaneel sluit zal de robot zijn normale werking moeten hervatten.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="settings-card">
+                <h2 class="settings-card-title">Verdwaaldprocedure</h2>
+                <div class="action-row">
+                    <button class="settings-btn-primary" onclick="window.location.href='/manual-driving'">
+                        <span class="btn-text">Ga naar <br>manueel rijden</span>
+                    </button>
+                    <div class="action-description">
+                        <p>
+                            De robot weet niet meer waar hij is, kies een methode:<br>
+                            Zet de robot via manual drive +-2 meter recht voor een QR-code. Zorg dat de camera aan de voorzijde de code kan zien.<br>
+                            Nadat je dit gedaan hebt moet de robot zijn normale werking hervatten.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
             <section class="settings-card">
                 <h2 class="settings-card-title">Bumper</h2>
                 <div class="action-row full-width-row">
@@ -70,43 +127,7 @@
 
             </section>
 
-            <section class="settings-card">
-                <h2 class="settings-card-title">Rebootprocedure</h2>
-                
-                <div class="action-row">
-                    <button class="settings-btn-primary" onclick="rebootRobot('robot-hard'); greyOutWaitForBT(this)">
-                        <span class="btn-text">Reboot robot</span>
-                    </button>
-                    <div class="action-description">
-                        <p>
-                            Klik hier om de robot volledig herop te starten. Dit reset het rij-gedrag. <br>
-                            De robot zal seffens niet meer weten waar hij is.<br>
-                            Zet de robot via manual drive +-2 meter recht voor een QR-code. Zorg dat de camera aan de voorzijde de code kan zien.</li>
-                            Klik nu op de rebootknop. <br>
-                            De robot kan ongeveer een meter naar voor rijden tijdens opstart.<br>
-                            Als de robot en zijn programma's succesvol zijn heropgestart zal de knop terug groen worden. <br>
-                            Wanneer je nu het adminpaneel sluit zal de robot zijn normale werking moeten hervatten.
-                        </p>
-                    </div>
-                </div>
-            </section>
 
-            <section class="settings-card">
-                <h2 class="settings-card-title">Verdwaaldprocedure</h2>
-                <div class="action-row">
-                    <button class="settings-btn-primary" onclick="window.location.href='/manual-driving'">
-                        <span class="btn-text">Ga naar <br>manueel rijden</span>
-                    </button>
-                    <div class="action-description">
-                        <p>
-                            De robot weet niet meer waar hij is, kies een methode:<br>
-                            Zet de robot via manual drive +-2 meter recht voor een QR-code. Zorg dat de camera aan de voorzijde de code kan zien.<br>
-                            Nadat je dit gedaan hebt moet de robot zijn normale werking hervatten.
-                        </p>
-                    </div>
-                </div>
-            </section>
-            
             <section class="settings-card">
                 <h2 class="settings-card-title">Overige rebootacties</h2>
                 
@@ -135,26 +156,7 @@
                 </div>
 
             </section>     
-            
-            <section class="settings-card">
-                <h2 class="settings-card-title">Handleiding</h2>
-                
-                <div class="action-row">
-                    <button class="settings-btn-primary" onclick="window.location.href='../diagnose/gebruikershandleiding.html'">
-                        <span class="btn-text">Gebruikershandleiding</span>
-                    </button>
-                    <p class="action-description">Raadpleeg hier de gebruikershandleiding van Hugoo</p>
-                </div>
-
-                <!-- <div class="action-row">
-                    <button class="settings-btn-primary" onclick="window.location.href='../diagnose/technischehandleiding.html'">
-                        <span class="btn-text">Technische handleiding</span>
-                    </button>
-                    <p class="action-description">Raadpleeg hier de technische handleiding van Hugoo</p>
-                </div> -->
-
-            </section>
-            
+                       
             <section class="settings-card">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid var(--bgColor); padding-bottom: 0.5rem;">
                     
@@ -166,7 +168,7 @@
                         </button>
                         
                         <button class="settings-btn-primary" onclick="toggleAllDiagnose()">
-                            <span class="btn-text" id="toggleAllBtnText">Alles inklappen</span>
+                            <span class="btn-text" id="toggleAllBtnText">Verder inklappen</span>
                         </button>
                     </div>
 

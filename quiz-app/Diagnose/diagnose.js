@@ -188,23 +188,57 @@ function disableHardwareError() {
 /**
  * Toggle functie voor de knop: Alles in- of uitklappen
  */
-let allExpanded = true; // We starten standaard met alles opengeklapt
+
+let isExpanding = true; // Vervangt je isExpaning variabele
 
 function toggleAllDiagnose() {
-    allExpanded = !allExpanded;
-    const detailsElements = document.querySelectorAll('#diagnoseBox details');
+    // Haal alle details elementen op als een Array zodat we handige filter() functies kunnen gebruiken
+    const allDetails = Array.from(document.querySelectorAll('#diagnoseBox details'));
     
-    detailsElements.forEach(detail => {
-        if (allExpanded) {
-            detail.setAttribute('open', '');
-        } else {
-            detail.removeAttribute('open');
-        }
-    });
+    if (allDetails.length === 0) return;
 
+    // Check of alles open of dicht is (handig voor als de gebruiker zelf handmatig geklikt heeft)
+    const fullyOpen = allDetails.every(detail => detail.hasAttribute('open'));
+    const fullyClosed = allDetails.every(detail => !detail.hasAttribute('open'));
+
+    // Corrigeer de richting als we aan het uiterste einde zijn
+    if (fullyOpen) isExpanding = false;
+    if (fullyClosed) isExpanding = true;
+
+    if (isExpanding) {
+        // UITKLAPPEN: Zoek alle gesloten details waarvan de parent-details wél al open is (of die geen parent hebben)
+        const toOpen = allDetails.filter(detail => {
+            const parentDetails = detail.parentElement.closest('details');
+            return !detail.hasAttribute('open') && (!parentDetails || parentDetails.hasAttribute('open'));
+        });
+
+        // Klap alleen dit niveau open
+        toOpen.forEach(detail => detail.setAttribute('open', ''));
+
+        // Als hiermee het allerlaatste niveau is geopend, wissel de richting voor de volgende klik
+        if (allDetails.every(detail => detail.hasAttribute('open'))) {
+            isExpanding = false;
+        }
+    } else {
+        // INKLAPPEN: Zoek alle open details die zélf geen open onderliggende details hebben (de diepste open laag)
+        const toClose = allDetails.filter(detail => {
+            return detail.hasAttribute('open') && !detail.querySelector('details[open]');
+        });
+
+        // Klap dit diepste niveau dicht
+        toClose.forEach(detail => detail.removeAttribute('open'));
+
+        // Als hiermee het allerlaatste niveau is gesloten, wissel de richting voor de volgende klik
+        if (allDetails.every(detail => !detail.hasAttribute('open'))) {
+            isExpanding = true;
+        }
+    }
+
+    // Update de tekst op de knop
     const btnText = document.getElementById('toggleAllBtnText');
     if (btnText) {
-        btnText.innerText = allExpanded ? 'Alles inklappen' : 'Alles uitklappen';
+        // Je kunt deze teksten aanpassen naar wens, 'Verder' is logischer bij stapsgewijs werken
+        btnText.innerText = isExpanding ? 'Verder uitklappen' : 'Verder inklappen'; 
     }
 }
 
@@ -253,8 +287,8 @@ async function makeDiagnose(){
 
         diagnoseBox.innerHTML = generateCleanHTML(actualData);
 
-        allExpanded = true;
-        document.getElementById('toggleAllBtnText').innerText = 'Alles inklappen';
+        isExpaning = true;
+        document.getElementById('toggleAllBtnText').innerText = 'Verder inklappen';
 
         refreshknopText.innerHTML="Refresh diagnose"
         refreshknopButton.classList.remove('settings-btn-nonActive');

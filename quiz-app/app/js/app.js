@@ -19,6 +19,9 @@ window.socket = io(`ws://${window.location.hostname}`);
  * It updates most of the content of the frontend.
  */
 function onLanguageChange() {
+    //Even geduld
+    document.querySelector('[data-lang-key=EVEN_GEDULD]').innerHTML = LanguageData.get("EVEN_GEDULD");
+
     // Start screen
     document.querySelector('[data-lang-key=START_SCREEN_HEADER]').innerHTML = LanguageData.get("START_SCREEN_HEADER");
     document.querySelector('[data-lang-key=START_SCREEN_START_BUTTON]').innerHTML = LanguageData.get("START_SCREEN_START_BUTTON");
