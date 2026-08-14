@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Statistieken</title>
+    <title>Admin Panel - Diagnose</title>
     <link rel="icon" type="image/x-icon" href="../shared/assets/icons/favicon.ico">
     <link rel="stylesheet" href="diagnose.css">
 </head>
@@ -47,18 +47,24 @@
                 <h2 class="settings-card-title">Rebootprocedure</h2>
                 
                 <div class="action-row">
-                    <button class="settings-btn-primary" onclick="rebootRobot('robot-hard'); greyOutWaitForBT(this)">
-                        <span class="btn-text">Reboot robot</span>
+                    <button class="settings-btn-primary" onclick="rebootRobot('robot-hard'); rebootRobot('pi-hard'); greyOutWaitForBT(this)">
+                        <span class="btn-text">Reboot robot en scherm</span>
                     </button>
                     <div class="action-description">
                         <p>
                             Klik hier om de robot volledig herop te starten. Dit reset het rij-gedrag. <br>
                             De robot zal seffens niet meer weten waar hij is.<br>
-                            Zet de robot via manual drive +-2 meter recht voor een QR-code. Zorg dat de camera aan de voorzijde de code kan zien.</li>
+                            Kies één van de volgende methodes:<br>
+                            <ul>
+                                <li>Zet de robot via manual drive +-2 meter recht voor een QR-code. 
+                                    Zorg dat de camera aan de voorzijde de code kan zien.</li>
+                                <li>Rijdt de robot manueel tegen het laadstation. Druk de noodstop niet in.</li> 
+                            </ul>
                             Klik nu op de rebootknop. <br>
                             De robot kan ongeveer een meter naar voor rijden tijdens opstart.<br>
-                            Als de robot en zijn programma's succesvol zijn heropgestart zal de knop terug groen worden. <br>
-                            Wanneer je nu het adminpaneel sluit zal de robot zijn normale werking moeten hervatten.
+                            Je kan zien dat de robot is opgestart wanneer de in/uitschakelknop op het adminpaneel niet meer volledig grijs is. <br>
+                            Wanneer je nu het adminpaneel sluit zal de robot gaan werken. <br>
+                            Als je wil dat hij toch gaat slapen mag je Hugoo uitzetten als hij naar de quizzone wil vertrekken.
                         </p>
                     </div>
                 </div>
@@ -72,9 +78,33 @@
                     </button>
                     <div class="action-description">
                         <p>
-                            De robot weet niet meer waar hij is, kies een methode:<br>
-                            Zet de robot via manual drive +-2 meter recht voor een QR-code. Zorg dat de camera aan de voorzijde de code kan zien.<br>
+                            De robot weet niet meer waar hij is. <br>
+                            Zet de robot via manual drive +-2 meter recht voor de QR-code. Zorg dat de camera aan de voorzijde de code kan zien.<br>
                             Nadat je dit gedaan hebt moet de robot zijn normale werking hervatten.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="settings-card">
+                <h2 class="settings-card-title">Vakantieprocedure</h2>
+                
+                <div class="action-row">
+                    <button class="settings-btn-primary" onclick="rebootRobot('shutdown-robot'); rebootRobot('shutdown-pi'); greyOutWaitForBT(this)">
+                        <span class="btn-text">Schakel robot en scherm uit</span>
+                    </button>
+                    <div class="action-description">
+                        <p>
+                            Klik hier om de robot volledig af te sluiten. <br>
+                            Gebruik dit eventueel als de robot een zeer lange tijd niet moet werken. <br>
+                            Na je op de knop hebt geklikt moet je ook de spanning van de robot uitzetten.
+                            Dit doe je door het luikje vanachter open te doen en de blauwe knop uit te zetten. <br>
+                            Opgelet, zorg dat je de opstartprocedure hebt afgedrukt of op je laptop hebt staan als 
+                            je de robot na de vakantie terug wil heropstarten. <br><br>
+                            Als je de robot terug wil opstarten moet je eerst de spanning terug aanzetten met de blauwe knop in de robot. <br>
+                            Daarna moet je op het knopje van de PI klikken (zie gele sticker met zwarte pijl).<br>
+                            Als Hugoo niet aan het opladen of de QR-code niet ziet tijdens het opstarten zal Hugoo verdwaald zijn.
+                            Volg in dit geval de verdwaaldprocedure.
                         </p>
                     </div>
                 </div>
@@ -129,14 +159,24 @@
 
 
             <section class="settings-card">
-                <h2 class="settings-card-title">Overige rebootacties</h2>
+                <h2 class="settings-card-title">Gevanceerde rebootacties</h2>
+
+                <div class="action-row">
+                    <button class="settings-btn-primary" onclick="rebootRobot('robot-hard'); greyOut(this)">
+                        <span class="btn-text">Reboot robot</span>
+                    </button>
+                    <p class="action-description">
+                        Klik hier om de Orin Nano volledig herop te starten. Dit reset het rij-gedrag. <br>
+                    </p>
+                </div>
                 
                 <div class="action-row">
                     <button class="settings-btn-primary" onclick="rebootRobot('shutdown-robot'); greyOut(this)">
-                        <span class="btn-text">Robot afsluiten</span>
+                        <span class="btn-text">Schakel robot uit</span>
                     </button>
                     <p class="action-description">
-                        Dit sluit de hele robot af. Opstart is enkel mogelijk door de stroom uit en aan te zetten met de blauwe knop in de body.
+                        Dit sluit de Orin Nano die verantwoordelijk is voor het rij-gedrag af. 
+                        Opstart is enkel mogelijk door de stroom uit en aan te zetten met de blauwe knop in de body.
                         Vergeet daarna niet op het knopje van de PI te klikken om ook deze herop te starten.
                     </p>
                 </div>
@@ -150,9 +190,12 @@
 
                 <div class="action-row">
                     <button class="settings-btn-primary" onclick="rebootRobot('shutdown-pi'); greyOut(this)">
-                        <span class="btn-text">Scherm afsluiten</span>
+                        <span class="btn-text">Schakel scherm uit</span>
                     </button>
-                    <p class="action-description">Sluit de Raspberry Pi 5 af die verantwoordelijk is voor het tonen van alle schermen.</p>
+                    <p class="action-description">
+                        Sluit de Raspberry Pi 5 af die verantwoordelijk is voor het tonen van alle schermen.<br>
+                        Opstart is enkel mogelijk door op het knopje onder de gele sticker met zwarte pijl te klikken.
+                    </p>
                 </div>
 
             </section>     
