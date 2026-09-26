@@ -684,6 +684,7 @@ a#easy-numpad-close {
     text-align: center;
     font-size: 3.5rem;
     display: flex;
+    -webkit-text-security: disc;
     align-items: center;
     justify-content: center;
 }
