@@ -47,12 +47,12 @@
                 <h2 class="settings-card-title">Rebootprocedure</h2>
                 
                 <div class="action-row">
-                    <button class="settings-btn-primary" onclick="rebootRobot('robot-hard'); rebootRobot('pi-hard'); greyOutWaitForBT(this)">
+                    <button class="settings-btn-primary" onclick="rebootRobot('robot-and-pi-hard', this)">
                         <span class="btn-text">Reboot robot en scherm</span>
                     </button>
                     <div class="action-description">
                         <p>
-                            Klik hier om de robot volledig herop te starten. Dit reset het rij-gedrag. <br>
+                            Eerst herstart de Orin Nano. Zodra de robot opnieuw klaar is, herstart de Raspberry Pi. <br>
                             De robot zal seffens niet meer weten waar hij is.<br>
                             Kies één van de volgende methodes:<br>
                             <ul>
@@ -62,8 +62,8 @@
                             </ul>
                             Klik nu op de rebootknop. <br>
                             De robot kan ongeveer een meter naar voor rijden tijdens opstart.<br>
-                            Je kan zien dat de robot is opgestart wanneer de in/uitschakelknop op het adminpaneel niet meer volledig grijs is. <br>
-                            Wanneer je nu het adminpaneel sluit zal de robot gaan werken. <br>
+                            De robot blijft stilstaan tot de Pi opnieuw opgestart is en het quizscherm beschikbaar is. <br>
+                            Daarna wordt de robotvergrendeling automatisch opgeheven. <br>
                             Als je wil dat hij toch gaat slapen mag je Hugoo uitzetten als hij naar de quizzone wil vertrekken.
                         </p>
                     </div>
@@ -162,7 +162,7 @@
                 <h2 class="settings-card-title">Gevanceerde rebootacties</h2>
 
                 <div class="action-row">
-                    <button class="settings-btn-primary" onclick="rebootRobot('robot-hard'); greyOut(this)">
+                    <button class="settings-btn-primary" onclick="rebootRobot('robot-hard', this)">
                         <span class="btn-text">Reboot robot</span>
                     </button>
                     <p class="action-description">

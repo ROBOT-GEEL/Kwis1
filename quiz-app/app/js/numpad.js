@@ -10,6 +10,7 @@ $(document).ready(function () {
         
         try {
             socket.emit("robot-stop-for-x-time", { time: 8000 });
+            socket.emit("robot-login-open");
             Quiz.abortByScreenChange("Adminpaneel aangeklikt");
         } catch (error) {
             console.error("Fout bij het versturen van socket event:", error);
@@ -90,6 +91,7 @@ function easy_numpad_clear(event) {
 
 function easy_numpad_cancel(event) {
     socket.emit("login-canceled");
+    socket.emit("robot-login-closed");
     event.preventDefault();
     $('#easy-numpad-frame').remove();
     console.log("cancel output");
@@ -121,3 +123,9 @@ async function easy_numpad_done(event) {
         console.error('Error:', error);
     }
 }
+
+socket.on("connect", () => {
+    if (document.getElementById("easy-numpad-frame")) {
+        socket.emit("robot-login-open");
+    }
+});

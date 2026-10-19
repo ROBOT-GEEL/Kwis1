@@ -37,6 +37,75 @@ async function greyOutWaitForBT(buttonElement) {
     }
 }
 
+function waitForRobotReadyAfterDisconnect(timeoutMs = 600000) {
+    let disconnected = false;
+    let timeout;
+
+    let resolveWait;
+    let rejectWait;
+
+    const promise = new Promise((resolve, reject) => {
+        resolveWait = resolve;
+        rejectWait = reject;
+    });
+
+    const cleanup = () => {
+        clearTimeout(timeout);
+        socket.off("robot-disconnected", onRobotDisconnected);
+        socket.off("robot-ready", onRobotReady);
+    };
+
+    const onRobotDisconnected = () => {
+        disconnected = true;
+    };
+
+    const onRobotReady = () => {
+        if (!disconnected) {
+            return;
+        }
+
+        cleanup();
+        resolveWait();
+    };
+
+    socket.on("robot-disconnected", onRobotDisconnected);
+    socket.on("robot-ready", onRobotReady);
+
+    timeout = setTimeout(() => {
+        cleanup();
+        rejectWait(new Error("De Orin werd niet binnen 10 minuten opnieuw klaar."));
+    }, timeoutMs);
+
+    return {
+        promise,
+        cancel: () => {
+            cleanup();
+            resolveWait();
+        }
+    };
+}
+
+function rebootPiAfterOrinIsReady() {
+    return new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => {
+            reject(new Error("De Pi bevestigde het rebootcommando niet."));
+        }, 10000);
+
+        socket.emit("screen-reboot", { type: "hard" }, (result) => {
+            clearTimeout(timeout);
+
+            if (!result || !result.success) {
+                reject(new Error(
+                    result?.message || "De Pi-reboot kon niet worden gestart."
+                ));
+                return;
+            }
+
+            resolve();
+        });
+    });
+}
+
 socket.on("robot-bumper-status", (status) => {    
     console.log("bumper", status.msg);
     const errorContainerBumper = document.getElementById('hardwareErrorContainerBumper');
@@ -60,7 +129,15 @@ socket.on("robot-bumper-status", (status) => {
     }
 });
 
-async function rebootRobot(type) {
+async function rebootRobot(type, buttonElement) {
+    const originalButtonText = buttonElement?.querySelector(".btn-text")?.textContent;
+    if (buttonElement) {
+        buttonElement.disabled = true;
+    }
+
+    let adminSessionClosed = false;
+    let robotReadyWaiter = null;
+
     try {
         if (type === 'robot-soft') {
             const response = await fetch('/diagnose/reboot-soft-robot', {
@@ -90,19 +167,53 @@ async function rebootRobot(type) {
             const data = await response.json();
             console.log("Succes:", data.message); 
         } 
-        else if (type === 'robot-hard') {
+        else if (type === 'robot-hard' || type === 'robot-and-pi-hard') {
+            const token = sessionStorage.getItem("adminToken");
+            if (!token) {
+                throw new Error("De admin-token ontbreekt; de reboot is afgebroken.");
+            }
+
+            await window.closeAdminPanelForReboot({
+                holdRobotStopped: type === 'robot-and-pi-hard'
+            });
+            adminSessionClosed = true;
+
+            if (type === 'robot-and-pi-hard') {
+                robotReadyWaiter = waitForRobotReadyAfterDisconnect();
+                const buttonText = buttonElement?.querySelector(".btn-text");
+                if (buttonText) {
+                    buttonText.textContent =
+                        "Orin herstart; wachten tot de robot klaar is...";
+                }
+            }
+
             const response = await fetch('/diagnose/reboot-robot', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'}
             });
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || `HTTP-fout! Status: ${response.status}`);
+            const data = await response.json();
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || `HTTP-fout! Status: ${response.status}`);
             }
 
-            const data = await response.json();
             console.log("Succes:", data.message); 
+
+            if (type === 'robot-and-pi-hard') {
+                const buttonText = buttonElement?.querySelector(".btn-text");
+                if (buttonText) {
+                    buttonText.textContent =
+                        "Robot klaar; Raspberry Pi wordt herstart...";
+                }
+
+                await robotReadyWaiter.promise;
+                await rebootPiAfterOrinIsReady();
+            } else {
+                window.location.href = "../";
+            }
+
+            adminSessionClosed = false;
+            sessionStorage.removeItem("adminToken");
         } 
         else if (type === 'pi-hard') {
             socket.emit('screen-reboot', { type: 'hard' });
@@ -111,7 +222,28 @@ async function rebootRobot(type) {
             socket.emit('screen-reboot', { type: 'shutdown' });
         }
     } catch (error) {
+        if (robotReadyWaiter) {
+            robotReadyWaiter.cancel();
+        }
+
+        if (adminSessionClosed) {
+            try {
+                await window.restoreAdminSessionAfterFailedReboot();
+            } catch (restoreError) {
+                console.error("Adminsessie kon niet worden hersteld:", restoreError.message);
+                error.message += ` De adminsessie kon ook niet worden hersteld: ${restoreError.message}`;
+            }
+        }
+
         console.error("Fout tijdens het herstarten:", error.message);
+        if (buttonElement) {
+            buttonElement.disabled = false;
+            const buttonText = buttonElement.querySelector(".btn-text");
+            if (buttonText) {
+                buttonText.textContent = originalButtonText;
+            }
+        }
+        alert(`De Orin kon niet veilig worden herstart: ${error.message}`);
     }
 }
 

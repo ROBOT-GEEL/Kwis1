@@ -9,10 +9,62 @@ export function registerSocketHandlers(io) {
   let currentAdminToken = null;
   let currentAdminSocketId = null;
   let disconnectTimer = null; // Used to track page navigation
+  let adminLoginOpen = false;
+  let robotRebootLock = false;
 
   let orinNanoRobotId = null;
 
   let screenOn = false; // Track the current state of the screen
+
+  const sendRobotScreenState = async () => {
+    if (!orinNanoRobotId) {
+      return;
+    }
+
+    try {
+      const db = getDB();
+      const status = await db.collection("robotStatus").findOne(
+        { robotStatusId: 0 },
+        { projection: { robotRebootLock: 1 } }
+      );
+      robotRebootLock = status?.robotRebootLock === true;
+    } catch (error) {
+      robotRebootLock = true;
+      logger.error("Could not read persisted robot reboot lock:", error);
+    }
+
+    io.to(orinNanoRobotId).emit("robot-screen-state", {
+      adminOpen: Boolean(currentAdminToken),
+      adminLoginOpen,
+      robotRebootLock
+    });
+  };
+
+  const releaseRobotRebootLock = async () => {
+    try {
+      const db = getDB();
+      const status = await db.collection("robotStatus").findOne(
+        { robotStatusId: 0 },
+        { projection: { robotRebootLock: 1 } }
+      );
+
+      if (status?.robotRebootLock !== true) {
+        return;
+      }
+
+      const released = await writeRobotRebootLockInDB(false);
+      if (!released) {
+        logger.error("Robot reboot lock was not released: database update failed.");
+        return;
+      }
+
+      robotRebootLock = false;
+      logger.info("Robot reboot lock released after quiz screen became available.");
+      await sendRobotScreenState();
+    } catch (error) {
+      logger.error("Could not release persisted robot reboot lock:", error);
+    }
+  };
 
   io.on("connection", (socket) => {
     logger.info(`Client connected: ${socket.id}`);
@@ -29,6 +81,7 @@ export function registerSocketHandlers(io) {
       if (data === "orin-nano-robot") {
         orinNanoRobotId = socket.id;
         logger.info(`Orin Nano Robot connected with socket ID: ${socket.id}`);
+        sendRobotScreenState();
         //io.emit("time-updated", new Date().toISOString());
         socket.broadcast.emit("robot-connected");
       }
@@ -151,7 +204,7 @@ export function registerSocketHandlers(io) {
     ];
 
     robotEvents.forEach((event) => {
-      socket.on(event, (data) => {
+      socket.on(event, async (data) => {
         logger.info(event, data || "");
         if (event !== "robot-bumper-status") {
           console.log(event, data || "");
@@ -165,7 +218,29 @@ export function registerSocketHandlers(io) {
         if (event === "robot-isActive") {
           toggleProjector("DB");
         }
+
+        if (event === "robot-askScreen") {
+          if (socket.id === orinNanoRobotId) {
+            await sendRobotScreenState();
+          } else {
+            await releaseRobotRebootLock();
+          }
+        }
       });
+    });
+
+    socket.on("robot-login-open", (callback) => {
+      adminLoginOpen = true;
+      socket.broadcast.emit("robot-login-open");
+
+      if (typeof callback === "function") callback({ success: true });
+    });
+
+    socket.on("robot-login-closed", (callback) => {
+      adminLoginOpen = false;
+      socket.broadcast.emit("robot-login-closed");
+
+      if (typeof callback === "function") callback({ success: true });
     });
 
     
@@ -219,6 +294,7 @@ export function registerSocketHandlers(io) {
             // Register the NEW admin token and socket, effectively taking over
             currentAdminToken = token;
             currentAdminSocketId = socket.id;
+            adminLoginOpen = false;
 
             writeAdminStatusInDB(true); 
             toggleProjector("sleep");
@@ -236,6 +312,7 @@ export function registerSocketHandlers(io) {
             if (token === currentAdminToken) {
                 currentAdminToken = null; 
                 currentAdminSocketId = null;
+                adminLoginOpen = false;
 
                 writeAdminStatusInDB(false); 
                 socket.broadcast.emit("admin-panel-closed");
@@ -250,6 +327,76 @@ export function registerSocketHandlers(io) {
         }
     });
 
+    socket.on("admin-panel-close-for-reboot", async (token, options, callback) => {
+        if (typeof options === "function") {
+            callback = options;
+            options = {};
+        }
+
+        const acknowledge = (result) => {
+            if (typeof callback === "function") callback(result);
+        };
+
+        try {
+            if (
+                token !== currentAdminToken ||
+                socket.id !== currentAdminSocketId
+            ) {
+                acknowledge({
+                    success: false,
+                    message: "Deze browser heeft geen actieve adminsessie."
+                });
+                return;
+            }
+
+            const holdRobotStopped = options?.holdRobotStopped === true;
+            const statusSaved = await writeAdminRebootStatusInDB(
+                false,
+                holdRobotStopped
+            );
+            if (!statusSaved) {
+                acknowledge({
+                    success: false,
+                    message: holdRobotStopped
+                        ? "De adminstatus en robotvergrendeling konden niet veilig worden bijgewerkt."
+                        : "De adminstatus kon niet worden bijgewerkt."
+                });
+                return;
+            }
+
+            robotRebootLock = holdRobotStopped || robotRebootLock;
+
+            if (disconnectTimer) {
+                clearTimeout(disconnectTimer);
+                disconnectTimer = null;
+            }
+
+            currentAdminToken = null;
+            currentAdminSocketId = null;
+            adminLoginOpen = false;
+
+            if (holdRobotStopped) {
+                await sendRobotScreenState();
+            }
+
+            toggleProjector("DB");
+            logger.info(
+                holdRobotStopped
+                    ? "Admin panel closed for combined reboot; persisted robot stop remains active."
+                    : "Admin panel closed for Orin reboot; robot stop remains active."
+            );
+
+            // Do not notify the robot that the admin panel closed before reboot.
+            acknowledge({ success: true });
+        } catch (error) {
+            logger.error("Error closing admin panel for robot reboot:", error);
+            acknowledge({
+                success: false,
+                message: "Het adminpaneel kon niet veilig worden gesloten."
+            });
+        }
+    });
+
     socket.on("disconnect", () => {
         try {
             if (socket.id === currentAdminSocketId) {
@@ -257,6 +404,7 @@ export function registerSocketHandlers(io) {
                 disconnectTimer = setTimeout(() => {
                     currentAdminToken = null;
                     currentAdminSocketId = null;
+                    adminLoginOpen = false;
                     writeAdminStatusInDB(false); 
                     socket.broadcast.emit("admin-panel-closed");
                     logger.info("Admin connection lost");
@@ -267,36 +415,55 @@ export function registerSocketHandlers(io) {
         }
     });
 
-    socket.on("screen-reboot", (data) => {
-    
+    socket.on("screen-reboot", (data, callback) => {
+      const acknowledge = (result) => {
+        if (typeof callback === "function") {
+          callback(result);
+        }
+      };
+
+      if (!data || !["hard", "shutdown"].includes(data.type)) {
+        acknowledge({
+          success: false,
+          message: "Ongeldig schermcommando."
+        });
+        return;
+      }
+
       if (data.type === 'hard') {
           console.log("Reboot command voor de Pi ontvangen.");
           
           exec("sudo reboot", (error, stdout, stderr) => {
               if (error) {
                   console.error(`Fout bij het rebooten van de Pi: ${error.message}`);
+                  logger.error(`Fout bij het rebooten van de Pi: ${error.message}`);
                   return;
               }
               if (stderr) {
                   console.error(`Reboot waarschuwing/fout: ${stderr}`);
+                  logger.error(`Reboot waarschuwing/fout: ${stderr}`);
                   return;
               }
               console.log(`Reboot succesvol gestart: ${stdout}`);
           });
+          acknowledge({ success: true });
       } else if (data.type === 'shutdown') {
           console.log("shutdown command voor de Pi ontvangen.");
           
           exec("sudo shutdown now", (error, stdout, stderr) => {
               if (error) {
                   console.error(`Fout bij shutdown van de Pi: ${error.message}`);
+                  logger.error(`Fout bij shutdown van de Pi: ${error.message}`);
                   return;
               }
               if (stderr) {
                   console.error(`Shutdown waarschuwing/fout: ${stderr}`);
+                  logger.error(`Shutdown waarschuwing/fout: ${stderr}`);
                   return;
               }
               console.log(`Shutdown succesvol gestart: ${stdout}`);
           });
+          acknowledge({ success: true });
       }
     });
   });
@@ -354,19 +521,70 @@ function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function writeAdminStatusInDB(isOpen){
+async function writeAdminStatusInDB(isOpen) {
   try {
-      await fetch("http://localhost:80/robot-status/insert-robot-status", {
+      const response = await fetch("http://localhost:80/robot-status/insert-robot-status", {
           method: "POST",
           headers: {
               "Content-Type": "application/json",
           },
           body: JSON.stringify({ adminPanelIsOpen: isOpen })
       });
+
+      if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+      }
+
+      return true;
   } catch (fetchError) {
       logger.error("Interne fetch naar DB faalde:", fetchError);
+      return false;
   }
 }
 
+async function writeRobotRebootLockInDB(isLocked) {
+  try {
+      const response = await fetch("http://localhost:80/robot-status/insert-robot-status", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ robotRebootLock: isLocked })
+      });
 
+      if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+      }
 
+      return true;
+  } catch (fetchError) {
+      logger.error("Interne fetch voor robot reboot lock faalde:", fetchError);
+      return false;
+  }
+}
+
+async function writeAdminRebootStatusInDB(adminPanelIsOpen, holdRobotStopped) {
+  try {
+      const status = { adminPanelIsOpen };
+      if (holdRobotStopped) {
+          status.robotRebootLock = true;
+      }
+
+      const response = await fetch("http://localhost:80/robot-status/insert-robot-status", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify(status)
+      });
+
+      if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+      }
+
+      return true;
+  } catch (fetchError) {
+      logger.error("Interne fetch voor admin/rebootstatus faalde:", fetchError);
+      return false;
+  }
+}
