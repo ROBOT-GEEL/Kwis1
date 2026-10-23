@@ -19,21 +19,7 @@ socket.on('robot-lost-charging', () => {
 });
 
 socket.on('robot-explore', () => { 
-    changeScreen('robot-explore-screen');
-
-    const interval = setInterval(() => {
-        if (document.querySelector('#robot-explore-screen').style.display === 'none') {
-            clearInterval(interval);
-            return;
-        }
-        let selectedLanguageIndex = 0;
-        document.querySelectorAll('.language-selector').forEach((el, index) => {
-            if (el.classList.contains('selected-language')) {
-                selectedLanguageIndex = index;
-            }
-        });
-        document.querySelectorAll('.language-selector')[(selectedLanguageIndex + 1) % 3].click();
-    }, 2100);
+    changeScreen('start-screen');
 });
 
 socket.on('robot-arrived-at-visitors', () => { 

@@ -90,19 +90,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 let wantEasyQuestion = null;
 let hasVisited = null; 
+let quizOptionsTimeout = null;
+let quizOptionsSubmitTimeout = null;
+let quizOptionsPending = false;
+let quizOptionsSubmitting = false;
 
 // This event listener shows the modal to ask if the participants want easy questions.
 document.querySelector('#play-quiz-button').addEventListener('click', async () => {
     document.querySelector('#NL-selector').click();
     toggleEasyVisitedOpened();
-    setTimeout(async () => {
-        toggleEasyVisitedButtonsReset();
-        }, 30000);
 });
 
 // This event listener closes the modal.
 document.querySelector('#close-modal-btn').addEventListener('click', () => {
-    toggleEasyVisitedButtonsReset();
+    cancelQuizOptions();
 });
 
 // Luister naar de keuzeknoppen
@@ -120,9 +121,23 @@ document.querySelector('#visited-expoo-no').addEventListener('click', () => {
 });
 
 async function toggleEasyVisitedOpened() {
+    clearTimeout(quizOptionsTimeout);
+    clearTimeout(quizOptionsSubmitTimeout);
+    quizOptionsPending = true;
+    quizOptionsSubmitting = false;
+    wantEasyQuestion = null;
+    hasVisited = null;
     document.querySelector('#easyvisited-questions-modal').style.display = 'block';
-    console.log("send stop");
-    socket.emit("robot-stop-for-x-time", { time: 30000 });
+    socket.emit("robot-quiz-options-pause", true);
+    quizOptionsTimeout = setTimeout(() => {
+        if (!quizOptionsPending) {
+            return;
+        }
+
+        closeQuizOptions();
+        socket.emit('robot-quiz-options-pause', false);
+        socket.emit('robot-visitor-no-response', true);
+    }, 20000);
 }
 
 async function toggleEasyVisitedButtonsReset() {
@@ -137,7 +152,33 @@ async function toggleEasyVisitedButtonsReset() {
     document.querySelector('#easyvisited-questions-modal').style.display = 'none';
 }
 
+function closeQuizOptions() {
+    clearTimeout(quizOptionsTimeout);
+    clearTimeout(quizOptionsSubmitTimeout);
+    quizOptionsTimeout = null;
+    quizOptionsSubmitTimeout = null;
+    quizOptionsPending = false;
+    quizOptionsSubmitting = false;
+    wantEasyQuestion = null;
+    hasVisited = null;
+    toggleEasyVisitedButtonsReset();
+}
+
+function cancelQuizOptions() {
+    if (!quizOptionsPending) {
+        return;
+    }
+
+    closeQuizOptions();
+    socket.emit('robot-quiz-options-pause', false);
+    socket.emit('robot-visitor-no-response', true);
+}
+
 async function toggleEasyVisitedButtons(easyVisited, state) {
+    if (!quizOptionsPending || quizOptionsSubmitting) {
+        return;
+    }
+
     const easyQuestionYes = document.querySelector('#easy-questions-yes');
     const easyQuestionNo = document.querySelector('#easy-questions-no');
     const visitedYes = document.querySelector('#visited-expoo-yes');
@@ -166,21 +207,24 @@ async function toggleEasyVisitedButtons(easyVisited, state) {
         }
     } 
 
-    if ((wantEasyQuestion !== null) && (hasVisited !== null)) {
-
-        setTimeout(async () => {
-            document.querySelector('#easyvisited-questions-modal').style.display = 'none';
-            easyQuestionYes.classList.remove('modal-buttons-clicked');
-            easyQuestionNo.classList.remove('modal-buttons-clicked');
-            visitedYes.classList.remove('modal-buttons-clicked');
-            visitedNo.classList.remove('modal-buttons-clicked');
-            
-            Quiz.easyQuestion = wantEasyQuestion;
-            Quiz.visited = hasVisited;
-
-            hasVisited = null;
-            wantEasyQuestion = null;
-
+    if (
+        wantEasyQuestion !== null
+        && hasVisited !== null
+        && !quizOptionsSubmitting
+    ) {
+        quizOptionsSubmitting = true;
+        clearTimeout(quizOptionsTimeout);
+        quizOptionsTimeout = null;
+        quizOptionsSubmitTimeout = setTimeout(async () => {
+            if (!quizOptionsPending) {
+                return;
+            }
+            const selectedEasyQuestion = wantEasyQuestion;
+            const selectedVisited = hasVisited;
+            closeQuizOptions();
+            Quiz.easyQuestion = selectedEasyQuestion;
+            Quiz.visited = selectedVisited;
+            socket.emit('robot-quiz-options-pause', false);
             socket.emit('drive-to-quiz-location');
             
             try {
@@ -189,7 +233,7 @@ async function toggleEasyVisitedButtons(easyVisited, state) {
                 error(e);
                 return;
             }
-        }, 1500); // <-- Hier stel je de vertraging in
+        }, 1500);
     }
 }
 

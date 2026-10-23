@@ -198,6 +198,8 @@ export function registerSocketHandlers(io) {
       "robot-get-battery-percentage",
       "robot-update-battery-percentage",
       "robot-bumper-status",
+      "robot-quiz-options-pause",
+      "robot-visitor-no-response",
       "drive",
       "robot-stop-for-x-time",
       "login-canceled"
