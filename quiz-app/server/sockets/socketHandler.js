@@ -10,6 +10,7 @@ export function registerSocketHandlers(io) {
   let currentAdminSocketId = null;
   let disconnectTimer = null; // Used to track page navigation
   let adminLoginOpen = false;
+  let adminLoginSocketId = null;
   let robotRebootLock = false;
 
   let orinNanoRobotId = null;
@@ -71,6 +72,12 @@ export function registerSocketHandlers(io) {
 
     socket.on("disconnect", () => {
       logger.info(`Client disconnected: ${socket.id}`);
+      if (adminLoginOpen && socket.id === adminLoginSocketId) {
+        // Het loginscherm hoort bij deze pagina; die is weg.
+        adminLoginOpen = false;
+        adminLoginSocketId = null;
+        socket.broadcast.emit("robot-login-closed");
+      }
       if (socket.id === orinNanoRobotId) {
         orinNanoRobotId = null;
         socket.broadcast.emit("robot-disconnected");
@@ -233,6 +240,7 @@ export function registerSocketHandlers(io) {
 
     socket.on("robot-login-open", (callback) => {
       adminLoginOpen = true;
+      adminLoginSocketId = socket.id;
       socket.broadcast.emit("robot-login-open");
 
       if (typeof callback === "function") callback({ success: true });
@@ -240,6 +248,7 @@ export function registerSocketHandlers(io) {
 
     socket.on("robot-login-closed", (callback) => {
       adminLoginOpen = false;
+      adminLoginSocketId = null;
       socket.broadcast.emit("robot-login-closed");
 
       if (typeof callback === "function") callback({ success: true });
