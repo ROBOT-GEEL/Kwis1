@@ -43,8 +43,9 @@ export const makeDiagnose = async (req, res, next) => {
             "Drive Mux": {
                 "/drive_mux": { "status": false }
             },
-            "Quiz BT node": {
-                "/quiz_bt_node": { "status": false }
+            "Quiz Socket Bridge": {
+                "/quiz_socket_bridge": { "status": false },
+                "/robot_state_manager": { "status": false }
             },
             "Drive to Coord": {
                 "/drive_to_goal": { "status": false }
@@ -70,50 +71,12 @@ export const makeDiagnose = async (req, res, next) => {
             "Autocharge": {
                 "/auto_recharger": { "status": false }
             },
-            "Robot Position Reset": {
-                "/publish_back_pose": { "status": false }
-            },
             "Apriltag": {
-                "/apriltag_absolute_pose": { "status": false }
+                "/april_tabloo": { "status": false }
             },
             "Behavior Tree": {
-                "/btArrivedAtVisitors": { "status": false },
-                "/btBatteryCharged": { "status": false },
-                "/btBatteryFull": { "status": false },
-                "/btBatteryStopDrive": { "status": false },
-                "/btCheckAdminCondition": { "status": false },
-                "/btCheckAdminPanel": { "status": false },
-                "/btCheckButtonState": { "status": false },
-                "/btCheckNetworkError": { "status": false },
-                "/btCheckingNearbyVisitors": { "status": false },
-                "/btConnectionLost": { "status": false },
-                "/btDriveQuizLocation": { "status": false },
-                "/btDriveToChargingStation": { "status": false },
-                "/btDriveWorkArea": { "status": false },
-                "/btFallbackDriveQuizLocation": { "status": false },
-                "/btFallbackDriveToChargingStation": { "status": false },
-                "/btFallbackDriveToWorkArea": { "status": false },
-                "/btFallbackIsRobotAtChargingStation": { "status": false },
-                "/btFallbackIsRobotAtQuiz": { "status": false },
-                "/btFallbackIsRobotAtWorkArea": { "status": false },
-                "/btInWorkingZone": { "status": false },
-                "/btIsRobotAtQuiz": { "status": false },
-                "/btIsRobotAtWorkArea": { "status": false },
-                "/btIsRobotCharging": { "status": false },
-                "/btMainBTSetErrorFlag": { "status": false },
-                "/btMainBTStopDrive": { "status": false },
-                "/btRobotDriveToChargingStation": { "status": false },
-                "/btRobotExplore": { "status": false },
-                "/btRobotFailedDriveToChargingStation": { "status": false },
-                "/btRobotIsRobotAtChargingStation": { "status": false },
-                "/btRobotWaitInChargingStation": { "status": false },
-                "/btStartDrivingToPeople": { "status": false },
-                "/btStatusDriveToChargingDock": { "status": false },
-                "/btStopRobotCharging": { "status": false },
-                "/btWaitQuizToEnd": { "status": false },
-                "/bt_BatteryOk_node": { "status": false },
-                "/bt_robot_at_quiz_node": { "status": false },
-                "/bt_robot_rotation_follow_me": { "status": false }
+                "/behavior_tree_node": { "status": false },
+                "/robot_controller": { "status": false }
             },
             "Battery check": {
                 "/autocharge_batcheck": { "status": false }
@@ -201,18 +164,18 @@ export const makeDiagnose = async (req, res, next) => {
                 "/search_cmd_vel": { "status": false },
                 "/turn_cmd_vel": { "status": false }
             },
-            "Quiz BT node": {
+            "Quiz Socket Bridge": {
                 "/BatteryAverageVoltage": { "status": false },
-                "/ManualDriveControleLocation": { "status": false },
-                "/admin": { "status": false },
-                "/ask_button_quiz": { "status": false },
+                "/IsBatteryOK": { "status": false },
+                "/IsRobotActive": { "status": false },
+                "/IsRobotAtQuiz": { "status": false },
+                "/IsRobotDocked": { "status": false },
+                "/IsRobotStateReady": { "status": false },
                 "/bump_status": { "status": false },
-                "/connection": { "status": false },
                 "/estop_cmd_vel": { "status": false },
                 "/gui_cmd_vel": { "status": false },
-                "/quiz": { "status": false },
-                "/quizbtnode_activestatus": { "status": false },
-                "/rpitopic": { "status": false }
+                "/robot_command": { "status": false },
+                "/screen_command": { "status": false }
             },
             "Drive to Coord": {
                 "/BehaviorTreeNode": { "status": false },
@@ -278,13 +241,6 @@ export const makeDiagnose = async (req, res, next) => {
                 "/robot_red_flag": { "status": false },
                 "/rpitopic": { "status": false }
             },
-            "Robot Position Reset": {
-                "/ManualDriveControleLocation": { "status": false },
-                "/charge_XSTOP": { "status": false },
-                "/initialpose": { "status": false },
-                "/resetPositionChargeStation": { "status": false },
-                "/reset_active": { "status": false }
-            },
             "Apriltag": {
                 "/camera/color/camera_info": { "status": false },
                 "/camera/color/image_raw": { "status": false },
@@ -295,16 +251,13 @@ export const makeDiagnose = async (req, res, next) => {
             },
             "Behavior Tree": {
                 "/BehaviorTreeNode": { "status": false },
-                "/ask_button_quiz": { "status": false },
+                "/IsRobotActive": { "status": false },
                 "/auto_recharge_event": { "status": false },
                 "/btDriveCoord": { "status": false },
-                "/connection": { "status": false },
                 "/drive_to_coord_status": { "status": false },
                 "/estop_cmd_vel": { "status": false },
                 "/force_charge": { "status": false },
                 "/gui_cmd_vel": { "status": false },
-                "/quiz": { "status": false },
-                "/quizbtnode_activestatus": { "status": false },
                 "/rpitopic": { "status": false },
                 "/search_cmd_vel": { "status": false },
                 "/target_distance": { "status": false },
@@ -354,8 +307,8 @@ export const makeDiagnose = async (req, res, next) => {
     try {
         // --- ROS 2 NODES ---
         const commandNodes = `
-            cd wheeltec_ros2 &&
-            source install/setup.bash &&
+            source /opt/ros/humble/setup.bash &&
+            source wheeltec_ros2_rt/install/setup.bash &&
             ros2 daemon start &&
             sleep 1 &&
             ros2 node list
@@ -383,8 +336,8 @@ export const makeDiagnose = async (req, res, next) => {
 
         // --- ROS 2 TOPICS ---
         const commandTopics = `
-            cd wheeltec_ros2 &&
-            source install/setup.bash &&
+            source /opt/ros/humble/setup.bash &&
+            source wheeltec_ros2_rt/install/setup.bash &&
             ros2 topic list
         `;
 
