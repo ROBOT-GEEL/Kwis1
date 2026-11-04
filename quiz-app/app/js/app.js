@@ -224,15 +224,17 @@ async function toggleEasyVisitedButtons(easyVisited, state) {
             closeQuizOptions();
             Quiz.easyQuestion = selectedEasyQuestion;
             Quiz.visited = selectedVisited;
-            socket.emit('robot-quiz-options-pause', false);
-            socket.emit('drive-to-quiz-location');
             
             try {
                 await Quiz.initializeNewQuiz();
             } catch (e) {
+                socket.emit('robot-quiz-options-pause', false);
                 error(e);
                 return;
             }
+
+            socket.emit('robot-quiz-options-pause', false);
+            socket.emit('drive-to-quiz-location');
         }, 1500);
     }
 }

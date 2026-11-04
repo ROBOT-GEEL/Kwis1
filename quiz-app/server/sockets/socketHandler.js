@@ -225,6 +225,10 @@ export function registerSocketHandlers(io) {
         }
 
         if (event === "robot-isActive") {
+          // De RT-robot schrijft robotActive niet zelf naar de DB: eerst bijwerken, dan projector volgen
+          if (typeof data === "boolean") {
+            await writeRobotActiveInDB(data);
+          }
           toggleProjector("DB");
         }
 
@@ -549,6 +553,27 @@ async function writeAdminStatusInDB(isOpen) {
       return true;
   } catch (fetchError) {
       logger.error("Interne fetch naar DB faalde:", fetchError);
+      return false;
+  }
+}
+
+async function writeRobotActiveInDB(isActive) {
+  try {
+      const response = await fetch("http://localhost:80/robot-status/insert-robot-status", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ robotActive: isActive })
+      });
+
+      if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+      }
+
+      return true;
+  } catch (fetchError) {
+      logger.error("Interne fetch voor robotActive faalde:", fetchError);
       return false;
   }
 }

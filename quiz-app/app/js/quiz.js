@@ -86,9 +86,9 @@ class Quiz {
         await this.#updateParameters();
         this.#questions = await this.#getQuestions();
         this.#instructions = await this.#getInstructions();
-        this.#isInitialized = true;
 
-        this.#prepareProjectorForQuiz();
+        await this.#prepareProjectorForQuiz();
+        this.#isInitialized = true;
     }
 
     /**
