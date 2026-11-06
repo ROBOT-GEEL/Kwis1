@@ -19,14 +19,17 @@ socket.on('robot-lost-charging', () => {
 });
 
 socket.on('robot-explore', () => { 
+    if (awaitingFollowRobot) return;
     changeScreen('start-screen');
 });
 
 socket.on('robot-arrived-at-visitors', () => { 
+    if (awaitingFollowRobot) return;
     changeScreen('start-screen');
 });
 
 socket.on('robot-arrived-at-quiz-location', async () => { 
+    setAwaitingFollowRobot(false);
     console.log('Robot has arrived at the quiz location!');
     try {
         await Quiz.start();
@@ -73,6 +76,7 @@ socket.on('robot-connected', () => {
 });
 
 socket.on('follow-robot-screen', () => { 
+    setAwaitingFollowRobot(false);
     changeScreen('follow-robot-screen'); 
 });
 

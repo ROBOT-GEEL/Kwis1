@@ -95,6 +95,23 @@ let quizOptionsSubmitTimeout = null;
 let quizOptionsPending = false;
 let quizOptionsSubmitting = false;
 
+// Na de 2 antwoorden blijft "volg de robot" staan; 'robot-explore' en 'robot-arrived-at-visitors' worden dan genegeerd.
+let awaitingFollowRobot = false;
+let awaitingFollowRobotTimeout = null;
+
+function setAwaitingFollowRobot(state) {
+    clearTimeout(awaitingFollowRobotTimeout);
+    awaitingFollowRobotTimeout = null;
+    awaitingFollowRobot = state;
+    if (state) {
+        // Vangnet: als de robot nooit reageert, niet eeuwig vastzitten
+        awaitingFollowRobotTimeout = setTimeout(() => {
+            awaitingFollowRobot = false;
+            awaitingFollowRobotTimeout = null;
+        }, 30000);
+    }
+}
+
 // This event listener shows the modal to ask if the participants want easy questions.
 document.querySelector('#play-quiz-button').addEventListener('click', async () => {
     document.querySelector('#NL-selector').click();
@@ -221,6 +238,9 @@ async function toggleEasyVisitedButtons(easyVisited, state) {
             }
             const selectedEasyQuestion = wantEasyQuestion;
             const selectedVisited = hasVisited;
+            // Eerst het volg-scherm tonen, anders is het startscherm zichtbaar tijdens het laden
+            setAwaitingFollowRobot(true);
+            changeScreen('follow-robot-screen');
             closeQuizOptions();
             Quiz.easyQuestion = selectedEasyQuestion;
             Quiz.visited = selectedVisited;
@@ -228,6 +248,7 @@ async function toggleEasyVisitedButtons(easyVisited, state) {
             try {
                 await Quiz.initializeNewQuiz();
             } catch (e) {
+                setAwaitingFollowRobot(false);
                 socket.emit('robot-quiz-options-pause', false);
                 error(e);
                 return;
