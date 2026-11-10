@@ -39,9 +39,9 @@
     },
 
     "FOLLOW_SCREEN_TEXT": {
-        "NL": "Hugoo rijdt naar de quizlocatie <br> Kijk naar het balkon!",
-        "EN": "Hugoo is driving to the quiz venue <br> Look at the balcony!",
-        "FR": "Hugoo se rend en voiture au lieu du quiz <br> Regardez le balcon!"
+        "NL": "Maak plaats, volg me naar de quizlocatie <br> Kijk naar het balkon!",
+        "EN": "Make way, follow me to the quiz venue <br> Look at the balcony!",
+        "FR": "Laissez-moi passer. Suivez-moi jusqu'au quiz! <br> Regardez le balcon!"
     },
     "QUIZ_SCREEN_QUESTION": {
         "NL": "%question%",
